@@ -21,7 +21,7 @@ while 1:
 	print("")
 
 	with open("log.txt", "w+") as log:
-		print("%s,", format(can_id, '03b'), file=log, end="")
+		print("", format(can_id, '03b'), file=log, end=",")
 		for i in range(length):
-			print("", format(data[i], '02X'), file=log, end="")
-		print("")
+			print(" ", format(data[i], '02X'), file=log, end="")
+		print("", file=log)
