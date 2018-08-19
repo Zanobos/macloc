@@ -15,3 +15,4 @@ def create_wall():
 @bp.route('/walls/<int:wallid>', methods=['PUT'])
 def update_wall(wallid):
     pass
+    
