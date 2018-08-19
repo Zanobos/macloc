@@ -1,2 +1,7 @@
+Set up
+
 pip install Flask==1.0.2
 pip install flask-sqlalchemy
+
+Initial configuration
+export FLASK_APP=app.py

@@ -1,0 +1,5 @@
+Wall
+
+ID int
+width double
+height double
