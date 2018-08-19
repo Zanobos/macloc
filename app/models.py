@@ -15,3 +15,7 @@ class Wall(db.Model):
             'width': self.width
         }
         return data
+    
+    def from_dict(self, data):
+        for field in ['height','width']:
+            setattr(self, field, data[field])
