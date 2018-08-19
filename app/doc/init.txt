@@ -1,8 +1,11 @@
-Set up
+#Dependencies
 
 pip install Flask==1.0.2
-pip install flask-sqlalchemy
 pip install python-dotenv
+pip install flask-sqlalchemy
+pip install flask-migrate
 
-Initial configuration
-export FLASK_APP=app.py
+# Database initialization
+flask db init                       #initialization
+flask db migrate -m "walls table"   #First script creation
+flask db upgrade
