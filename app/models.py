@@ -58,7 +58,7 @@ class Climb(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     grade = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    historic_wall = db.relationship('HistoricWall', uselist=False, backref='used_on', lazy='dynamic')
+    historic_wall = db.relationship('HistoricWall', uselist=False, backref='used_on')
 
     def __repr__(self):
         return '<Climb {}, grade={}>'.format(self.id, self.grade)
@@ -94,7 +94,7 @@ class Wall(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['height', 'width']:
             setattr(self, field, data[field])
-            
+
 class Hold(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     can_id = db.Column(db.Integer)
@@ -118,15 +118,18 @@ class Hold(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['dist_from_sx', 'dist_from_bot', 'holdType']:
+        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
             setattr(self, field, data[field])
+
+    def to_historic_hold(self):
+        return HistoricHold().from_dict(data=self.to_dict())
 
 class HistoricWall(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     width = db.Column(db.Float)
     holds = db.relationship('HistoricHold', backref='mounted_on', lazy='dynamic')
-    wall_id = db.Column(db.Integer, db.ForeignKey('historic_wall.id'))
+    climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
 
     def __repr__(self):
         return '<HistoricWall {}, h={}, w={}>' .format(self.id, self.height, self.width)
@@ -162,11 +165,16 @@ class HistoricHold(db.Model):
         }
         return data
 
+    def from_dict(self, data):
+        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
+            setattr(self, field, data[field])
+
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     can_id = db.Column(db.Integer)
     #missing the three forces
     hold_id = db.Column(db.Integer, db.ForeignKey('historic_hold.id'))
+    #missing timestamp
 
     def __repr__(self):
         return '<Record {}, can_id={}>'.format(self.id, self.can_id)
