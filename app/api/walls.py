@@ -10,7 +10,10 @@ def get_wall(wallid):
 
 @bp.route('/walls', methods=['GET'])
 def get_walls():
-    pass
+    page = request.args.get('page', 1, type=int)
+    per_page = min(request.args.get('per_page', 5, type=int), 20)
+    data = Wall.to_collection_dict(Wall.query, page, per_page, 'api.git')
+    return jsonify(data)
 
 @bp.route('/walls', methods=['POST'])
 def create_wall():
