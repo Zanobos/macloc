@@ -4,20 +4,23 @@ GET				/api/walls					Get all the walls configured
 GET				/api/walls/{id}				Get the info of a single walls
 POST			/api/walls					Create a single wall
 PUT				/api/walls/{id}				Modify a single wall
+DELETE          /api/walls/{id}             Delete a single wall
 
 GET				/api/holds					Get all the holds
 GET				/api/holds/{id}				Get the info of a single hold
 POST			/api/holds					Create a single hold
 PUT				/api/holds/{id}				Modify a single hold
-WSS				/api/holds/{id}/realtime	Get realtime info
+DELETE          /api/holds/{id}             Delete a single hold
+WS				/api/holds/{id}         	Get realtime info
 
 GET				/api/users					Get the collections of users
 GET				/api/users/{id}				Get a single user
 POST			/api/users					Create a single user
 PUT				/api/users/{id}				Modify a single user
+DELETE          /api/users/{id}             Delete a single user
 
 GET				/api/climbs					Get all the climbs made
 GET				/api/climbs/{id}			Get the information of a single climb
 POST			/api/climbs					Create a new climb
-GET				/api/climbs/{id}/start		Start a new climb
-GET				/api/climbs/{id}/end		End the climbing
+DELETE          /api/climbs/{id}            Delete a climb
+PUT				/api/climbs/{id}		    Modify the climb - i.e. modify it's state(START/END)

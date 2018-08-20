@@ -1,8 +1,8 @@
+from app import db
 from app.api import bp
-from flask import request, jsonify, url_for
 from app.models import Wall
 from app.api.errors import bad_request
-from app import db
+from flask import request, jsonify, url_for
 
 @bp.route('/walls/<int:wallid>', methods=['GET'])
 def get_wall(wallid):
@@ -28,4 +28,12 @@ def create_wall():
 
 @bp.route('/walls/<int:wallid>', methods=['PUT'])
 def update_wall(wallid):
+    wall = Wall.query.get_or_404(wallid)
+    data = request.get_json() or {}
+    wall.from_dict(data)
+    db.session.commit()
+    return jsonify(wall.to_dict())
+
+@bp.route('/walls/<int:wallid>', methods=['DELETE'])
+def delete_wall(wallid):
     pass
