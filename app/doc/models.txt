@@ -1,5 +1,23 @@
 Wall
 
-ID int
+id int
 width double
 height double
+------------
+User
+
+id int
+name str
+nickname str
+email str
+height double
+weight double
+climbs Climb[]
+
+-------------
+Climb
+
+id int
+grade double
+user_id int
+#Note! The climb wall and holds must be copied/freezed, because they can be modified afterwards
