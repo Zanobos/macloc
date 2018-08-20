@@ -40,3 +40,7 @@ def update_wall(wallid):
 @bp.route('/walls/<int:wallid>', methods=['DELETE'])
 def delete_wall(wallid):
     pass
+
+@bp.route('/walls', methods=['DELETE'])
+def delete_walls():
+    pass
