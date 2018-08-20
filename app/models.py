@@ -122,7 +122,8 @@ class Hold(PaginatedAPIMixin, db.Model):
             setattr(self, field, data[field])
 
     def to_historic_hold(self):
-        return HistoricHold().from_dict(data=self.to_dict())
+        hh = HistoricHold()
+        return hh.from_dict(self.to_dict())
 
 class HistoricWall(db.Model):
     id = db.Column(db.Integer, primary_key=True)
