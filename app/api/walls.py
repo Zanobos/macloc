@@ -1,7 +1,7 @@
 from app import db
 from app.api import bp
 from app.models import Wall
-from app.api.errors import bad_request
+from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
 @bp.route('/walls/<int:wallid>', methods=['GET'])
@@ -12,7 +12,7 @@ def get_wall(wallid):
 def get_walls():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 5, type=int), 20)
-    data = Wall.to_collection_dict(Wall.query, page, per_page, 'api.git')
+    data = Wall.to_collection_dict(Wall.query, page, per_page, 'api.get_walls')
     return jsonify(data)
 
 @bp.route('/walls', methods=['POST'])
@@ -39,8 +39,16 @@ def update_wall(wallid):
 
 @bp.route('/walls/<int:wallid>', methods=['DELETE'])
 def delete_wall(wallid):
-    pass
+    wall = Wall.query.get_or_404(wallid)
+    db.session.delete(wall)
+    db.session.commit()
+    return jsonify(wall.to_dict())
 
 @bp.route('/walls', methods=['DELETE'])
 def delete_walls():
-    pass
+    auth = request.args.get('auth', 'notme', type=str)
+    if auth != 'me':
+        return unauthorized('wrong auth')
+    number_items = db.session.query(Wall).delete()
+    db.session.commit()
+    return jsonify(number_items)
