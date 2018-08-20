@@ -15,8 +15,10 @@ class PaginatedAPIMixin(object):
             },
             '_links': {
                 'self': url_for(endpoint, page=page, per_page=per_page, **kwargs),
-                'next': url_for(endpoint, page=page + 1, per_page=per_page, **kwargs) if resources.has_next else None,
-                'prev': url_for(endpoint, page=page - 1, per_page=per_page, **kwargs) if resources.has_prev else None
+                'next': url_for(endpoint, page=page + 1, per_page=per_page, **kwargs)
+                        if resources.has_next else None,
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page, **kwargs)
+                        if resources.has_prev else None
             }
         }
         return data
@@ -25,6 +27,7 @@ class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     width = db.Column(db.Float)
+    holds = db.relationship('Hold', backref='mounted_on', lazy='dynamic')
 
     def __repr__(self):
         return '<Wall {}, h={}, w={}>' .format(self.id, self.height, self.width)
@@ -87,4 +90,28 @@ class Climb(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['grade']:
+            setattr(self, field, data[field])
+
+class Hold(PaginatedAPIMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dist_from_sx = db.Column(db.Float)
+    dist_from_bot = db.Column(db.Float)
+    holdType = db.Column(db.String(30))
+    wall_id = db.Column(db.Integer, db.ForeignKey('wall.id'))
+
+    def __repr__(self):
+        return '<Hold {} ({},{}) t={}>'.format(self.id, self.dist_from_sx, \
+                self.dist_from_bot, self.holdType)
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'dist_from_sx': self.dist_from_sx,
+            'dist_from_bot': self.dist_from_bot,
+            'holdType': self.holdType
+        }
+        return data
+
+    def from_dict(self, data):
+        for field in ['dist_from_sx', 'dist_from_bot', 'holdType']:
             setattr(self, field, data[field])

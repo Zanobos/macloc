@@ -21,3 +21,12 @@ id int
 grade double
 user_id int
 #Note! The climb wall and holds must be copied/freezed, because they can be modified afterwards
+
+------------
+Hold
+
+id int
+dist_from_sx double
+dist_from_bot double
+holdType str
+wall_id int
