@@ -21,5 +21,3 @@ while 1:				                                                                    
     with open("log.txt", "a+") as log:					                                                #Write ID and values to text file
         print("", format(can_id, '04d'), file=log, end=",")
         print("\t", data1, "\t", data2, "\t", data3, "\t", data4, file=log)
-
-		

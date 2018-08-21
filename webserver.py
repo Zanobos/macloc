@@ -1,5 +1,6 @@
 from app import create_app, db
 from app.models import Wall, Climb, User, Hold, HistoricHold, HistoricWall, Record
+from app.worker import WorkerThread
 
 app = create_app()
 
@@ -13,5 +14,6 @@ def make_shell_context():
         'Hold': Hold,
         'HistoricWall': HistoricWall,
         'HistoricHold': HistoricHold,
-        'Record': Record
+        'Record': Record,
+        'WorkerThread': WorkerThread
         }
