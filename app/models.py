@@ -72,7 +72,7 @@ class Climb(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in []:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
 class Wall(PaginatedAPIMixin, db.Model):
@@ -96,11 +96,13 @@ class Wall(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['height', 'width', 'grade']:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
     def to_historic_wall(self):
-        return HistoricWall().from_dict(self.to_dict())
+        hw = HistoricWall().from_dict(self.to_dict())
+        hw.holds = [h.to_historic_hold() for h in self.holds]
+        return hw
 
 class Hold(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -126,7 +128,7 @@ class Hold(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
     def to_historic_hold(self):
@@ -154,7 +156,7 @@ class HistoricWall(db.Model):
 
     def from_dict(self, data):
         for field in ['height', 'width', 'grade']:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
 class HistoricHold(db.Model):
@@ -182,7 +184,7 @@ class HistoricHold(db.Model):
 
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
 class Record(db.Model):
