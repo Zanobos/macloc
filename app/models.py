@@ -84,11 +84,11 @@ class Climb(PaginatedAPIMixin, db.Model):
 
     def start_climb(self):
         self.status = 'start'
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now()
 
     def end_climb(self):
         self.status = 'end'
-        self.end_time = datetime.utcnow()
+        self.end_time = datetime.now()
 
 class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
