@@ -1,7 +1,6 @@
 import threading
 import time
 
-
 class WorkerThread(threading.Thread):
 
     def __init__(self):

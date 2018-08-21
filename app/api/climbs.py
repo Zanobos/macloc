@@ -1,8 +1,12 @@
 from app import db
 from app.api import bp
 from app.models import Climb, User, Wall
+from app.worker import WorkerThread
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
+
+#Ok for dev environment and in order to save on resources
+worker_thread = None
 
 @bp.route('/climbs/<int:climbid>', methods=['GET'])
 def get_climb(climbid):
@@ -39,10 +43,14 @@ def create_climb():
 def update_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
+    global worker_thread
     if data['status'] == 'start':
         climb.start_climb()
+        worker_thread = WorkerThread()
+        worker_thread.start()
     if data['status'] == 'end':
         climb.end_climb()
+        worker_thread.join()
     db.session.commit()
     return jsonify(climb.to_dict())
 
