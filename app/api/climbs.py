@@ -28,7 +28,7 @@ def create_climb():
     user = User.query.get_or_404(user_id)
     wall = Wall.query.get_or_404(wall_id)
     historic_wall = wall.to_historic_wall()
-    climb = Climb(climber=user, on_wall=historic_wall)
+    climb = Climb(climber=user, on_wall=historic_wall, status='ready')
     db.session.add(climb)
     db.session.commit()
     response = jsonify(climb.to_dict())
@@ -40,7 +40,10 @@ def create_climb():
 def update_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
-    climb.from_dict(data)
+    if data['status'] == 'start':
+        climb.start_climb()
+    if data['status'] == 'end':
+        climb.end_climb()
     db.session.commit()
     return jsonify(climb.to_dict())
 

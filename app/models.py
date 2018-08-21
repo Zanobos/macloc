@@ -1,3 +1,4 @@
+from datetime import datetime
 from app import db
 from flask import url_for
 
@@ -58,6 +59,9 @@ class Climb(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     historic_wall_id = db.Column(db.Integer, db.ForeignKey('historic_wall.id'))
+    status = db.Column(db.String(20))
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Climb {}>'.format(self.id)
@@ -66,7 +70,10 @@ class Climb(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'climber_name': self.climber.name,
-            'wall_grade': self.on_wall.grade
+            'wall_grade': self.on_wall.grade,
+            'status': self.status,
+            'start_time': self.start_time,
+            'end_time': self.end_time
         }
         return data
 
@@ -74,6 +81,14 @@ class Climb(PaginatedAPIMixin, db.Model):
         for field in []:
             setattr(self, field, data.get(field, None))
         return self
+
+    def start_climb(self):
+        self.status = 'start'
+        self.start_time = datetime.utcnow()
+
+    def end_climb(self):
+        self.status = 'end'
+        self.end_time = datetime.utcnow()
 
 class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -12,6 +12,7 @@ Climb
 
 id int
 user_id int
+status str //ready, start, end
 #Note! The climb wall and holds must be copied/freezed, because they can be modified afterwards
 ------------
 Wall (/HistoricWall)
