@@ -1,9 +1,3 @@
-Wall
-
-id int
-width double
-height double
-------------
 User
 
 id int
@@ -13,17 +7,21 @@ email str
 height double
 weight double
 climbs Climb[]
-
 -------------
 Climb
 
 id int
-grade double
 user_id int
 #Note! The climb wall and holds must be copied/freezed, because they can be modified afterwards
-
 ------------
-Hold
+Wall (/HistoricWall)
+
+id int
+width double
+height double
+grade double
+-------------
+Hold (/HistoricHold)
 
 id int
 dist_from_sx double

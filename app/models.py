@@ -57,22 +57,20 @@ class User(PaginatedAPIMixin, db.Model):
 # For this reason I store wall information as attributes
 class Climb(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    grade = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     historic_wall = db.relationship('HistoricWall', uselist=False, backref='used_on')
 
     def __repr__(self):
-        return '<Climb {}, grade={}>'.format(self.id, self.grade)
+        return '<Climb {}>'.format(self.id)
 
     def to_dict(self):
         data = {
-            'id': self.id,
-            'grade': self.grade
+            'id': self.id
         }
         return data
 
     def from_dict(self, data):
-        for field in ['grade']:
+        for field in []:
             setattr(self, field, data[field])
         return self
 
@@ -80,6 +78,7 @@ class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     width = db.Column(db.Float)
+    grade = db.Column(db.Float)
     holds = db.relationship('Hold', backref='mounted_on', lazy='dynamic')
 
     def __repr__(self):
@@ -89,12 +88,13 @@ class Wall(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'height': self.height,
-            'width': self.width
+            'width': self.width,
+            'grade': self.grade
         }
         return data
 
     def from_dict(self, data):
-        for field in ['height', 'width']:
+        for field in ['height', 'width', 'grade']:
             setattr(self, field, data[field])
         return self
 
@@ -135,6 +135,7 @@ class HistoricWall(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     width = db.Column(db.Float)
+    grade = db.Column(db.Float)
     holds = db.relationship('HistoricHold', backref='mounted_on', lazy='dynamic')
     climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
 
@@ -145,12 +146,13 @@ class HistoricWall(db.Model):
         data = {
             'id': self.id,
             'height': self.height,
-            'width': self.width
+            'width': self.width,
+            'grade': self.grade
         }
         return data
 
     def from_dict(self, data):
-        for field in ['height', 'width']:
+        for field in ['height', 'width', 'grade']:
             setattr(self, field, data[field])
         return self
 
