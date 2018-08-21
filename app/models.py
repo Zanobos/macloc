@@ -50,6 +50,7 @@ class User(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['name', 'nickname', 'email', 'height', 'weight']:
             setattr(self, field, data[field])
+        return self
 
 # Remember, user can be referenced with relationship, but
 # holds and walls must be copied because they can change
@@ -73,6 +74,7 @@ class Climb(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['grade']:
             setattr(self, field, data[field])
+        return self
 
 class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -94,6 +96,10 @@ class Wall(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['height', 'width']:
             setattr(self, field, data[field])
+        return self
+
+    def to_historic_wall(self):
+        return HistoricWall().from_dict(self.to_dict())
 
 class Hold(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -120,10 +126,10 @@ class Hold(PaginatedAPIMixin, db.Model):
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
             setattr(self, field, data[field])
+        return self
 
     def to_historic_hold(self):
-        hh = HistoricHold()
-        return hh.from_dict(self.to_dict())
+        return HistoricHold().from_dict(self.to_dict())
 
 class HistoricWall(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -142,6 +148,11 @@ class HistoricWall(db.Model):
             'width': self.width
         }
         return data
+
+    def from_dict(self, data):
+        for field in ['height', 'width']:
+            setattr(self, field, data[field])
+        return self
 
 class HistoricHold(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -169,6 +180,7 @@ class HistoricHold(db.Model):
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
             setattr(self, field, data[field])
+        return self
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
