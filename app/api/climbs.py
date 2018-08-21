@@ -19,7 +19,6 @@ def get_climbs():
 
 @bp.route('/climbs', methods=['POST'])
 def create_climb():
-    #data = request.get_json() or {}
     #Create a new Climb, freezing wall and holds status
     user_id = request.args.get('user_id', None, type=int)
     wall_id = request.args.get('wall_id', None, type=int)
