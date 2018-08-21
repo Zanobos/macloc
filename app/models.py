@@ -23,7 +23,6 @@ class PaginatedAPIMixin(object):
         }
         return data
 
-
 class User(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
@@ -49,7 +48,7 @@ class User(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['name', 'nickname', 'email', 'height', 'weight']:
-            setattr(self, field, data[field])
+            setattr(self, field, data.get(field, None))
         return self
 
 # Remember, user can be referenced with relationship, but
@@ -58,14 +57,16 @@ class User(PaginatedAPIMixin, db.Model):
 class Climb(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    historic_wall = db.relationship('HistoricWall', uselist=False, backref='used_on')
+    historic_wall_id = db.Column(db.Integer, db.ForeignKey('historic_wall.id'))
 
     def __repr__(self):
         return '<Climb {}>'.format(self.id)
 
     def to_dict(self):
         data = {
-            'id': self.id
+            'id': self.id,
+            'climber_name': self.climber.name,
+            'wall_grade': self.on_wall.grade
         }
         return data
 
@@ -137,7 +138,7 @@ class HistoricWall(db.Model):
     width = db.Column(db.Float)
     grade = db.Column(db.Float)
     holds = db.relationship('HistoricHold', backref='mounted_on', lazy='dynamic')
-    climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
+    climb = db.relationship('Climb', uselist=False, backref='on_wall')
 
     def __repr__(self):
         return '<HistoricWall {}, h={}, w={}>' .format(self.id, self.height, self.width)

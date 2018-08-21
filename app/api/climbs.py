@@ -1,6 +1,6 @@
 from app import db
 from app.api import bp
-from app.models import Climb
+from app.models import Climb, User, Wall
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
@@ -19,11 +19,16 @@ def get_climbs():
 
 @bp.route('/climbs', methods=['POST'])
 def create_climb():
-    data = request.get_json() or {}
-    if 'grade' not in data:
-        return bad_request('must include grade')
-    climb = Climb()
-    climb.from_dict(data)
+    #data = request.get_json() or {}
+    #Create a new Climb, freezing wall and holds status
+    user_id = request.args.get('user_id', None, type=int)
+    wall_id = request.args.get('wall_id', None, type=int)
+    if user_id is None or wall_id is None:
+        return bad_request('must include user_id and wall_id')
+    user = User.query.get_or_404(user_id)
+    wall = Wall.query.get_or_404(wall_id)
+    historic_wall = wall.to_historic_wall()
+    climb = Climb(climber=user, on_wall=historic_wall)
     db.session.add(climb)
     db.session.commit()
     response = jsonify(climb.to_dict())

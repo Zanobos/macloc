@@ -18,8 +18,8 @@ def get_walls():
 @bp.route('/walls', methods=['POST'])
 def create_wall():
     data = request.get_json() or {}
-    if 'width' not in data or 'height' not in data:
-        return bad_request('must include width and height')
+    if 'width' not in data or 'height' not in data or 'grade' not in data:
+        return bad_request('must include width, height and grade')
     wall = Wall()
     wall.from_dict(data)
     db.session.add(wall)
