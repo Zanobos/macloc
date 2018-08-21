@@ -1,5 +1,6 @@
 import threading
 import time
+from app.models import Record
 
 class WorkerThread(threading.Thread):
 
@@ -9,6 +10,7 @@ class WorkerThread(threading.Thread):
 
     def run(self):
         while not self.stoprequest.isSet():
+            record = Record()
             print("working on")
             time.sleep(1)
 

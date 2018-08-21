@@ -1,6 +1,7 @@
 from app import create_app, db
 from app.models import Wall, Climb, User, Hold, HistoricHold, HistoricWall, Record
-from app.worker import WorkerThread
+from app.utils.worker import WorkerThread
+from app.utils.rabbitmq import Publisher, Receiver
 
 app = create_app()
 
@@ -15,5 +16,7 @@ def make_shell_context():
         'HistoricWall': HistoricWall,
         'HistoricHold': HistoricHold,
         'Record': Record,
-        'WorkerThread': WorkerThread
+        'WorkerThread': WorkerThread,
+        'Publisher': Publisher,
+        'Receiver': Receiver
         }

@@ -1,7 +1,7 @@
 from app import db
 from app.api import bp
 from app.models import Climb, User, Wall
-from app.worker import WorkerThread
+from app.utils.worker import WorkerThread
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
