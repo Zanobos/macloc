@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4910c3748489
+Revision ID: b46721bbe889
 Revises: 
-Create Date: 2018-08-21 09:43:28.477972
+Create Date: 2018-08-21 12:02:55.972673
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4910c3748489'
+revision = 'b46721bbe889'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -48,6 +48,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('historic_wall_id', sa.Integer(), nullable=True),
+    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('start_time', sa.DateTime(), nullable=True),
+    sa.Column('end_time', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['historic_wall_id'], ['historic_wall.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -57,7 +60,7 @@ def upgrade():
     sa.Column('can_id', sa.Integer(), nullable=True),
     sa.Column('dist_from_sx', sa.Float(), nullable=True),
     sa.Column('dist_from_bot', sa.Float(), nullable=True),
-    sa.Column('holdType', sa.String(length=30), nullable=True),
+    sa.Column('hold_type', sa.String(length=30), nullable=True),
     sa.Column('wall_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['wall_id'], ['historic_wall.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -67,7 +70,7 @@ def upgrade():
     sa.Column('can_id', sa.Integer(), nullable=True),
     sa.Column('dist_from_sx', sa.Float(), nullable=True),
     sa.Column('dist_from_bot', sa.Float(), nullable=True),
-    sa.Column('holdType', sa.String(length=30), nullable=True),
+    sa.Column('hold_type', sa.String(length=30), nullable=True),
     sa.Column('wall_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['wall_id'], ['wall.id'], ),
     sa.PrimaryKeyConstraint('id')

@@ -22,6 +22,9 @@ def create_hold():
     data = request.get_json() or {}
     if 'dist_from_sx' not in data or 'dist_from_bot' not in data:
         return bad_request('must include dist_from_sx and dist_from_bot')
+#    wall_id = request.args.get('wall_id', None, type=int)
+#    wall = Wall.query.get(wall_id) if wall_id is not None else None
+#    hold = Hold(mounted_on=wall)
     hold = Hold()
     hold.from_dict(data)
     db.session.add(hold)

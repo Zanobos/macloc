@@ -105,7 +105,8 @@ class Wall(PaginatedAPIMixin, db.Model):
             'id': self.id,
             'height': self.height,
             'width': self.width,
-            'grade': self.grade
+            'grade': self.grade,
+            'holds_number': len(self.holds.all())
         }
         return data
 
@@ -124,12 +125,12 @@ class Hold(PaginatedAPIMixin, db.Model):
     can_id = db.Column(db.Integer)
     dist_from_sx = db.Column(db.Float)
     dist_from_bot = db.Column(db.Float)
-    holdType = db.Column(db.String(30))
+    hold_type = db.Column(db.String(30))
     wall_id = db.Column(db.Integer, db.ForeignKey('wall.id'))
 
     def __repr__(self):
         return '<Hold {}, can_id={} ({},{}) t={}>'.format(self.id, self.can_id, self.dist_from_sx, \
-                self.dist_from_bot, self.holdType)
+                self.dist_from_bot, self.hold_type)
 
     def to_dict(self):
         data = {
@@ -137,12 +138,13 @@ class Hold(PaginatedAPIMixin, db.Model):
             'can_id': self.can_id,
             'dist_from_sx': self.dist_from_sx,
             'dist_from_bot': self.dist_from_bot,
-            'holdType': self.holdType
+            'hold_type': self.hold_type,
+            'wall_id': self.wall_id
         }
         return data
 
     def from_dict(self, data):
-        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
+        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'hold_type', 'wall_id']:
             setattr(self, field, data.get(field, None))
         return self
 
@@ -179,13 +181,13 @@ class HistoricHold(db.Model):
     can_id = db.Column(db.Integer)
     dist_from_sx = db.Column(db.Float)
     dist_from_bot = db.Column(db.Float)
-    holdType = db.Column(db.String(30))
+    hold_type = db.Column(db.String(30))
     wall_id = db.Column(db.Integer, db.ForeignKey('historic_wall.id'))
     records = db.relationship('Record', backref='of_hold', lazy='dynamic')
 
     def __repr__(self):
         return '<HistoricHold {}, can_id={} ({},{}) t={}>'.format(self.id, self.can_id, \
-                self.dist_from_sx, self.dist_from_bot, self.holdType)
+                self.dist_from_sx, self.dist_from_bot, self.hold_type)
 
     def to_dict(self):
         data = {
@@ -193,12 +195,12 @@ class HistoricHold(db.Model):
             'can_id': self.can_id,
             'dist_from_sx': self.dist_from_sx,
             'dist_from_bot': self.dist_from_bot,
-            'holdType': self.holdType
+            'hold_type': self.hold_type
         }
         return data
 
     def from_dict(self, data):
-        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'holdType']:
+        for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'hold_type']:
             setattr(self, field, data.get(field, None))
         return self
 
