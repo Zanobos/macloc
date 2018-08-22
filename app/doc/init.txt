@@ -5,6 +5,8 @@ pip install python-dotenv
 pip install flask-sqlalchemy
 pip install flask-migrate
 pip install pika
+pip install flask-socketio
+pip install eventlet
 
 pip install httpie #curl in python
 

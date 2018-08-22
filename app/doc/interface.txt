@@ -13,7 +13,6 @@ POST			/api/holds					Create a single hold
 PUT				/api/holds/{id}				Modify a single hold
 DELETE          /api/holds/{id}             Delete a single hold
 DELETE          /api/holds                  Delete all the holds
-WS				/api/holds/{id}         	Get realtime info
 
 GET				/api/users					Get the collections of users
 GET				/api/users/{id}				Get a single user
@@ -28,3 +27,4 @@ POST			/api/climbs					Create a new climb
 PUT				/api/climbs/{id}		    Modify the climb - i.e. modify it's state(START/END)
 DELETE          /api/climbs/{id}            Delete a climb
 DELETE          /api/climbs                 Delete all the climbs
+WS				/api/climbs              	Get realtime info of the climb

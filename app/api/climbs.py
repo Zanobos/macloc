@@ -1,4 +1,4 @@
-from app import db
+from app import db, socketio
 from app.api import bp
 from app.models import Climb, User, Wall
 from app.utils.worker import WorkerThread
@@ -69,3 +69,11 @@ def delete_climbs():
     number_items = db.session.query(Climb).delete()
     db.session.commit()
     return jsonify(number_items)
+
+#@socketio.on('connect', namespace='/climbs')
+#def test_connect():
+#    print('Client connected')
+
+#@socketio.on('disconnect', namespace='/climbs')
+#def test_disconnect():
+#    print('Client disconnected')
