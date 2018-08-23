@@ -80,8 +80,4 @@ def ws_disconnect():
 
 @socketio.on('json', namespace='/api/climbs')
 def handle_json(json):
-    print('Received: {}', json)
-
-@socketio.on('message', namespace='/api/climbs')
-def handle_message(message):
-    print('Received: {}', message)
+    print('Received:', json)
