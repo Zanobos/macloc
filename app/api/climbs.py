@@ -70,10 +70,18 @@ def delete_climbs():
     db.session.commit()
     return jsonify(number_items)
 
-#@socketio.on('connect', namespace='/climbs')
-#def test_connect():
-#    print('Client connected')
+@socketio.on('connect', namespace='/api/climbs')
+def ws_connect():
+    print('Client connected')
 
-#@socketio.on('disconnect', namespace='/climbs')
-#def test_disconnect():
-#    print('Client disconnected')
+@socketio.on('disconnect', namespace='/api/climbs')
+def ws_disconnect():
+    print('Client disconnected')
+
+@socketio.on('json', namespace='/api/climbs')
+def handle_json(json):
+    print('Received: {}', json)
+
+@socketio.on('message', namespace='/api/climbs')
+def handle_message(message):
+    print('Received: {}', message)
