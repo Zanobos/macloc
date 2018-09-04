@@ -211,8 +211,8 @@ class Record(db.Model):
     y = db.Column(db.Float)
     x = db.Column(db.Float)
     timestamp = db.Column(db.Integer)
-    hold_id = db.Column(db.Integer)
-    climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
+    hold_id = db.Column(db.Integer, db.ForeignKey('hold.id'))
+    climb_id = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Record {}, can_id={}, x={}, y={}, z={}>'.format(self.id, self.can_id,
