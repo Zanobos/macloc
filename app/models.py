@@ -207,18 +207,25 @@ class HistoricHold(db.Model):
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     can_id = db.Column(db.Integer)
-    #missing the three forces
+    x = db.Column(db.Float)
+    y = db.Column(db.Float)
+    x = db.Column(db.Float)
+    timestamp = db.Column(db.Integer)
+    climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
     hold_id = db.Column(db.Integer, db.ForeignKey('historic_hold.id'))
-    #missing timestamp
 
     def __repr__(self):
-        return '<Record {}, can_id={}>'.format(self.id, self.can_id)
+        return '<Record {}, can_id={}, x={}, y={}, z={}>'.format(self.id, self.can_id,
+                                                                 self.x, self.y, self.z)
 
     def to_dict(self):
         data = {
             'id': self.id,
             'can_id': self.can_id,
-            'hold_id': self.hold_id
+            'hold_id': self.hold_id,
+            'x': self.x,
+            'y': self.y,
+            'z': self.z
         }
         return data
 
