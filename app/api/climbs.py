@@ -46,7 +46,7 @@ def update_climb(climbid):
     global worker_thread
     if data['status'] == 'start':
         climb.start_climb()
-        worker_thread = WorkerThread(climb.id)
+        worker_thread = WorkerThread(climb)
         worker_thread.start()
     if data['status'] == 'end':
         climb.end_climb()

@@ -211,8 +211,8 @@ class Record(db.Model):
     y = db.Column(db.Float)
     x = db.Column(db.Float)
     timestamp = db.Column(db.Integer)
+    hold_id = db.Column(db.Integer)
     climb_id = db.Column(db.Integer, db.ForeignKey('climb.id'))
-    hold_id = db.Column(db.Integer, db.ForeignKey('historic_hold.id'))
 
     def __repr__(self):
         return '<Record {}, can_id={}, x={}, y={}, z={}>'.format(self.id, self.can_id,
@@ -222,12 +222,19 @@ class Record(db.Model):
         data = {
             'id': self.id,
             'can_id': self.can_id,
+            'x': self.x,
+            'y': self.y,
+            'z': self.z,
+            'hold_id': self.hold_id,
+            'timestamp': self.timestamp
+        }
+        return data
+
+    def to_ws_dict(self):
+        data = {
             'hold_id': self.hold_id,
             'x': self.x,
             'y': self.y,
             'z': self.z
         }
         return data
-
-    def to_ws_dict(self):
-        pass

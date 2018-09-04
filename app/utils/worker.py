@@ -5,20 +5,24 @@ import struct
 from app import db
 from app.models import Record
 from app.utils.rabbitmq import Publisher
+from flask import jsonify
 
 class WorkerThread(threading.Thread):
 
     #Format string to unpack received message
     FMT = "<IB3x3h1H"
 
-    climb_id = None
+    climb = None
     socket = None
     publisher = None
+    canid_holdid_dict = None
 
-    def __init__(self, climb_id):
+    def __init__(self, climb):
         super(WorkerThread, self).__init__()
         self.stoprequest = threading.Event()
-        self.climb_id = climb_id
+        self.climb = climb
+        self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
+                                          [o.hold_id for o in climb.on_wall.holds]))
         self.publisher = Publisher()
         self.publisher.open_connection()
         print("connected to RabbitMQ")
@@ -34,10 +38,11 @@ class WorkerThread(threading.Thread):
             #Mask ID to hide possible flags
             can_id &= socket.CAN_EFF_MASK
             #Create Record
-            record = Record(can_id=can_id, x=x, y=y, z=z,
-                            timestamp=timestamp, climb_id=self.climb_id)
+            hold_id = self.canid_holdid_dict[can_id]
+            record = Record(hold_id=hold_id, can_id=can_id, x=x, y=y, z=z,
+                            timestamp=timestamp, climb_id=self.climb.id)
             #Send Record to RabbitMQ
-            self.publisher.publish(record.to_dict)
+            self.publisher.publish(jsonify(record.to_ws_dict()))
             #Save the Record in db
             db.session.add(record)
             print(record)
