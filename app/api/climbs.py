@@ -83,7 +83,6 @@ def ws_connect():
     receiver = Receiver()
     receiver.open_connection()
     receiver.setup_consumer(on_rabbitmq_message)
-    print('Receiver connected to RabbitMQ')
 
 @socketio.on('disconnect', namespace='/api/climbs')
 def ws_disconnect():
