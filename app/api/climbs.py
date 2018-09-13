@@ -1,14 +1,14 @@
 from app import db, socketio
 from app.api import bp
 from app.models import Climb, User, Wall
-from app.utils.worker import WorkerThread
+from app.utils.worker import PublisherThread, ReceiverThread
 from app.utils.rabbitmq import Receiver
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
 #Ok for dev environment and in order to save on resources
-worker_thread = None
-receiver = None
+publisher_thread = None
+receiver_thread = None
 
 @bp.route('/climbs/<int:climbid>', methods=['GET'])
 def get_climb(climbid):
@@ -54,15 +54,15 @@ def patch_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
     climb.patch_from_dict(data)
-    global worker_thread
+    global publisher_thread
     if data['status'] == 'start':
         climb.start_climb()
-        worker_thread = WorkerThread(climb)
-        worker_thread.start()
+        publisher_thread = PublisherThread(climb)
+        publisher_thread.start()
     if data['status'] == 'end':
         climb.end_climb()
-        worker_thread.join()
-        worker_thread = None
+        publisher_thread.join()
+        publisher_thread = None
     db.session.commit()
     return jsonify(climb.to_dict())
 
@@ -82,20 +82,16 @@ def delete_climbs():
     db.session.commit()
     return jsonify(number_items)
 
-def on_rabbitmq_message(body):
-    socketio.emit('json', body, namespace='/api/climbs')
-
 @socketio.on('connect', namespace='/api/climbs')
 def ws_connect():
+    global receiver_thread
+    receiver_thread = ReceiverThread()
+    receiver_thread.start()
     print('Client connected')
-    global receiver
-    receiver = Receiver()
-    receiver.open_connection()
-    receiver.setup_consumer(on_rabbitmq_message)
 
 @socketio.on('disconnect', namespace='/api/climbs')
 def ws_disconnect():
+    global receiver_thread
+    receiver_thread.join()
+    receiver_thread = None
     print('Client disconnected')
-    global receiver
-    receiver.close_connection()
-    receiver = None
