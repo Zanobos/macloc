@@ -45,6 +45,15 @@ def create_climb():
 def update_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
+    climb.from_dict(data)
+    db.session.commit()
+    return jsonify(climb.to_dict())
+
+@bp.route('/climbs/<int:climbid>', methods=['PATCH'])
+def patch_climb(climbid):
+    climb = Climb.query.get_or_404(climbid)
+    data = request.get_json() or {}
+    climb.patch_from_dict(data)
     global worker_thread
     if data['status'] == 'start':
         climb.start_climb()

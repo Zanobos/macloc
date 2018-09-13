@@ -37,6 +37,14 @@ def update_user(userid):
     db.session.commit()
     return jsonify(user.to_dict())
 
+@bp.route('/users/<int:userid>', methods=['PATCH'])
+def patch_user(userid):
+    user = User.query.get_or_404(userid)
+    data = request.get_json() or {}
+    user.patch_from_dict(data)
+    db.session.commit()
+    return jsonify(user.to_dict())
+
 @bp.route('/users/<int:userid>', methods=['DELETE'])
 def delete_user(userid):
     user = User.query.get_or_404(userid)

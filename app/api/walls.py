@@ -37,6 +37,14 @@ def update_wall(wallid):
     db.session.commit()
     return jsonify(wall.to_dict())
 
+@bp.route('/walls/<int:wallid>', methods=['PATCH'])
+def patch_wall(wallid):
+    wall = Wall.query.get_or_404(wallid)
+    data = request.get_json() or {}
+    wall.patch_from_dict(data)
+    db.session.commit()
+    return jsonify(wall.to_dict())
+
 @bp.route('/walls/<int:wallid>', methods=['DELETE'])
 def delete_wall(wallid):
     wall = Wall.query.get_or_404(wallid)

@@ -39,6 +39,14 @@ def update_hold(holdid):
     db.session.commit()
     return jsonify(hold.to_dict())
 
+@bp.route('/holds/<int:holdid>', methods=['PATCH'])
+def patch_hold(holdid):
+    hold = Hold.query.get_or_404(holdid)
+    data = request.get_json() or {}
+    hold.patch_from_dict(data)
+    db.session.commit()
+    return jsonify(hold.to_dict())
+
 @bp.route('/holds/<int:holdid>', methods=['DELETE'])
 def delete_hold(holdid):
     hold = Hold.query.get_or_404(holdid)

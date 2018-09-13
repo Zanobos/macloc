@@ -49,7 +49,12 @@ class User(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['name', 'nickname', 'email', 'height', 'weight']:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
+        return self
+
+    def patch_from_dict(self, data):
+        for field in data:
+            setattr(self, field, data[field])
         return self
 
 # Remember, user can be referenced with relationship, but
@@ -79,7 +84,12 @@ class Climb(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in []:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
+        return self
+
+    def patch_from_dict(self, data):
+        for field in data:
+            setattr(self, field, data[field])
         return self
 
     def start_climb(self):
@@ -112,7 +122,12 @@ class Wall(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['height', 'width', 'grade']:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
+        return self
+
+    def patch_from_dict(self, data):
+        for field in data:
+            setattr(self, field, data[field])
         return self
 
     def to_historic_wall(self):
@@ -145,7 +160,12 @@ class Hold(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'hold_type', 'wall_id']:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
+        return self
+
+    def patch_from_dict(self, data):
+        for field in data:
+            setattr(self, field, data[field])
         return self
 
     def to_historic_hold(self):
@@ -173,7 +193,7 @@ class HistoricWall(db.Model):
 
     def from_dict(self, data):
         for field in ['height', 'width', 'grade']:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
         return self
 
 class HistoricHold(db.Model):
@@ -201,7 +221,7 @@ class HistoricHold(db.Model):
 
     def from_dict(self, data):
         for field in ['can_id', 'dist_from_sx', 'dist_from_bot', 'hold_type']:
-            setattr(self, field, data.get(field, None))
+            setattr(self, field, data[field])
         return self
 
 class Record(db.Model):
