@@ -83,6 +83,7 @@ def delete_climbs():
 
 @socketio.on('connect', namespace='/api/climbs')
 def ws_connect():
+    print('Client is asking to connect')
     global receiver_thread
     receiver_thread = ReceiverThread()
     receiver_thread.start()
@@ -90,6 +91,7 @@ def ws_connect():
 
 @socketio.on('disconnect', namespace='/api/climbs')
 def ws_disconnect():
+    print('Client is asking to disconnect')
     global receiver_thread
     receiver_thread.join()
     receiver_thread = None

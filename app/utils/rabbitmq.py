@@ -49,7 +49,9 @@ class Receiver(MessageController):
         self.channel.basic_consume(
             consumer_callback=self.on_message,
             queue=self.QUEUE_NAME)
-        print("Receiver to RabbitMQ ready")
 
     def start_consuming(self):
         self.channel.start_consuming()
+
+    def stop_consuming(self):
+        self.channel.stop_consuming()

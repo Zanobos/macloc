@@ -76,6 +76,7 @@ class ReceiverThread(threading.Thread):
 
     def join(self, timeout=None):
         self.stoprequest.set()
+        self.receiver.stop_consuming()
         super(ReceiverThread, self).join(timeout)
         self.receiver.close_connection()
         print("Receiver closed connection to RabbitMQ")
