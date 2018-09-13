@@ -99,4 +99,3 @@ def ws_disconnect():
     global receiver
     receiver.close_connection()
     receiver = None
-    print('Receiver closed connection to RabbitMQ')
