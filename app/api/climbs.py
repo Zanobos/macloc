@@ -2,7 +2,6 @@ from app import db, socketio
 from app.api import bp
 from app.models import Climb, User, Wall
 from app.utils.worker import PublisherThread, ReceiverThread
-from app.utils.rabbitmq import Receiver
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
