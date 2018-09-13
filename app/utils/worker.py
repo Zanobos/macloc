@@ -61,6 +61,7 @@ class ReceiverThread(threading.Thread):
     receiver = None
 
     def on_rabbitmq_message(self, body):
+        print('message ', body)
         socketio.emit('json', body, namespace='/api/climbs')
 
     def __init__(self):
@@ -70,6 +71,7 @@ class ReceiverThread(threading.Thread):
         self.receiver = Receiver()
         self.receiver.open_connection()
         self.receiver.setup_consumer(self.on_rabbitmq_message)
+        print("Receiver connected to RabbitMQ")
 
     def run(self):
         self.receiver.start_consuming()

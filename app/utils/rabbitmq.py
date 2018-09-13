@@ -17,11 +17,9 @@ class MessageController(object):
         self.channel.exchange_declare(
             exchange=self.EXCHANGE_NAME,
             exchange_type=self.EXCHANGE_TYPE)
-        print("Opened connection to RabbitMQ")
 
     def close_connection(self):
         self.connection.close()
-        print("Closed connection to RabbitMQ")
 
 class Publisher(MessageController):
 
