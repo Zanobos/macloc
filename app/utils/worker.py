@@ -18,8 +18,9 @@ class PublisherThread(threading.Thread):
     publisher = None
     canid_holdid_dict = None
     session = None
+    db_session = None
 
-    def __init__(self, climb, db_engine):
+    def __init__(self, climb, db_session):
         super(PublisherThread, self).__init__()
         self.stoprequest = threading.Event()
         self.climb = climb
@@ -28,8 +29,8 @@ class PublisherThread(threading.Thread):
         self.publisher = Publisher()
         self.publisher.open_connection()
 
-        session_factory = sessionmaker(bind=db_engine)
-        self.session = scoped_session(session_factory)
+        self.db_session = db_session
+        self.session = db_session()
 
         print("Publisher connected to RabbitMQ")
 #        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
@@ -47,6 +48,9 @@ class PublisherThread(threading.Thread):
                 can_pkt = self.sock.recv(16)
             except socket.error:
                 print('Exiting can receiver loop')
+                self.session.commit()
+                self.db_session.remove()
+                print("Commiting the session and clearing resources")
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
             #Mask ID to hide possible flags
@@ -59,17 +63,15 @@ class PublisherThread(threading.Thread):
             self.publisher.publish(json.dumps(record.to_ws_dict()))
             #Save the Record in db
             self.session.add(record)
-            self.session.commit()
             print(record)
 
     def join(self, timeout=None):
         self.stoprequest.set()
         self.sock.close()
-        print("can connection closed")
+        print("Can connection closed")
         super(PublisherThread, self).join(timeout)
         self.publisher.close_connection()
         print("Publisher closed connection to RabbitMQ")
-        self.session.remove()
 
 class ReceiverThread(threading.Thread):
 
