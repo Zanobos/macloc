@@ -46,7 +46,8 @@ class Receiver(MessageController):
             routing_key=self.ROUTING_KEY)
         self.channel.basic_consume(
             consumer_callback=self.on_message,
-            queue=self.QUEUE_NAME)
+            queue=self.QUEUE_NAME,
+            no_ack=True)
 
     def start_consuming(self):
         self.channel.start_consuming()

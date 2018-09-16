@@ -16,17 +16,23 @@
             
             socket.on('connect', function(msg) {
                 console.log('connected')
+                socket.on('json', function(msg){
+                    console.log('handler')
+                    console.log(msg)
+                    $('#test').html('<p>' + msg + '</p>');             
+                });
+
+                socket.on('message', function(msg){
+                    console.log('handler')
+                    console.log(msg)
+                    $('#test').html('<p>' + msg + '</p>');             
+                });
             });
 
             socket.on('disconnect', function(msg) {
                 console.log('disconnected')
             });
-            
-            socket.on('json', function(msg){
-                console.log(msg)
-                $('#test').html('<p>' + msg + '</p>');             
-            });
-			
+            			
 			socket.connect();            
           
         });
