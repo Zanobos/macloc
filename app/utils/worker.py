@@ -61,7 +61,6 @@ class ReceiverThread(threading.Thread):
     receiver = None
 
     def on_rabbitmq_message(self, body):
-        print('message ', body)
         socketio.emit('json', body, namespace='/api/climbs')
 
     def __init__(self):

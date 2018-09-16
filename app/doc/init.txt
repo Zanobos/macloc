@@ -6,7 +6,8 @@ pip install flask-sqlalchemy
 pip install flask-migrate
 pip install pika
 pip install flask-socketio
-pip install eventlet
+pip install gevent
+pip install gevent-websocket
 
 pip install httpie #curl in python
 
