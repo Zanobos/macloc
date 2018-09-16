@@ -1,11 +1,12 @@
 import threading
 import socket
 import struct
+import json
 
-from app import db, socketio
+from app import socketio
 from app.models import Record
 from app.utils.rabbitmq import Publisher, Receiver
-from flask import jsonify
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 class PublisherThread(threading.Thread):
 
@@ -16,8 +17,9 @@ class PublisherThread(threading.Thread):
     sock = None
     publisher = None
     canid_holdid_dict = None
+    session = None
 
-    def __init__(self, climb):
+    def __init__(self, climb, db_engine):
         super(PublisherThread, self).__init__()
         self.stoprequest = threading.Event()
         self.climb = climb
@@ -25,6 +27,10 @@ class PublisherThread(threading.Thread):
                                           [o.id for o in climb.on_wall.holds]))
         self.publisher = Publisher()
         self.publisher.open_connection()
+
+        session_factory = sessionmaker(bind=db_engine)
+        self.session = scoped_session(session_factory)
+
         print("Publisher connected to RabbitMQ")
 #        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
 #        self.sock.bind(("can0",))
@@ -44,25 +50,26 @@ class PublisherThread(threading.Thread):
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
             #Mask ID to hide possible flags
-            can_id &= socket.CAN_EFF_MASK
+            #can_id &= socket.CAN_EFF_MASK
             #Create Record
             hold_id = self.canid_holdid_dict[can_id]
             record = Record(hold_id=hold_id, can_id=can_id, x=x, y=y, z=z,
                             timestamp=timestamp, climb_id=self.climb.id)
             #Send Record to RabbitMQ
-            self.publisher.publish(jsonify(record.to_ws_dict()))
+            self.publisher.publish(json.dumps(record.to_ws_dict()))
             #Save the Record in db
-            db.session.add(record)
+            self.session.add(record)
+            self.session.commit()
             print(record)
 
     def join(self, timeout=None):
         self.stoprequest.set()
         self.sock.close()
+        print("can connection closed")
         super(PublisherThread, self).join(timeout)
         self.publisher.close_connection()
         print("Publisher closed connection to RabbitMQ")
-        db.session.commit()
-        print("can connection closed")
+        self.session.remove()
 
 class ReceiverThread(threading.Thread):
 

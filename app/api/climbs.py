@@ -56,7 +56,7 @@ def patch_climb(climbid):
     global publisher_thread
     if data['status'] == 'start':
         climb.start_climb()
-        publisher_thread = PublisherThread(climb)
+        publisher_thread = PublisherThread(climb=climb, db_engine=db.engine)
         publisher_thread.start()
     if data['status'] == 'end':
         climb.end_climb()

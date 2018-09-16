@@ -229,7 +229,7 @@ class Record(db.Model):
     can_id = db.Column(db.Integer)
     x = db.Column(db.Float)
     y = db.Column(db.Float)
-    x = db.Column(db.Float)
+    z = db.Column(db.Float)
     timestamp = db.Column(db.Integer)
     hold_id = db.Column(db.Integer, db.ForeignKey('historic_hold.id'))
     climb_id = db.Column(db.Integer)
