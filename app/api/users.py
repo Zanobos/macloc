@@ -18,8 +18,8 @@ def get_users():
 @bp.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
-    if 'name' not in data:
-        return bad_request('must include name')
+    if 'name' not in data or 'height' not in data or 'weight' not in data:
+        return bad_request('must include name, height and weight')
     user = User()
     user.from_dict(data)
     db.session.add(user)

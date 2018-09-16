@@ -13,7 +13,7 @@ class PublisherThread(threading.Thread):
     FMT = "<IB3x3h1H"
 
     climb = None
-    socket = None
+    sock = None
     publisher = None
     canid_holdid_dict = None
 
@@ -22,18 +22,26 @@ class PublisherThread(threading.Thread):
         self.stoprequest = threading.Event()
         self.climb = climb
         self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
-                                          [o.hold_id for o in climb.on_wall.holds]))
+                                          [o.id for o in climb.on_wall.holds]))
         self.publisher = Publisher()
         self.publisher.open_connection()
         print("Publisher connected to RabbitMQ")
-        self.socket = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
-        self.socket.bind(("can0",))
-        print("can connection opened")
+#        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+#        self.sock.bind(("can0",))
+#        print("can connection opened")
+
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.bind(("127.0.0.1", 6000))
+        print("UDP mock connection open")
 
     def run(self):
         while not self.stoprequest.isSet():
             #Receive and unpack message
-            can_pkt = socket.recv(16)
+            try:
+                can_pkt = self.sock.recv(16)
+            except socket.error:
+                print('Exiting can receiver loop')
+                continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
             #Mask ID to hide possible flags
             can_id &= socket.CAN_EFF_MASK
@@ -49,11 +57,11 @@ class PublisherThread(threading.Thread):
 
     def join(self, timeout=None):
         self.stoprequest.set()
+        self.sock.close()
         super(PublisherThread, self).join(timeout)
         self.publisher.close_connection()
         print("Publisher closed connection to RabbitMQ")
         db.session.commit()
-        self.socket.close()
         print("can connection closed")
 
 class ReceiverThread(threading.Thread):
