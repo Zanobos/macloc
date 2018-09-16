@@ -6,7 +6,6 @@ import json
 from app import socketio
 from app.models import Record
 from app.utils.rabbitmq import Publisher, Receiver
-from sqlalchemy.orm import sessionmaker, scoped_session
 
 class PublisherThread(threading.Thread):
 
