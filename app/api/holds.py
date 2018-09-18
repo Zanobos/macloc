@@ -2,6 +2,7 @@ from app import db, socketio
 from app.api import bp
 from app.models import Hold
 from app.api.errors import bad_request, unauthorized
+from app.worker import CalibrationThread
 from flask import request, jsonify, url_for
 
 @bp.route('/holds/<int:holdid>', methods=['GET'])
@@ -74,3 +75,6 @@ def holds_ws_disconnect():
 @socketio.on('message', namespace='/api/holds')
 def holds_ws_message(message):
     print('message ', message)
+    calibration_thread = CalibrationThread(db_session=db.session, hold_info=message)
+    calibration_thread.start()
+    calibration_thread.join()

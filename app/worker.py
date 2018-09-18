@@ -2,9 +2,11 @@ import threading
 import socket
 import struct
 import json
+from collections import defaultdict
+from math import sqrt
 
 from app import socketio
-from app.models import Record
+from app.models import Record, Hold
 
 class SocketConnectedThread(threading.Thread):
 
@@ -24,12 +26,6 @@ class SocketConnectedThread(threading.Thread):
         self.sock.bind(("127.0.0.1", 6000))
         print("UDP mock connection open")
 
-    def join(self, timeout=None):
-        self.stoprequest.set()
-        self.sock.close()
-        print("UDP mock connection closed")
-#        print("Can connection closed")
-        super(SocketConnectedThread, self).join(timeout)
 
 class PublisherThread(SocketConnectedThread):
 
@@ -71,3 +67,65 @@ class PublisherThread(SocketConnectedThread):
             #Save the Record in db
             self.session.add(record)
             print(record)
+
+    def join(self, timeout=None):
+        self.stoprequest.set()
+        self.sock.close()
+        print("UDP mock connection closed")
+#        print("Can connection closed")
+        super(PublisherThread, self).join(timeout)
+
+
+class CalibrationThread(SocketConnectedThread):
+
+    db_session = None
+    session = None
+    canid_values_dict = None
+    hold_info = None
+
+    def __init__(self, db_session, hold_info):
+        super(CalibrationThread, self).__init__()
+        self.db_session = db_session
+        self.session = db_session()
+        self.canid_values_dict = defaultdict(list)
+        self.hold_info = hold_info
+
+    def run(self):
+        while not self.stoprequest.isSet():
+            #Receive and unpack message
+            try:
+                can_pkt = self.sock.recv(16)
+            except socket.error:
+                socketio.emit('message', 'timeout', namespace='/api/holds')
+                self.db_session.remove()
+                print("Went to timeout!")
+                continue
+            can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
+            #Mask ID to hide possible flags
+            #can_id &= socket.CAN_EFF_MASK
+            magnitude = sqrt(x**2 + y**2 + z**2)
+            print(magnitude)
+            self.canid_values_dict[can_id].append(magnitude)
+            found_a_device = self.search_trough_records(can_id)
+            if found_a_device is True:
+                socketio.emit('message', 'ok', namespace='/api/holds')
+                if self.hold_info.save_result is True:
+                    hold = Hold.query.get(self.hold_info.hold_id)
+                    hold.can_id = can_id
+                    self.session.commit()
+                #Beware! in any case, db_session.remove()
+                self.db_session.remove()
+            else:
+                continue
+
+    def join(self, timeout=60):
+        super(CalibrationThread, self).join(timeout)
+        self.stoprequest.set()
+        self.sock.close()
+        print("UDP mock connection closed")
+#        print("Can connection closed")
+
+    def search_trough_records(self, can_id):
+        NUMBER_OF_SAMPLES = 10
+        if self.canid_values_dict[can_id].length % NUMBER_OF_SAMPLES is not 0:
+            pass
