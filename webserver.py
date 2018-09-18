@@ -1,6 +1,5 @@
 from app import create_app, db, socketio
 from app.models import Wall, Climb, User, Hold, HistoricHold, HistoricWall, Record
-from app.utils.rabbitmq import Publisher, Receiver
 
 app = create_app()
 
@@ -17,7 +16,5 @@ def make_shell_context():
         'Hold': Hold,
         'HistoricWall': HistoricWall,
         'HistoricHold': HistoricHold,
-        'Record': Record,
-        'Publisher': Publisher,
-        'Receiver': Receiver
+        'Record': Record
         }

@@ -1,7 +1,7 @@
 from app import db, socketio
 from app.api import bp
 from app.models import Climb, User, Wall
-from app.utils.worker import PublisherThread, ReceiverThread
+from app.utils.worker import PublisherThread
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
 
@@ -83,16 +83,8 @@ def delete_climbs():
 
 @socketio.on('connect', namespace='/api/climbs')
 def ws_connect():
-    print('Client is asking to connect')
-    global receiver_thread
-    receiver_thread = ReceiverThread()
-    receiver_thread.start()
     print('Client connected')
 
 @socketio.on('disconnect', namespace='/api/climbs')
 def ws_disconnect():
-    print('Client is asking to disconnect')
-    global receiver_thread
-    receiver_thread.join()
-    receiver_thread = None
     print('Client disconnected')
