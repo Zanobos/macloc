@@ -7,7 +7,6 @@
     <script type="text/javascript" charset="utf-8">
 
         let socket;
-        const enc = new TextDecoder("utf-8");
 
         $(document).ready(function(){
             namespace = '/api/climbs'; // change to an empty string to use the global namespace
@@ -19,9 +18,7 @@
                 console.log('connected')
                 socket.on('json', function(msg){
                     console.log(msg)
-                    data = enc.decode(msg)
-                    console.log(data)
-                    $('#test').html('<p>' + data + '</p>');             
+                    $('#test').html('<p>' + msg + '</p>');             
                 });
 
             });
