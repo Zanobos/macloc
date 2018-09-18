@@ -114,7 +114,7 @@ class Wall(PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return '<Wall {}, h={}, w={}, active={}>' .format(self.id, self.height, self.width,
-                                                            self.active)
+                                                          self.active)
 
     def to_dict(self):
         data = {
