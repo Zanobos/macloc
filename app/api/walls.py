@@ -13,6 +13,7 @@ def get_walls():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 5, type=int), 20)
     data = Wall.to_collection_dict(Wall.query, page, per_page, 'api.get_walls')
+    data['active'] = any(wall.active is True for wall in Wall.query.all())
     return jsonify(data)
 
 @bp.route('/walls', methods=['POST'])
@@ -21,6 +22,7 @@ def create_wall():
     if 'width' not in data or 'height' not in data or 'grade' not in data:
         return bad_request('must include width, height and grade')
     wall = Wall()
+    data['active'] = 'false'
     wall.from_dict(data)
     db.session.add(wall)
     db.session.commit()

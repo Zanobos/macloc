@@ -64,6 +64,7 @@ class Climb(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     historic_wall_id = db.Column(db.Integer, db.ForeignKey('historic_wall.id'))
+    wall_id = db.Column(db.Integer, db.ForeignKey('wall.id'))
     status = db.Column(db.String(20))
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
@@ -95,20 +96,25 @@ class Climb(PaginatedAPIMixin, db.Model):
     def start_climb(self):
         self.status = 'start'
         self.start_time = datetime.now()
+        self.going_on.active = True
 
     def end_climb(self):
         self.status = 'end'
         self.end_time = datetime.now()
+        self.going_on.active = False
 
 class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     width = db.Column(db.Float)
     grade = db.Column(db.Float)
+    active = db.Column(db.Boolean)
     holds = db.relationship('Hold', backref='mounted_on', lazy='dynamic')
+    climb = db.relationship('Climb', uselist=False, backref='going_on')
 
     def __repr__(self):
-        return '<Wall {}, h={}, w={}>' .format(self.id, self.height, self.width)
+        return '<Wall {}, h={}, w={}, active={}>' .format(self.id, self.height, self.width,
+                                                            self.active)
 
     def to_dict(self):
         data = {
@@ -116,12 +122,13 @@ class Wall(PaginatedAPIMixin, db.Model):
             'height': self.height,
             'width': self.width,
             'grade': self.grade,
+            'active': self.active,
             'holds_number': len(self.holds.all())
         }
         return data
 
     def from_dict(self, data):
-        for field in ['height', 'width', 'grade']:
+        for field in ['height', 'width', 'grade', 'active']:
             setattr(self, field, data[field])
         return self
 
