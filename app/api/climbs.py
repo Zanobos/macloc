@@ -7,7 +7,6 @@ from flask import request, jsonify, url_for
 
 #Ok for dev environment and in order to save on resources
 publisher_thread = None
-receiver_thread = None
 
 @bp.route('/climbs/<int:climbid>', methods=['GET'])
 def get_climb(climbid):

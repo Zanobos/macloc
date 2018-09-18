@@ -27,7 +27,6 @@ class PublisherThread(threading.Thread):
         self.db_session = db_session
         self.session = db_session()
 
-        print("Publisher connected to RabbitMQ")
 #        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
 #        self.sock.bind(("can0",))
 #        print("can connection opened")
