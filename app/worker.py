@@ -24,6 +24,13 @@ class SocketConnectedThread(threading.Thread):
         self.sock.bind(("127.0.0.1", 6000))
         print("UDP mock connection open")
 
+    def join(self, timeout=None):
+        self.stoprequest.set()
+        self.sock.close()
+        print("UDP mock connection closed")
+#        print("Can connection closed")
+        super(SocketConnectedThread, self).join(timeout)
+
 class PublisherThread(SocketConnectedThread):
 
     climb = None
@@ -36,7 +43,6 @@ class PublisherThread(SocketConnectedThread):
         self.climb = climb
         self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
                                           [o.id for o in climb.on_wall.holds]))
-
         self.db_session = db_session
         self.session = db_session()
 
@@ -65,9 +71,3 @@ class PublisherThread(SocketConnectedThread):
             #Save the Record in db
             self.session.add(record)
             print(record)
-
-    def join(self, timeout=None):
-        self.stoprequest.set()
-        self.sock.close()
-        print("Can connection closed")
-        super(PublisherThread, self).join(timeout)
