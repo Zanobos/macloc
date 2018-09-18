@@ -81,9 +81,9 @@ def delete_climbs():
     return jsonify(number_items)
 
 @socketio.on('connect', namespace='/api/climbs')
-def ws_connect():
+def climbs_ws_connect():
     print('Client connected')
 
 @socketio.on('disconnect', namespace='/api/climbs')
-def ws_disconnect():
+def climbs_ws_disconnect():
     print('Client disconnected')

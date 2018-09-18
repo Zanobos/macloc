@@ -1,4 +1,4 @@
-from app import db
+from app import db, socketio
 from app.api import bp
 from app.models import Hold
 from app.api.errors import bad_request, unauthorized
@@ -62,3 +62,15 @@ def delete_holds():
     number_items = db.session.query(Hold).delete()
     db.session.commit()
     return jsonify(number_items)
+
+@socketio.on('connect', namespace='/api/holds')
+def holds_ws_connect():
+    print('Calibration client connected')
+
+@socketio.on('disconnect', namespace='/api/holds')
+def holds_ws_disconnect():
+    print('Calibration client disconnected')
+
+@socketio.on('message', namespace='/api/holds')
+def holds_ws_message(message):
+    print('message ', message)

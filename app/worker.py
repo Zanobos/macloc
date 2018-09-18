@@ -6,26 +6,15 @@ import json
 from app import socketio
 from app.models import Record
 
-class PublisherThread(threading.Thread):
+class SocketConnectedThread(threading.Thread):
 
     #Format string to unpack received message
     FMT = "<IB3x3h1H"
-
-    climb = None
     sock = None
-    canid_holdid_dict = None
-    session = None
-    db_session = None
 
-    def __init__(self, climb, db_session):
-        super(PublisherThread, self).__init__()
+    def __init__(self):
+        super(SocketConnectedThread, self).__init__()
         self.stoprequest = threading.Event()
-        self.climb = climb
-        self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
-                                          [o.id for o in climb.on_wall.holds]))
-
-        self.db_session = db_session
-        self.session = db_session()
 
 #        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
 #        self.sock.bind(("can0",))
@@ -34,6 +23,22 @@ class PublisherThread(threading.Thread):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("127.0.0.1", 6000))
         print("UDP mock connection open")
+
+class PublisherThread(SocketConnectedThread):
+
+    climb = None
+    canid_holdid_dict = None
+    session = None
+    db_session = None
+
+    def __init__(self, climb, db_session):
+        super(PublisherThread, self).__init__()
+        self.climb = climb
+        self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
+                                          [o.id for o in climb.on_wall.holds]))
+
+        self.db_session = db_session
+        self.session = db_session()
 
     def run(self):
         while not self.stoprequest.isSet():
@@ -51,6 +56,8 @@ class PublisherThread(threading.Thread):
             #can_id &= socket.CAN_EFF_MASK
             #Create Record
             hold_id = self.canid_holdid_dict[can_id]
+            if hold_id is None:
+                continue
             record = Record(hold_id=hold_id, can_id=can_id, x=x, y=y, z=z,
                             timestamp=timestamp, climb_id=self.climb.id)
             #Send Record to WS
