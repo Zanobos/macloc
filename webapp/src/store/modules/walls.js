@@ -2,19 +2,18 @@ import apiwalls from '@/api/modules/apiwalls'
 
 const state = {
   walls: [],
-  inProgress: false
+  activeStatus: false
 }
 
-const getters = {
-  isInProgress: state => {
-    return state.inProgress
-  }
-}
+const getters = {}
 
 const actions = {
-  getWalls ({ commit }) {
+  fetchWalls ({ commit }) {
     apiwalls.getWalls(
-      (response) => commit('storeWalls', { walls: response.data }),
+      (response) => {
+        commit('storeWalls', { walls: response.data.items })
+        commit('setActiveStatus', { activeStatus: response.data.active })
+      },
       () => {} // Default error handler?
     )
   }
@@ -23,6 +22,9 @@ const actions = {
 const mutations = {
   storeWalls (state, { walls }) {
     state.walls = walls
+  },
+  setActiveStatus (state, { activeStatus }) {
+    state.activeStatus = activeStatus
   }
 }
 

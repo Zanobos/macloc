@@ -10,10 +10,11 @@ import { mapState } from 'vuex'
 export default {
   name: 'HomePage',
   computed: mapState({
-    walls: state => state.walls.all
+    walls: state => state.walls.all,
+    active: state => state.activeStatus
   }),
   created () {
-    this.$store.dispatch('walls/getWalls')
+    this.$store.dispatch('walls/fetchWalls')
   }
 }
 </script>
