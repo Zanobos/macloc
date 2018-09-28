@@ -5,8 +5,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  computed: mapState({
+    walls: state => state.walls.all
+  }),
+  created () {
+    this.$store.dispatch('walls/getWalls')
+  }
 }
 </script>
 
