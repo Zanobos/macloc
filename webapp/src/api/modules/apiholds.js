@@ -1,43 +1,43 @@
 import { HTTP } from '@/api'
 
 export default {
-  getUsers (cb, ecb) {
-    HTTP.get('users')
+  getHolds (cb, ecb) {
+    HTTP.get('holds')
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  getUser (id, cb, ecb) {
-    HTTP.get('users/' + id)
+  getHold (id, cb, ecb) {
+    HTTP.get('holds/' + id)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  postUsers (user, cb, ecb) {
-    HTTP.post('users', user)
+  postHolds (hold, cb, ecb) {
+    HTTP.post('holds', hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  putUser (user, cb, ecb) {
-    HTTP.put('users/' + user.id, user)
+  putHold (hold, cb, ecb) {
+    HTTP.put('holds/' + hold.id, hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  patchUser (user, cb, ecb) {
-    HTTP.patch('users/' + user.id, user)
+  patchHold (hold, cb, ecb) {
+    HTTP.patch('holds/' + hold.id, hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  deleteUser (id, cb, ecb) {
-    HTTP.delete('users/' + id)
+  deleteHold (id, cb, ecb) {
+    HTTP.delete('holds/' + id)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
