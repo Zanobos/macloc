@@ -5,8 +5,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'ClimbsHistory'
+  name: 'ClimbsHistory',
+  computed: mapState({
+    climbs: state => state.climbs.all
+  }),
+  created () {
+    this.$store.dispatch('walls/fetchClimbs')
+  }
 }
 </script>
 
