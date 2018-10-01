@@ -13,7 +13,7 @@ export default {
     climbs: state => state.climbs.all
   }),
   created () {
-    this.$store.dispatch('walls/fetchClimbs')
+    this.$store.dispatch('climbs/fetchClimbs')
   }
 }
 </script>
