@@ -8,35 +8,35 @@ export default {
         (error) => ecb(error)
       )
   },
-  getUser (id, cb, ecb) {
+  getUser (cb, ecb, id) {
     HTTP.get('users/' + id)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  postUsers (user, cb, ecb) {
+  postUsers (cb, ecb, user) {
     HTTP.post('users', user)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  putUser (user, cb, ecb) {
+  putUser (cb, ecb, user) {
     HTTP.put('users/' + user.id, user)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  patchUser (user, cb, ecb) {
+  patchUser (cb, ecb, user) {
     HTTP.patch('users/' + user.id, user)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  deleteUser (id, cb, ecb) {
+  deleteUser (cb, ecb, id) {
     HTTP.delete('users/' + id)
       .then(
         (response) => cb(response),

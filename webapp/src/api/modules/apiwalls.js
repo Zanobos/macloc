@@ -8,35 +8,35 @@ export default {
         (error) => ecb(error)
       )
   },
-  getWall (id, cb, ecb) {
+  getWall (cb, ecb, id) {
     HTTP.get('walls/' + id)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  postWalls (wall, cb, ecb) {
+  postWalls (cb, ecb, wall) {
     HTTP.post('walls', wall)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  putWall (wall, cb, ecb) {
+  putWall (cb, ecb, wall) {
     HTTP.put('walls/' + wall.id, wall)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  patchWall (wall, cb, ecb) {
+  patchWall (cb, ecb, wall) {
     HTTP.patch('walls/' + wall.id, wall)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  deleteWall (id, cb, ecb) {
+  deleteWall (cb, ecb, id) {
     HTTP.delete('walls/' + id)
       .then(
         (response) => cb(response),

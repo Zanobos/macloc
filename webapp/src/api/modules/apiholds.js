@@ -8,35 +8,35 @@ export default {
         (error) => ecb(error)
       )
   },
-  getHold (id, cb, ecb) {
+  getHold (cb, ecb, id) {
     HTTP.get('holds/' + id)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  postHolds (hold, cb, ecb) {
+  postHolds (cb, ecb, hold) {
     HTTP.post('holds', hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  putHold (hold, cb, ecb) {
+  putHold (cb, ecb, hold) {
     HTTP.put('holds/' + hold.id, hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  patchHold (hold, cb, ecb) {
+  patchHold (cb, ecb, hold) {
     HTTP.patch('holds/' + hold.id, hold)
       .then(
         (response) => cb(response),
         (error) => ecb(error)
       )
   },
-  deleteHold (id, cb, ecb) {
+  deleteHold (cb, ecb, id) {
     HTTP.delete('holds/' + id)
       .then(
         (response) => cb(response),
