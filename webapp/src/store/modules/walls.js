@@ -1,4 +1,5 @@
 import apiwalls from '@/api/modules/apiwalls'
+import { defaultErrorHandler } from '@/api'
 
 const state = {
   walls: [],
@@ -14,7 +15,16 @@ const actions = {
         commit('storeWalls', { walls: response.data.items })
         commit('setActiveStatus', { activeStatus: response.data.active })
       },
-      () => {} // Default error handler?
+      (error) => defaultErrorHandler(error)
+    )
+  },
+  addWall ({ commit }, wall) {
+    apiwalls.postWalls(
+      (response) => {
+        this.fetchWalls({ commit: commit })
+      },
+      (error) => defaultErrorHandler(error),
+      wall
     )
   }
 }

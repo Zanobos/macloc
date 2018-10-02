@@ -11,3 +11,8 @@ export function encodeQueryData (data) {
   }
   return '?' + ret.join('&')
 }
+
+export function defaultErrorHandler (error) {
+  console.log('error during remote call:')
+  console.log(error)
+}
