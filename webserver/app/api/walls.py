@@ -22,8 +22,9 @@ def create_wall():
     if 'width' not in data or 'height' not in data or 'grade' not in data:
         return bad_request('must include width, height and grade')
     wall = Wall()
-    data['active'] = 'false'
+    data['active'] = False
     wall.from_dict(data)
+    print(wall)
     db.session.add(wall)
     db.session.commit()
     response = jsonify(wall.to_dict())

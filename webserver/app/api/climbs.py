@@ -27,11 +27,11 @@ def create_climb():
     user_id = request.args.get('user_id', None, type=int)
     wall_id = request.args.get('wall_id', None, type=int)
     if user_id is None or wall_id is None:
-        return bad_request('must include user_id and wall_id')
+        return bad_request('must include user_id and wall_id as query param')
     user = User.query.get_or_404(user_id)
     wall = Wall.query.get_or_404(wall_id)
     historic_wall = wall.to_historic_wall()
-    climb = Climb(climber=user, on_wall=historic_wall, status='ready')
+    climb = Climb(climber=user, on_wall=historic_wall, going_on=wall, status='ready')
     db.session.add(climb)
     db.session.commit()
     response = jsonify(climb.to_dict())
@@ -58,9 +58,10 @@ def patch_climb(climbid):
         publisher_thread = PublisherThread(climb=climb, db_session=db.session)
         publisher_thread.start()
     if data['status'] == 'end':
-        climb.end_climb()
         publisher_thread.join()
         publisher_thread = None
+        # this end climb must be the last instruction because it touches the session
+        climb.end_climb()
     db.session.commit()
     return jsonify(climb.to_dict())
 

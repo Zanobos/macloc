@@ -40,7 +40,7 @@ class PublisherThread(SocketConnectedThread):
         self.canid_holdid_dict = dict(zip([o.can_id for o in climb.on_wall.holds],
                                           [o.id for o in climb.on_wall.holds]))
         self.db_session = db_session
-        self.session = db_session()
+        self.session = self.db_session()
 
     def run(self):
         while not self.stoprequest.isSet():

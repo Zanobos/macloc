@@ -21,8 +21,8 @@ def get_holds():
 @bp.route('/holds', methods=['POST'])
 def create_hold():
     data = request.get_json() or {}
-    if 'dist_from_sx' not in data or 'dist_from_bot' not in data:
-        return bad_request('must include dist_from_sx and dist_from_bot')
+    if 'dist_from_sx' not in data or 'dist_from_bot' not in data or 'hold_type' not in data:
+        return bad_request('must include dist_from_sx and dist_from_bot and hold_type')
     hold = Hold()
     hold.from_dict(data)
     db.session.add(hold)

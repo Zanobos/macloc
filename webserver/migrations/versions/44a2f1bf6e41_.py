@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ddecaf68f3a4
+Revision ID: 44a2f1bf6e41
 Revises: 
-Create Date: 2018-09-05 11:48:37.703669
+Create Date: 2018-10-04 09:17:30.412318
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ddecaf68f3a4'
+revision = '44a2f1bf6e41'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -42,17 +42,21 @@ def upgrade():
     sa.Column('height', sa.Float(), nullable=True),
     sa.Column('width', sa.Float(), nullable=True),
     sa.Column('grade', sa.Float(), nullable=True),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('climb',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('historic_wall_id', sa.Integer(), nullable=True),
+    sa.Column('wall_id', sa.Integer(), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('start_time', sa.DateTime(), nullable=True),
     sa.Column('end_time', sa.DateTime(), nullable=True),
+    sa.Column('duration', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['historic_wall_id'], ['historic_wall.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['wall_id'], ['wall.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('historic_hold',
@@ -78,8 +82,9 @@ def upgrade():
     op.create_table('record',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('can_id', sa.Integer(), nullable=True),
-    sa.Column('y', sa.Float(), nullable=True),
     sa.Column('x', sa.Float(), nullable=True),
+    sa.Column('y', sa.Float(), nullable=True),
+    sa.Column('z', sa.Float(), nullable=True),
     sa.Column('timestamp', sa.Integer(), nullable=True),
     sa.Column('hold_id', sa.Integer(), nullable=True),
     sa.Column('climb_id', sa.Integer(), nullable=True),

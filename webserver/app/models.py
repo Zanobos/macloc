@@ -68,6 +68,7 @@ class Climb(PaginatedAPIMixin, db.Model):
     status = db.Column(db.String(20))
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
+    duration = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Climb {}>'.format(self.id)
@@ -79,7 +80,8 @@ class Climb(PaginatedAPIMixin, db.Model):
             'wall_grade': self.on_wall.grade,
             'status': self.status,
             'start_time': self.start_time,
-            'end_time': self.end_time
+            'end_time': self.end_time,
+            'duration': self.duration
         }
         return data
 
@@ -102,6 +104,7 @@ class Climb(PaginatedAPIMixin, db.Model):
         self.status = 'end'
         self.end_time = datetime.now()
         self.going_on.active = False
+        self.duration = (self.end_time - self.start_time).seconds
 
 class Wall(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
