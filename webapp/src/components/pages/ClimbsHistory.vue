@@ -1,11 +1,11 @@
 <template>
   <div>
-    <b-card no-body class="mb-1" v-for="climb in climbs"
-        :key="climb.id">
+    <b-card v-for="climb in climbs" :key="climb.id"
+      no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-btn block href="#" v-b-toggle.accordion2 variant="info">Climb #{{climb.id}}</b-btn>
       </b-card-header>
-      <b-collapse id="accordion2" accordion="my-accordion" role="tabpanel">
+      <b-collapse id="accordion" accordion="my-accordion" role="tabpanel">
         <b-card-body>
           <p class="card-text" style="text-align: left">
             <ul>

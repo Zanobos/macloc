@@ -5,6 +5,8 @@ import ClimbsHistory from '@/components/pages/ClimbsHistory'
 import Users from '@/components/pages/Users'
 import Configuration from '@/components/pages/Configuration'
 
+import ConfigWalls from '@/components/subpages/ConfigWalls'
+
 Vue.use(Router)
 
 export default new Router({
@@ -31,7 +33,25 @@ export default new Router({
       path: '/configuration',
       name: 'Configuration',
       label: 'Configuration',
-      component: Configuration
+      component: Configuration,
+      children: [
+        {
+          path: 'walls',
+          name: 'Walls',
+          label: 'Walls',
+          component: ConfigWalls
+        },
+        {
+          path: 'holds',
+          name: 'Holds',
+          label: 'Holds',
+          component: ConfigWalls
+        },
+        {
+          path: '',
+          redirect: 'walls'
+        }
+      ]
     }
   ]
 })
