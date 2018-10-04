@@ -13,12 +13,11 @@
       @sliding-end="onSlideEnd"
     >
 
-      <b-carousel-slide v-for="wall in walls" :key="wall.id"
-          caption="'Wall ID:' + wall.id"
-          img-src="'@/assets/img/walls/wall' + wall.id"
-      >
+      <b-carousel-slide v-for="wall in walls" :key="wall.id">
+        <img slot="img" class="d-block img-fluid w-100" width="1024" height="480" alt="image slot"
+              :src="getImg(wall.id)" >
+        {{wall.id}}
       </b-carousel-slide>
-
     </b-carousel>
   </div>
 </template>
@@ -43,6 +42,10 @@ export default {
     },
     onSlideEnd (slide) {
       this.sliding = false
+    },
+    getImg (id) {
+      var images = require.context('@/assets/img/walls/', false, /\.png$/)
+      return images('./wall' + id + '.png')
     }
   },
   created () {
