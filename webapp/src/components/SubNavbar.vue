@@ -1,12 +1,8 @@
 <template>
   <div id="subnavbar">
     <b-nav justified pills class="mt-3">
-            <b-nav-item
-                v-for="subRoute in subRoutes" :key="subRoute.name" :to="subRoute"
-            >
-            {{ subRoute.label }}
-            </b-nav-item>
-        </b-nav>
+      <b-nav-item v-for="subRoute in subRoutes" :key="subRoute.name" :to="subRoute">{{ subRoute.label }}</b-nav-item>
+    </b-nav>
   </div>
 </template>
 
