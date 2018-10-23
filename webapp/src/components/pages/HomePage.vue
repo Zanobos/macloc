@@ -1,14 +1,18 @@
 <template>
   <div>
-    QUI TUTTI I WALLS ATTIVI
+    <carousel-walls></carousel-walls>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import CarouselWalls from '@/components/CarouselWalls.vue'
 
 export default {
   name: 'HomePage',
+  components: {
+    CarouselWalls
+  },
   computed: mapState({
     walls: state => state.walls.walls,
     active: state => state.activeStatus,
