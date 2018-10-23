@@ -6,6 +6,7 @@ import Users from '@/components/pages/Users'
 import Configuration from '@/components/pages/Configuration'
 
 import ConfigWalls from '@/components/subpages/ConfigWalls'
+import ConfigHolds from '@/components/subpages/ConfigHolds'
 
 Vue.use(Router)
 
@@ -45,7 +46,7 @@ export default new Router({
           path: 'holds',
           name: 'Holds',
           label: 'Holds',
-          component: ConfigWalls
+          component: ConfigHolds
         },
         {
           path: '',

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <carousel-walls></carousel-walls>
+    <list-holds></list-holds>
   </div>
 </template>
 
 <script>
-import CarouselWalls from '@/components/CarouselWalls.vue'
+import ListHolds from '@/components/ListHolds.vue'
 
 export default {
-  name: 'ConfigWalls',
+  name: 'ConfigHolds',
   components: {
-    CarouselWalls
+    ListHolds
   }
 }
 </script>
