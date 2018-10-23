@@ -1,7 +1,6 @@
 <template>
   <div>
-    <b-card v-for="climb in climbs" :key="climb.id"
-      no-body class="mb-1">
+    <b-card v-for="climb in climbs" :key="climb.id" no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
         <b-btn block href="#" v-b-toggle.accordion variant="info">Climb #{{climb.id}}</b-btn>
       </b-card-header>

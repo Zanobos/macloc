@@ -1,12 +1,17 @@
 <template>
   <div>
-    QUI TUTTE GLI UTENTI PRESENTI
+    <list-users></list-users>
   </div>
 </template>
 
 <script>
+import ListUsers from '@/components/ListUsers.vue'
+
 export default {
-  name: 'Users'
+  name: 'Users',
+  components: {
+    ListUsers
+  }
 }
 </script>
 
