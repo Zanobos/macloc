@@ -4,13 +4,14 @@
 
 ## Sources
 
-- **receiver** :
-    the original receiver script with some target configuration
 - **webapp** :
     the dedicated web application. check the [relative instructions](webapp/README.md)
 - **webserver** :
-    the complete webserver 
+    the complete webserver. check the instructions[relative instructions](webserver/README.md) on how to setup the can interface
 
-## Build Setup
+## Connection
 
-Check in webserver/app/doc folder/init.txt for initial works. To be refactored and cleared
+Local connection with test device (remember to setup manual ipv4 addresses):
+- 192.168.1.10
+- pi
+- macloc1234

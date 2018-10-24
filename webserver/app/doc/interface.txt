@@ -27,8 +27,8 @@ DELETE          /api/users                  Delete all the holds
 GET				/api/climbs					Get all the climbs made
 GET				/api/climbs/{id}			Get the information of a single climb
 POST			/api/climbs					Create a new climb
-PUT				/api/climbs/{id}		    Modify the climb - i.e. modify it's state(START/END)
-PATCH			/api/climbs/{id}			Apply a patch to a single climb
+PUT				/api/climbs/{id}		    Modify the climbs 
+PATCH			/api/climbs/{id}			Apply a patch to a single climb  - i.e. modify it's state(START/END)
 DELETE          /api/climbs/{id}            Delete a climb
 DELETE          /api/climbs                 Delete all the climbs
 WS				/api/climbs              	Get realtime info of the climb
