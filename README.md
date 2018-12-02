@@ -7,7 +7,7 @@
 - **webapp** :
     the dedicated web application. check the [relative instructions](webapp/README.md)
 - **webserver** :
-    the complete webserver. check the instructions [relative instructions](webserver/README.md) on how to setup the can interface
+    the complete webserver.
 
 ## Connection
 
