@@ -41,4 +41,16 @@ static domain_name_servers=10.1.1.1
 
 7) sudo apt-get -y update
 8) sudo apt-get -y install git vim python3 python3-venv python3-dev
+9) Prepare the workspace:
+```
+cd ~
+mkdir workspace
+git clone https://github.com/Zanobos/macloc
+cd macloc
+python3 -m venv venv
+source venv/bin/activate
+pip install -r webserver/app/doc/requirements.txt
+pip install gunicorn 
+
+```
    
