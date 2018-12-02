@@ -60,6 +60,22 @@ cd macloc
 python3 -m venv venv
 source venv/bin/activate
 pip install -r webserver/app/doc/requirements.txt
-pip install gunicorn 
+pip install gunicorn
+flask db upgrade
 ```
-   
+10) Prepare supervisor
+```
+sudo touch /etc/supervisor/conf.d/maclocbe.conf
+sudo vim /etc/supervisor/conf.d/maclocbe.conf
+
+[program:maclocbe]
+command=/home/macloc/workspace/macloc/venv/bin/gunicorn -b 192.168.1.200:5000 -w 2 webserver:app
+directory=/home/macloc/workspace/macloc/webserver
+user=macloc
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+
+```
+
