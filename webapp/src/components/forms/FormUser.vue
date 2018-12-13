@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -59,7 +61,7 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      alert(JSON.stringify(this.form))
+      this.createUser(this.form)
     },
     onReset (evt) {
       evt.preventDefault()
@@ -71,7 +73,13 @@ export default {
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.$nextTick(() => { this.show = true })
-    }
+    },
+    ...mapActions([
+      'users/createUser'
+    ]),
+    ...mapActions({
+      createUser: 'users/createUser'
+    })
   }
 }
 </script>

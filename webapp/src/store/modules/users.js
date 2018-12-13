@@ -22,6 +22,13 @@ const actions = {
   },
   initUsersMeta ({ commit }, payload) {
     commit('storeUsersMeta', { meta: payload })
+  },
+  createUser (context, payload) {
+    apiusers.postUsers(
+      (response) => context.dispatch('fetchUsers', context.state.usersMeta),
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 
