@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ListClimbs from '@/components/ListClimbs.vue'
+import ListClimbs from '@/components/collections/ListClimbs.vue'
 
 export default {
   name: 'ClimbsHistory',

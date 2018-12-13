@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CarouselWalls from '@/components/CarouselWalls.vue'
+import CarouselWalls from '@/components/collections/CarouselWalls.vue'
 
 export default {
   name: 'ConfigWalls',

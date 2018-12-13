@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ListUsers from '@/components/ListUsers.vue'
+import ListUsers from '@/components/collections/ListUsers.vue'
 import FormUser from '@/components/forms/FormUser.vue'
 
 export default {

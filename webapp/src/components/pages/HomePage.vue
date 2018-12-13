@@ -6,7 +6,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import CarouselWalls from '@/components/CarouselWalls.vue'
+import CarouselWalls from '@/components/collections/CarouselWalls.vue'
 
 export default {
   name: 'HomePage',

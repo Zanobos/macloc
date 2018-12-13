@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ListHolds from '@/components/ListHolds.vue'
+import ListHolds from '@/components/collections/ListHolds.vue'
 
 export default {
   name: 'ConfigHolds',
