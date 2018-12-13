@@ -1,16 +1,19 @@
 <template>
   <div>
+    <form-user></form-user>
     <list-users></list-users>
   </div>
 </template>
 
 <script>
 import ListUsers from '@/components/ListUsers.vue'
+import FormUser from '@/components/forms/FormUser.vue'
 
 export default {
   name: 'Users',
   components: {
-    ListUsers
+    ListUsers,
+    FormUser
   }
 }
 </script>
