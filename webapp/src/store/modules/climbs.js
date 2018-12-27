@@ -3,8 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   climbs: [],
-  climbsMeta: {},
-  activeClimb: null
+  climbsMeta: {}
 }
 
 const getters = {}
