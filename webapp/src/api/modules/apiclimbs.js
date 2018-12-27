@@ -1,10 +1,11 @@
 import { HTTP, encodeQueryData } from '@/api'
 
 export default {
-  getClimbs (cb, ecb, page, perPage, userId) {
+  getClimbs (cb, ecb, page, perPage, userId, status) {
     let data = {}
     data.page = page
     data.per_page = perPage
+    data.status = status
     data.user_id = userId
     let queryString = encodeQueryData(data)
     HTTP.get('climbs' + queryString)

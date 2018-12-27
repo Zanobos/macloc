@@ -1,31 +1,35 @@
 <template>
   <div>
-    <list-climbs></list-climbs>
+    <h2>Here ongoing climb</h2>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import ListClimbs from '@/components/collections/ListClimbs.vue'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ClimbsOngoing',
-  components: {
-    ListClimbs
-  },
+  computed: mapState({
+    ongoingClimb: state => state.ongoingClimb
+  }),
   created () {
-    // I fetch all the possible walls, and I put all of them in a carousel
-    this.$store.dispatch('walls/initWallsMeta', {page: 1, per_page: 20}).then(() => {
-      this.$store.dispatch('walls/fetchWalls', this.wallsMeta)
-    })
+    // If the climb is in state "ready", it's local state, and the obj is not null
+    if (this.ongoingClimb == null) {
+      // If no local climb in status "ready", then check if it exist in server
+      this.getCurrentClimb()
+    }
   },
-  ...mapActions([
-    'climbs/getClimb',
-    'climbs/updateClimb'
-  ]),
-  ...mapActions({
-    getClimb: 'climbs/getClimb',
-    updateClimb: 'climbs/updateClimb'
-  })
+  methods: {
+    ...mapActions([
+      'climbs/startClimb',
+      'climbs/endClimb',
+      'climbs/getCurrentClimb'
+    ]),
+    ...mapActions({
+      startClimb: 'climbs/startClimb',
+      endClimb: 'climbs/endClimb',
+      getCurrentClimb: 'climbs/getCurrentClimb'
+    })
+  }
 }
 </script>

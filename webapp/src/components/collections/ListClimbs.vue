@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'ListClimbs',
@@ -35,13 +35,20 @@ export default {
   methods: {
     onPageChange: function (page) {
       this.climbsMeta.page = page
-      this.$store.dispatch('climbs/fetchClimbs', this.climbsMeta)
-    }
+      this.climbsMeta.status = 'end'
+      this.fetchClimbs(this.climbsMeta)
+    },
+    ...mapActions([
+      'climbs/fetchClimbs'
+    ]),
+    ...mapActions({
+      fetchClimbs: 'climbs/fetchClimbs'
+    })
+
   },
   created () {
-    this.$store.dispatch('climbs/initClimbsMeta', {page: 1, per_page: 2}).then(() => {
-      this.$store.dispatch('climbs/fetchClimbs', this.climbsMeta)
-    })
+    this.climbsMeta.status = 'end'
+    this.fetchClimbs(this.climbsMeta)
   }
 }
 </script>

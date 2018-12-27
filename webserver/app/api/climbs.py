@@ -15,7 +15,7 @@ def get_climb(climbid):
 @bp.route('/climbs', methods=['GET'])
 def get_climbs():
     page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 5, type=int), 20)
+    per_page = min(request.args.get('per_page', 1000, type=int), 1000)
     user_id = request.args.get('user_id', None, type=int)
     status = request.args.get('status', None, type=str)
     query = Climb.query if user_id is None else Climb.query.filter(Climb.user_id == user_id)

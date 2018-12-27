@@ -2,7 +2,7 @@
   <div id="app">
   <navbar/>
   <b-container>
-    <router-view class="row"/>
+    <router-view/>
   </b-container>
   </div>
 </template>

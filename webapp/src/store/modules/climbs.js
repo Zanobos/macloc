@@ -17,18 +17,18 @@ const actions = {
       },
       (error) => defaultErrorHandler(error),
       payload.page,
-      payload.per_page
+      payload.per_page,
+      payload.userId,
+      payload.status
     )
   },
   initClimbsMeta ({ commit }, payload) {
     commit('storeClimbsMeta', { meta: payload })
   },
   createClimb ({ commit }, payload) {
-    // TODO do stuff with response
     apiclimbs.postClimbs(
       (response) => {
         // 1 Mutate state
-        commit('setActiveStatus', { activeStatus: true }, { root: true })
         commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
         // 2 Call callback
         payload.onResponse(response)
@@ -37,6 +37,26 @@ const actions = {
       payload.climb,
       payload.userId,
       payload.wallId
+    )
+  },
+  getClimb (context, payload) {
+    apiclimbs.getClimb(
+      (response) => payload.onResponse(response),
+      (error) => defaultErrorHandler(error),
+      payload.climbId
+    )
+  },
+  getCurrentClimb ({ commit }) {
+    apiclimbs.getClimbs(
+      // Consider only first climb, as there should be only one
+      (response) => {
+        commit('setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      null,
+      null,
+      null,
+      'start'
     )
   }
 }

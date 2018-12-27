@@ -7,7 +7,9 @@ export const HTTP = axios.create({
 export function encodeQueryData (data) {
   let ret = []
   for (let d in data) {
-    ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
+    if (data[d] != null) {
+      ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
+    }
   }
   return '?' + ret.join('&')
 }
