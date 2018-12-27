@@ -29,6 +29,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getWallImg } from '@/utils'
 
 export default {
   props: {
@@ -51,10 +52,7 @@ export default {
     onSlideEnd (slide) {
       this.sliding = false
     },
-    getImg (id) {
-      var images = require.context('@/assets/img/walls/', false, /\.png$/)
-      return images('./wall' + id + '.png')
-    }
+    getImg: getWallImg
   },
   created () {
     // I fetch all the possible walls, and I put all of them in a carousel
