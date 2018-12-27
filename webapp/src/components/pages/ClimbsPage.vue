@@ -1,16 +1,19 @@
 <template>
   <div>
-    <list-climbs></list-climbs>
+    <sub-navbar parentRouteLabel="Climbs" />
+    <b-container>
+      <router-view/>
+    </b-container>
   </div>
 </template>
 
 <script>
-import ListClimbs from '@/components/collections/ListClimbs.vue'
+import SubNavbar from '@/components/SubNavbar.vue'
 
 export default {
-  name: 'ClimbsPage',
+  name: 'Configuration',
   components: {
-    ListClimbs
+    SubNavbar
   }
 }
 </script>

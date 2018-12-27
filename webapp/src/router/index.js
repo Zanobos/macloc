@@ -8,6 +8,9 @@ import Configuration from '@/components/pages/Configuration'
 import ConfigWalls from '@/components/subpages/ConfigWalls'
 import ConfigHolds from '@/components/subpages/ConfigHolds'
 
+import ClimbsHistory from '@/components/subpages/ClimbsHistory'
+import ClimbsOngoing from '@/components/subpages/ClimbsOngoing'
+
 Vue.use(Router)
 
 export default new Router({
@@ -20,9 +23,26 @@ export default new Router({
     },
     {
       path: '/climbs',
-      name: 'Climbs',
       label: 'Climbs',
-      component: ClimbsPage
+      component: ClimbsPage,
+      children: [
+        {
+          path: 'history',
+          name: 'ClimbsHistory',
+          label: 'History',
+          component: ClimbsHistory
+        },
+        {
+          path: 'ongoing',
+          name: 'ClimbsOngoing',
+          label: 'Ongoing',
+          component: ClimbsOngoing
+        },
+        {
+          path: '',
+          redirect: 'history'
+        }
+      ]
     },
     {
       path: '/users',
@@ -32,7 +52,6 @@ export default new Router({
     },
     {
       path: '/configuration',
-      name: 'Configuration',
       label: 'Configuration',
       component: Configuration,
       children: [
@@ -53,6 +72,10 @@ export default new Router({
           redirect: 'walls'
         }
       ]
+    },
+    {
+      path: '',
+      redirect: 'walls'
     }
   ]
 })
