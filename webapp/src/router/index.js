@@ -38,13 +38,13 @@ export default new Router({
       children: [
         {
           path: 'walls',
-          name: 'Walls',
+          name: 'ConfigWalls',
           label: 'Walls',
           component: ConfigWalls
         },
         {
           path: 'holds',
-          name: 'Holds',
+          name: 'ConfigHolds',
           label: 'Holds',
           component: ConfigHolds
         },

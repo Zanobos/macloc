@@ -18,9 +18,9 @@
               alt="image slot"
               :src="getImg(wall.id)"
         >
-        <b-button v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
+        <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
         <b-collapse id="collapse1">
-          <form-climb v-bind:wallId="wall.id"/>
+          <component :is="carouselFormProp" v-bind:wallId="wall.id"/>
         </b-collapse>
       </b-carousel-slide>
     </b-carousel>
@@ -29,11 +29,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import FormClimb from '@/components/forms/FormClimb.vue'
 
 export default {
-  components: {
-    FormClimb
+  props: {
+    carouselFormProp: { type: Object, required: false }
   },
   data () {
     return {

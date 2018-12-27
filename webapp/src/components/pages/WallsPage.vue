@@ -1,17 +1,19 @@
 <template>
   <div>
-    <carousel-walls></carousel-walls>
+    <carousel-walls v-bind:carouselFormProp="formClimb"></carousel-walls>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import CarouselWalls from '@/components/collections/CarouselWalls.vue'
+import FormClimb from '@/components/forms/FormClimb.vue'
 
 export default {
   name: 'WallsPage',
   components: {
-    CarouselWalls
+    CarouselWalls,
+    FormClimb
   },
   computed: mapState({
     walls: state => state.walls.walls,
@@ -20,6 +22,11 @@ export default {
   }),
   created () {
     this.$store.dispatch('walls/fetchWalls', this.wallsMeta)
+  },
+  data () {
+    return {
+      formClimb: FormClimb
+    }
   }
 }
 </script>
