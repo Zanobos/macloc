@@ -78,6 +78,8 @@ class Climb(PaginatedAPIMixin, db.Model):
             'id': self.id,
             'climber_name': self.climber.name,
             'wall_grade': self.on_wall.grade,
+            #This should become historic wall id once the api is ready
+            'wall_id': self.wall_id,
             'status': self.status,
             'start_time': self.start_time,
             'end_time': self.end_time,

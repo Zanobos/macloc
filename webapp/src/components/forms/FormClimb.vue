@@ -47,7 +47,7 @@ export default {
       evt.preventDefault()
       var router = this.$router
       this.form.onResponse = function (response) {
-        router.push('Users')
+        router.push('climbs/ongoing')
       }
       this.createClimb(this.form)
     },
