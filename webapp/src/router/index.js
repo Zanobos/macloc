@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HomePage from '@/components/pages/HomePage'
-import ClimbsHistory from '@/components/pages/ClimbsHistory'
-import Users from '@/components/pages/Users'
+import WallsPage from '@/components/pages/WallsPage'
+import ClimbsPage from '@/components/pages/ClimbsPage'
+import UsersPage from '@/components/pages/UsersPage'
 import Configuration from '@/components/pages/Configuration'
 
 import ConfigWalls from '@/components/subpages/ConfigWalls'
@@ -13,22 +13,22 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/homepage',
-      name: 'Home Page',
-      label: 'Home Page',
-      component: HomePage
+      path: '/walls',
+      name: 'Walls',
+      label: 'Walls',
+      component: WallsPage
     },
     {
-      path: '/climbsHistory',
-      name: 'Climbs History',
-      label: 'Climbs History',
-      component: ClimbsHistory
+      path: '/climbs',
+      name: 'Climbs',
+      label: 'Climbs',
+      component: ClimbsPage
     },
     {
       path: '/users',
       name: 'Users',
       label: 'Users',
-      component: Users
+      component: UsersPage
     },
     {
       path: '/configuration',

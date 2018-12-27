@@ -10,7 +10,7 @@ import ListUsers from '@/components/collections/ListUsers.vue'
 import FormUser from '@/components/forms/FormUser.vue'
 
 export default {
-  name: 'Users',
+  name: 'UsersPage',
   components: {
     ListUsers,
     FormUser

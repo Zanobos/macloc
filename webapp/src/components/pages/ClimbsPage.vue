@@ -8,7 +8,7 @@
 import ListClimbs from '@/components/collections/ListClimbs.vue'
 
 export default {
-  name: 'ClimbsHistory',
+  name: 'ClimbsPage',
   components: {
     ListClimbs
   }

@@ -9,7 +9,7 @@ import { mapState } from 'vuex'
 import CarouselWalls from '@/components/collections/CarouselWalls.vue'
 
 export default {
-  name: 'HomePage',
+  name: 'WallsPage',
   components: {
     CarouselWalls
   },
