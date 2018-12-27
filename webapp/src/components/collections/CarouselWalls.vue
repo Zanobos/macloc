@@ -1,22 +1,24 @@
 <template>
-  <div>
+  <div class="col">
     <b-carousel id="carousel1"
       style="text-shadow: 1px 1px 2px #333;"
+      class="d-block"
       controls
       indicators
       background="#ababab"
       :interval="0"
-      img-width="1024"
-      img-height="480"
       v-model="slide"
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
 
       <b-carousel-slide v-for="wall in walls" :key="wall.id">
-        <img slot="img" class="d-block img-fluid w-100" width="1024" height="480" alt="image slot"
-              :src="getImg(wall.id)" >
-        {{wall.id}}
+        <img  slot="img"
+              class="d-block mw-100"
+              alt="image slot"
+              :src="getImg(wall.id)"
+        >
+        Wall {{wall.id}}
       </b-carousel-slide>
     </b-carousel>
   </div>
