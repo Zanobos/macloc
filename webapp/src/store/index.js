@@ -13,5 +13,17 @@ export default new Vuex.Store({
     climbs,
     users,
     holds
+  },
+  state: {
+    activeStatus: false,
+    ongoingClimb: null
+  },
+  mutations: {
+    setActiveStatus (state, { activeStatus }) {
+      state.activeStatus = activeStatus
+    },
+    setOngoingClimb (state, { ongoingClimb }) {
+      state.ongoingClimb = ongoingClimb
+    }
   }
 })

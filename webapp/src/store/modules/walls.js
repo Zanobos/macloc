@@ -3,8 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   walls: [],
-  wallsMeta: {},
-  activeStatus: false
+  wallsMeta: {}
 }
 
 const getters = {}
@@ -14,7 +13,7 @@ const actions = {
     apiwalls.getWalls(
       (response) => {
         commit('storeWalls', { walls: response.data.items })
-        commit('setActiveStatus', { activeStatus: response.data.active })
+        commit('setActiveStatus', { activeStatus: response.data.active }, { root: true })
         commit('storeWallsMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
@@ -42,9 +41,6 @@ const mutations = {
   },
   storeWallsMeta (state, { meta }) {
     state.wallsMeta = meta
-  },
-  setActiveStatus (state, { activeStatus }) {
-    state.activeStatus = activeStatus
   }
 }
 

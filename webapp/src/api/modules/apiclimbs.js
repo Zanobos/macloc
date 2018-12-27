@@ -20,8 +20,12 @@ export default {
         (error) => ecb(error)
       )
   },
-  postClimbs (cb, ecb, climb) {
-    HTTP.post('climbs', climb)
+  postClimbs (cb, ecb, climb, userId, wallId) {
+    let data = {}
+    data.wall_id = wallId
+    data.user_id = userId
+    let queryString = encodeQueryData(data)
+    HTTP.post('climbs' + queryString, climb)
       .then(
         (response) => cb(response),
         (error) => ecb(error)

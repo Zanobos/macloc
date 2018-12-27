@@ -14,11 +14,14 @@
 
       <b-carousel-slide v-for="wall in walls" :key="wall.id">
         <img  slot="img"
-              class="d-block mw-100"
+              class="d-block img-fluid w-100"
               alt="image slot"
               :src="getImg(wall.id)"
         >
-        Wall {{wall.id}}
+        <b-button v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
+        <b-collapse id="collapse1">
+          <form-climb v-bind:wallId="wall.id"/>
+        </b-collapse>
       </b-carousel-slide>
     </b-carousel>
   </div>
@@ -26,8 +29,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import FormClimb from '@/components/forms/FormClimb.vue'
 
 export default {
+  components: {
+    FormClimb
+  },
   data () {
     return {
       slide: 0,
