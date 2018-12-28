@@ -38,9 +38,6 @@ export default {
       this.climbsMeta.status = 'end'
       this.fetchClimbs(this.climbsMeta)
     },
-    ...mapActions([
-      'climbs/fetchClimbs'
-    ]),
     ...mapActions({
       fetchClimbs: 'climbs/fetchClimbs'
     })

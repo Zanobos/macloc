@@ -74,9 +74,6 @@ export default {
       this.show = false
       this.$nextTick(() => { this.show = true })
     },
-    ...mapActions([
-      'users/createUser'
-    ]),
     ...mapActions({
       createUser: 'users/createUser'
     })

@@ -65,13 +65,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'climbs/startClimb',
-      'climbs/endClimb',
-      'climbs/getOngoingClimb',
-      'walls/getOngoingWall',
-      'holds/getOngoingHolds'
-    ]),
     ...mapActions({
       startClimb: 'climbs/startClimb',
       endClimb: 'climbs/endClimb',

@@ -61,9 +61,6 @@ export default {
       this.show = false
       this.$nextTick(() => { this.show = true })
     },
-    ...mapActions([
-      'climbs/createClimb'
-    ]),
     ...mapActions({
       createClimb: 'climbs/createClimb'
     })
