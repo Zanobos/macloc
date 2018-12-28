@@ -72,7 +72,7 @@ const actions = {
       payload.climbId
     )
   },
-  getCurrentClimb ({ commit }) {
+  getOngoingClimb ({ commit }) {
     apiclimbs.getClimbs(
       // Consider only first climb, as there should be only one
       (response) => {

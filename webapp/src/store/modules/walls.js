@@ -32,6 +32,15 @@ const actions = {
       (error) => defaultErrorHandler(error),
       wall
     )
+  },
+  getOngoingWall (context, payload) {
+    apiwalls.getWall(
+      (response) => {
+        context.commit('realtime/setOngoingWall', response.data, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      payload.wallId
+    )
   }
 }
 

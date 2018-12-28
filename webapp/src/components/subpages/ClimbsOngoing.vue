@@ -10,7 +10,7 @@
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
         Connected? <p>{{connected}}</p>
       </b-col>
-      <b-col>
+      <b-col v-if="ongoingClimb">
         <img  class="d-block img-fluid w-100"
               alt="image slot"
               :src="getOngoingWallImg()"
@@ -27,27 +27,38 @@ import { getWallImg } from '@/utils'
 export default {
   name: 'ClimbsOngoing',
   computed: mapState({
-    ongoingClimb: state => state.realtime.ongoingClimb,
     connected: state => state.realtime.isConnected,
-    ongoingWall: state => state.realtime.ongoingWall
+    ongoingClimb: state => state.realtime.ongoingClimb,
+    ongoingWall: state => state.realtime.ongoingWall,
+    ongoingHolds: state => state.realtime.ongoingHolds
   }),
   created () {
+    // TODO change the flow using some more general if
+
     // If the climb is in state "ready", it's local state, and the obj is not null
     if (this.ongoingClimb == null) {
       // If no local climb in status "ready", then check if it exist in server
-      this.getCurrentClimb()
+      this.getOngoingClimb()
+    }
+    if (this.ongoingClimb != null) {
+      this.getOngoingWall({ wallId: this.ongoingClimb.wall_id })
+      this.getOngoingHolds({ wallId: this.ongoingClimb.wall_id })
     }
   },
   methods: {
     ...mapActions([
       'climbs/startClimb',
       'climbs/endClimb',
-      'climbs/getCurrentClimb'
+      'climbs/getOngoingClimb',
+      'walls/getOngoingWall',
+      'holds/getOngoingHolds'
     ]),
     ...mapActions({
       startClimb: 'climbs/startClimb',
       endClimb: 'climbs/endClimb',
-      getCurrentClimb: 'climbs/getCurrentClimb'
+      getOngoingClimb: 'climbs/getOngoingClimb',
+      getOngoingWall: 'walls/getOngoingWall',
+      getOngoingHolds: 'holds/getOngoingHolds'
     }),
     getOngoingWallImg () {
       var id = this.ongoingClimb.wall_id

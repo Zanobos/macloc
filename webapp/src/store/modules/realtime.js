@@ -3,7 +3,8 @@ const state = {
   rtholds: [],
   activeStatus: false,
   ongoingClimb: null,
-  ongoingWall: null
+  ongoingWall: null,
+  ongoingHolds: []
 }
 
 const getters = {}
@@ -29,6 +30,9 @@ const mutations = {
   },
   setOngoingWall (state, { ongoingWall }) {
     state.ongoingWall = ongoingWall
+  },
+  setOngoingHolds (state, { ongoingHolds }) {
+    state.ongoingHolds = ongoingHolds
   }
 }
 

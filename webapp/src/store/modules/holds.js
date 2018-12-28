@@ -23,6 +23,17 @@ const actions = {
   },
   initHoldsMeta ({ commit }, payload) {
     commit('storeHoldsMeta', { meta: payload })
+  },
+  getOngoingHolds (context, payload) {
+    apiholds.getHolds(
+      (response) => {
+        context.commit('realtime/setOngoingHolds', response.data, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      null,
+      null,
+      payload.wallId
+    )
   }
 }
 
