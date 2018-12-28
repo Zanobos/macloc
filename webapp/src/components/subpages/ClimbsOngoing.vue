@@ -15,9 +15,9 @@
             <ul>
               <li>Id: {{ hold.id }} </li>
               <li>Type: {{ hold.hold_type }} </li>
-              <li>Force 1: {{getForceForClimb('x', hold.id)}}</li>
-              <li>Force 2: {{getForceForClimb('y', hold.id)}}</li>
-              <li>Force 3: {{getForceForClimb('z', hold.id)}}</li>
+              <li>Force 1: {{getForceByHoldId('x', hold.id)}}</li>
+              <li>Force 2: {{getForceByHoldId('y', hold.id)}}</li>
+              <li>Force 3: {{getForceByHoldId('z', hold.id)}}</li>
             </ul>
           </p>
         </b-card-body>
@@ -34,18 +34,23 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { getWallImg } from '@/utils'
 
 export default {
   name: 'ClimbsOngoing',
-  computed: mapState({
-    connected: state => state.realtime.isConnected,
-    ongoingClimb: state => state.realtime.ongoingClimb,
-    ongoingWall: state => state.realtime.ongoingWall,
-    ongoingHolds: state => state.realtime.ongoingHolds,
-    rtholds: state => state.realtime.rtholds
-  }),
+  computed: {
+    ...mapState({
+      connected: state => state.realtime.isConnected,
+      ongoingClimb: state => state.realtime.ongoingClimb,
+      ongoingWall: state => state.realtime.ongoingWall,
+      ongoingHolds: state => state.realtime.ongoingHolds,
+      rtholds: state => state.realtime.rtholds
+    }),
+    ...mapGetters({
+      getForceByHoldId: 'realtime/getForceByHoldId'
+    })
+  },
   created () {
     // TODO change the flow using some more general if
 
@@ -103,15 +108,6 @@ export default {
     getOngoingWallImg () {
       var id = this.ongoingClimb.wall_id
       return getWallImg(id)
-    },
-    getForceForClimb (direction, holdId) {
-      if (this.rtholds == null) {
-        return '-'
-      }
-      if (this.rtholds[holdId] == null) {
-        return '-'
-      }
-      return this.rtholds[holdId][direction]
     }
   }
 }

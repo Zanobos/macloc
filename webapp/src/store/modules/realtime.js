@@ -1,13 +1,25 @@
+import Vue from 'vue'
+
 const state = {
   isConnected: false,
-  rtholds: [],
+  rtholds: {},
   activeStatus: false,
   ongoingClimb: null,
   ongoingWall: null,
   ongoingHolds: []
 }
 
-const getters = {}
+const getters = {
+  getForceByHoldId (state, getters) {
+    return (direction, holdId) => {
+      console.log(direction + ',' + holdId + ',' + state.rtholds)
+      if (state.rtholds[holdId] == null) {
+        return null
+      }
+      return state.rtholds[holdId][direction]
+    }
+  }
+}
 
 const actions = {
   socket_connect (context, payload) {
@@ -15,6 +27,9 @@ const actions = {
   },
   socket_disconnect (context, payload) {
     context.commit('changeConnectionState', { isConnected: false })
+  },
+  socket_json (context, payload) {
+    context.commit('storeRecord', { record: JSON.parse(payload) })
   }
 }
 
@@ -33,6 +48,9 @@ const mutations = {
   },
   setOngoingHolds (state, { ongoingHolds }) {
     state.ongoingHolds = ongoingHolds
+  },
+  storeRecord (state, { record }) {
+    Vue.set(state.rtholds, record['hold_id'], { x: record['x'], y: record['y'], z: record['z'] })
   }
 }
 
