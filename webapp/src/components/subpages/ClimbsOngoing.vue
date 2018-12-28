@@ -8,6 +8,7 @@
         <p>Climber name: {{ongoingClimb}}</p>
         <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onStart">Start</b-button>
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
+        Connected? <p>{{connected}}</p>
       </b-col>
       <b-col>
         <img  class="d-block img-fluid w-100"
@@ -26,7 +27,9 @@ import { getWallImg } from '@/utils'
 export default {
   name: 'ClimbsOngoing',
   computed: mapState({
-    ongoingClimb: state => state.ongoingClimb
+    ongoingClimb: state => state.realtime.ongoingClimb,
+    connected: state => state.realtime.isConnected,
+    ongoingWall: state => state.realtime.ongoingWall
   }),
   created () {
     // If the climb is in state "ready", it's local state, and the obj is not null

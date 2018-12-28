@@ -13,8 +13,8 @@ const actions = {
     apiwalls.getWalls(
       (response) => {
         commit('storeWalls', { walls: response.data.items })
-        commit('setActiveStatus', { activeStatus: response.data.active }, { root: true })
         commit('storeWallsMeta', { meta: response.data._meta })
+        commit('realtime/setActiveStatus', { activeStatus: response.data.active }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       payload.page,

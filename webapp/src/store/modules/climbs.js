@@ -29,7 +29,7 @@ const actions = {
     apiclimbs.postClimbs(
       (response) => {
         // 1 Mutate state
-        commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
         // 2 Call callback
         payload.onResponse(response)
       },
@@ -46,7 +46,7 @@ const actions = {
     apiclimbs.patchClimb(
       (response) => {
         // Mutate state
-        commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       climb
@@ -59,7 +59,7 @@ const actions = {
     apiclimbs.patchClimb(
       (response) => {
         // Mutate state
-        commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       climb
@@ -76,7 +76,7 @@ const actions = {
     apiclimbs.getClimbs(
       // Consider only first climb, as there should be only one
       (response) => {
-        commit('setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
+        commit('realtime/setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       null,
