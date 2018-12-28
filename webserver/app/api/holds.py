@@ -12,7 +12,7 @@ def get_hold(holdid):
 @bp.route('/holds', methods=['GET'])
 def get_holds():
     page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 5, type=int), 20)
+    per_page = min(request.args.get('per_page', 1000, type=int), 1000)
     wall_id = request.args.get('wall_id', None, type=int)
     query = Hold.query if wall_id is None else Hold.query.filter(Hold.wall_id == wall_id)
     data = Hold.to_collection_dict(query, page, per_page, 'api.get_holds')

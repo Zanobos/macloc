@@ -27,7 +27,7 @@ const actions = {
   getOngoingHolds (context, payload) {
     apiholds.getHolds(
       (response) => {
-        context.commit('realtime/setOngoingHolds', response.data, { root: true })
+        context.commit('realtime/setOngoingHolds', { ongoingHolds: response.data.items }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       null,
