@@ -1,8 +1,12 @@
 import axios from 'axios'
 
+export const BASE_URL = 'http://localhost:5000/'
+
 export const HTTP = axios.create({
-  baseURL: `http://localhost:5000/api/`
+  baseURL: BASE_URL + 'api/'
 })
+
+export const SOCKET_IO_URL = BASE_URL + 'api/climbs'
 
 export function encodeQueryData (data) {
   let ret = []
