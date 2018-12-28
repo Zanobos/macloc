@@ -8,7 +8,20 @@
         <p>Climber name: {{ongoingClimb}}</p>
         <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onStart">Start</b-button>
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
-        Connected? <p>{{connected}}</p>
+        <p>Connected?{{connected}}</p>
+        <b-card v-for="hold in ongoingHolds" :key="hold.id" class="mb-1">
+          <b-card-body>
+          <p class="card-text" style="text-align: left">
+            <ul>
+              <li>Id: {{ hold.id }} </li>
+              <li>Type: {{ hold.hold_type }} </li>
+              <li>Force 1: {{getForceForClimb('x', hold.id)}}</li>
+              <li>Force 2: {{getForceForClimb('y', hold.id)}}</li>
+              <li>Force 3: {{getForceForClimb('z', hold.id)}}</li>
+            </ul>
+          </p>
+        </b-card-body>
+        </b-card>
       </b-col>
       <b-col v-if="ongoingClimb">
         <img  class="d-block img-fluid w-100"
@@ -30,7 +43,8 @@ export default {
     connected: state => state.realtime.isConnected,
     ongoingClimb: state => state.realtime.ongoingClimb,
     ongoingWall: state => state.realtime.ongoingWall,
-    ongoingHolds: state => state.realtime.ongoingHolds
+    ongoingHolds: state => state.realtime.ongoingHolds,
+    rtholds: state => state.realtime.rtholds
   }),
   created () {
     // TODO change the flow using some more general if
@@ -60,10 +74,6 @@ export default {
       getOngoingWall: 'walls/getOngoingWall',
       getOngoingHolds: 'holds/getOngoingHolds'
     }),
-    getOngoingWallImg () {
-      var id = this.ongoingClimb.wall_id
-      return getWallImg(id)
-    },
     startButtonDisabled () {
       var dis = this.ongoingClimb == null
       if (!dis) {
@@ -89,6 +99,19 @@ export default {
       var payload = {}
       payload.climbId = this.ongoingClimb.id
       this.endClimb(payload)
+    },
+    getOngoingWallImg () {
+      var id = this.ongoingClimb.wall_id
+      return getWallImg(id)
+    },
+    getForceForClimb (direction, holdId) {
+      if (this.rtholds == null) {
+        return '-'
+      }
+      if (this.rtholds[holdId] == null) {
+        return '-'
+      }
+      return this.rtholds[holdId][direction]
     }
   }
 }
