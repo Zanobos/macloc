@@ -39,6 +39,32 @@ const actions = {
       payload.wallId
     )
   },
+  startClimb ({ commit }, payload) {
+    var climb = {}
+    climb.id = payload.climbId
+    climb.status = 'start'
+    apiclimbs.patchClimb(
+      (response) => {
+        // Mutate state
+        commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      climb
+    )
+  },
+  endClimb ({ commit }, payload) {
+    var climb = {}
+    climb.id = payload.climbId
+    climb.status = 'end'
+    apiclimbs.patchClimb(
+      (response) => {
+        // Mutate state
+        commit('setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      climb
+    )
+  },
   getClimb (context, payload) {
     apiclimbs.getClimb(
       (response) => payload.onResponse(response),
