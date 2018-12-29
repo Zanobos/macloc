@@ -63,7 +63,7 @@ sudo touch /etc/supervisor/conf.d/maclocbe.conf
 sudo vim /etc/supervisor/conf.d/maclocbe.conf
 
     [program:maclocbe]
-    command=/home/macloc/workspace/macloc/venv/bin/gunicorn -b 192.168.1.200:5000 -w 2 webserver:app
+    command=/home/macloc/workspace/macloc/webserver/venv/bin/gunicorn -b 192.168.1.200:5000 -w 2 webserver:app
     directory=/home/macloc/workspace/macloc/webserver
     user=macloc
     autostart=true
@@ -90,11 +90,16 @@ sudo vim /etc/network/interfaces.d/can0
         bitrate 500000
 sudo reboot
 ```
-12) Set up FE files
+12) Configure apache
+```sh
+sudo chown -R macloc /var/www/html/
+sudo chgrp -R www-data /var/www/html/
+```
+13) Set up FE files
 ```sh
 cd ~/workspace/macloc/webapp
 sudo npm install npm@latest -g
 npm install
 npm run build
-mv dist/* /var/www/html
+cp dist/* /var/www/html
 ```
