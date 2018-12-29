@@ -5,4 +5,4 @@
 git pull                                            # Fetch the new code
 npm install
 npm run build
-cp dist/* /var/www/html
+cp -r dist/* /var/www/html
