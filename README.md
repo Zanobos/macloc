@@ -1,6 +1,6 @@
 # Macloc
 
-> Macloc server and webapp
+Macloc server and webapp
 
 ## Sources
 
@@ -17,7 +17,7 @@
 2) Perform command "touch ssh" while being in boot partition (to enable ssh login on boot)
 3) Connect with ssh pi/raspberrypi
 4) Create a dedicated user
-```
+```sh
 sudo adduser macloc
 sudo usermod -aG sudo macloc
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDo/lqJ5dK+pXu+hzMObW4zD/XiElCRF/5nFqA0WMpbaKA2g1arjwXI+8RJKJANzyWCTApxPkVobH4e0qdOzEK2r4qxp+RyWfDINmpYI/O44ulqbcD6ocowkDAXyLrM/UAWciljutQ1TMbcqNlGI2mSPxonIA158A9XvJ4J+4CgIJn/iHlgO4m0/hz6/NtHyunVcZeaDonCxpjQ5WoazBq/slesMTJiXUR5RgNjH14ylkl3IZzyR/R/gM+uVMFUiqT7uyFQ8a+TsDdxl+3Bga3K//aiDY14XjyAw0dqBh0YHNuzgHJ1+LIIHAuypcCEPV30+T4GHfiveolNXFHuYzrf macloc" > ~/.ssh/authorized_keys/macloc.pub
@@ -25,14 +25,14 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDo/lqJ5dK+pXu+hzMObW4zD/XiElCRF/5nFq
 5) change default password for user pi for security reason (log in as pi, and launch command passwd)
 
 6) remove access with root account and allow only ssh login
-```
+```sh
 sudo vim "/etc/ssh/sshd_config"
 
     PermitRootLogin no
     PasswordAuthentication no
 ```
 7) Configure the IP (need to know a free ip and gateway ip)
-```
+```sh
 sudo vim /etc/dhcpcd.conf
 
     interface eth0
@@ -41,12 +41,12 @@ sudo vim /etc/dhcpcd.conf
     static domain_name_servers=192.168.1.254
 ```
 8) Install needed packages
-```
+```sh
 sudo apt-get -y update
 sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor
 ```
 9) Prepare the workspace:
-```
+```sh
 cd ~
 mkdir workspace
 git clone https://github.com/Zanobos/macloc
@@ -58,7 +58,7 @@ pip install gunicorn
 flask db upgrade
 ```
 10) Prepare supervisor
-```
+```sh
 sudo touch /etc/supervisor/conf.d/maclocbe.conf
 sudo vim /etc/supervisor/conf.d/maclocbe.conf
 
@@ -72,7 +72,7 @@ sudo vim /etc/supervisor/conf.d/maclocbe.conf
     killasgroup=true
 ```
 11) Prepare the hardware for can acquisition. Connect the can controller to the RPI, then
-```
+```sh
 sudo apt-get install can-utils
 sudo vim /boot/config.txt
 
