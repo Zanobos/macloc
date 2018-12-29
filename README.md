@@ -43,7 +43,7 @@ sudo vim /etc/dhcpcd.conf
 8) Install needed packages
 ```sh
 sudo apt-get -y update
-sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor
+sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor apache2 npm
 ```
 9) Prepare the workspace:
 ```sh
@@ -90,4 +90,11 @@ sudo vim /etc/network/interfaces.d/can0
         bitrate 500000
 sudo reboot
 ```
-
+12) Set up FE files
+```sh
+cd ~/workspace/macloc/webapp
+sudo npm install npm@latest -g
+npm install
+npm run build
+mv dist/* /var/www/html
+```

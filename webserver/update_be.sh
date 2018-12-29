@@ -5,7 +5,6 @@
 git pull                                            # Fetch the new code
 supervisorctl stop maclocbe                         # Stop the application
 source venv/bin/activate                            # Activate the venv
-pip install -r webserver/app/doc/requirements.txt   # Install new dependencies
-cd webserver                                        # Change folder
+pip install -r app/doc/requirements.txt             # Install new dependencies
 flask db upgrade                                    # Update db
 supervisorctl start maclocbe                        # Start server
