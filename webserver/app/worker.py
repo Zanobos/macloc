@@ -37,7 +37,8 @@ class PublisherThread(SocketConnectedThread):
     def __init__(self, climb, db_session):
         super(PublisherThread, self).__init__()
         self.climb = climb
-        # Holds id is from actual, not historic
+        # Holds id is from actual, not historic wall, because if I have to replay
+        # some events, I access the db, not the CAN bus
         self.canid_holdid_dict = dict(zip([o.can_id for o in climb.going_on.holds],
                                           [o.id for o in climb.going_on.holds]))
         self.db_session = db_session

@@ -26,6 +26,7 @@ def get_climbs():
 @bp.route('/climbs', methods=['POST'])
 def create_climb():
     #Create a new Climb, freezing wall and holds status
+    #In any case, wallid and holdids are the ones from the ongoing wall
     user_id = request.args.get('user_id', None, type=int)
     wall_id = request.args.get('wall_id', None, type=int)
     if user_id is None or wall_id is None:
