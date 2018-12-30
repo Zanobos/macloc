@@ -4,6 +4,7 @@ import struct
 import json
 from collections import defaultdict
 from math import sqrt
+from flask import current_app
 
 from app import socketio
 from app.models import Record, Hold
@@ -17,6 +18,8 @@ class SocketConnectedThread(threading.Thread):
     def __init__(self):
         super(SocketConnectedThread, self).__init__()
         self.stoprequest = threading.Event()
+        # To be improved
+        self.logger = current_app._get_current_object().logger
 
 #        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
 #        self.sock.bind(("can0",))
@@ -24,7 +27,7 @@ class SocketConnectedThread(threading.Thread):
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("127.0.0.1", 6000))
-        print("UDP mock connection open")
+        self.logger.info("Connection open")
 
 
 class PublisherThread(SocketConnectedThread):
@@ -50,10 +53,10 @@ class PublisherThread(SocketConnectedThread):
             try:
                 can_pkt = self.sock.recv(16)
             except socket.error:
-                print('Exiting can receiver loop')
+                self.logger.info('Exiting can receiver loop')
                 self.session.commit()
                 self.db_session.remove()
-                print("Commiting the session and clearing resources")
+                self.logger.info("Commiting the session and clearing resources")
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
             #Mask ID to hide possible flags
@@ -68,13 +71,11 @@ class PublisherThread(SocketConnectedThread):
             socketio.emit('json', json.dumps(record.to_ws_dict()), namespace='/api/climbs')
             #Save the Record in db
             self.session.add(record)
-            print(record)
 
     def join(self, timeout=None):
         self.stoprequest.set()
         self.sock.close()
-        print("UDP mock connection closed")
-#        print("Can connection closed")
+        self.logger.info("Connection closed")
         super(PublisherThread, self).join(timeout)
 
 
@@ -100,13 +101,13 @@ class CalibrationThread(SocketConnectedThread):
             except socket.error:
                 socketio.emit('message', 'timeout', namespace='/api/holds')
                 self.db_session.remove()
-                print("Went to timeout!")
+                self.logger.info("Went to timeout!")
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
             #Mask ID to hide possible flags
             #can_id &= socket.CAN_EFF_MASK
             magnitude = sqrt(x**2 + y**2 + z**2)
-            print(magnitude)
+            self.logger.info(magnitude)
             self.canid_values_dict[can_id].append(magnitude)
             found_a_device = self.search_trough_records(can_id)
             if found_a_device is True:
@@ -124,8 +125,7 @@ class CalibrationThread(SocketConnectedThread):
         super(CalibrationThread, self).join(timeout)
         self.stoprequest.set()
         self.sock.close()
-        print("UDP mock connection closed")
-#        print("Can connection closed")
+        self.logger.info("Connection closed")
 
     def search_trough_records(self, can_id):
         NUMBER_OF_SAMPLES = 10

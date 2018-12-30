@@ -4,6 +4,7 @@ from app.models import Hold
 from app.api.errors import bad_request, unauthorized
 from app.worker import CalibrationThread
 from flask import request, jsonify, url_for
+from flask import current_app as app
 
 @bp.route('/holds/<int:holdid>', methods=['GET'])
 def get_hold(holdid):
@@ -66,15 +67,15 @@ def delete_holds():
 
 @socketio.on('connect', namespace='/api/holds')
 def holds_ws_connect():
-    print('Calibration client connected')
+    app.logger.info('Calibration client connected')
 
 @socketio.on('disconnect', namespace='/api/holds')
 def holds_ws_disconnect():
-    print('Calibration client disconnected')
+    app.logger.info('Calibration client disconnected')
 
 @socketio.on('message', namespace='/api/holds')
 def holds_ws_message(message):
-    print('message ', message)
+    app.logger.info('message ', message)
     calibration_thread = CalibrationThread(db_session=db.session, hold_info=message)
     calibration_thread.start()
     calibration_thread.join()

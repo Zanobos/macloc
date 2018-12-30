@@ -24,7 +24,6 @@ def create_wall():
     wall = Wall()
     data['active'] = False
     wall.from_dict(data)
-    print(wall)
     db.session.add(wall)
     db.session.commit()
     response = jsonify(wall.to_dict())

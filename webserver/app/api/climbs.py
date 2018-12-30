@@ -4,6 +4,7 @@ from app.models import Climb, User, Wall
 from app.worker import PublisherThread
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
+from flask import current_app as app
 
 #Ok for dev environment and in order to save on resources
 publisher_thread = None
@@ -86,8 +87,8 @@ def delete_climbs():
 
 @socketio.on('connect', namespace='/api/climbs')
 def climbs_ws_connect():
-    print('Client connected')
+    app.logger.info('Client connected')
 
 @socketio.on('disconnect', namespace='/api/climbs')
 def climbs_ws_disconnect():
-    print('Client disconnected')
+    app.logger.info('Client disconnected')
