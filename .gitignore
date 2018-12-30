@@ -1,4 +1,5 @@
 .vscode
+.flaskenv
 
 .DS_Store
 node_modules/
