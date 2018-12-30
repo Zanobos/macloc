@@ -48,12 +48,14 @@ sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor apac
 9) Prepare the workspace:
 ```sh
 cd ~
+echo "export FLASK_APP=webserver.py" >> ~/.profile
 mkdir workspace
+cd workspace
 git clone https://github.com/Zanobos/macloc
-cd macloc
+cd macloc/webserver
 python3 -m venv venv
 source venv/bin/activate
-pip install -r webserver/app/doc/requirements.txt
+pip install -r app/doc/requirements.txt
 pip install gunicorn
 flask db upgrade
 ```
