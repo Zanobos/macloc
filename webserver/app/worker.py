@@ -21,13 +21,14 @@ class SocketConnectedThread(threading.Thread):
         # To be improved
         self.logger = current_app._get_current_object().logger
 
-#        self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
-#        self.sock.bind(("can0",))
-#        print("can connection opened")
-
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind(("127.0.0.1", 6000))
-        self.logger.info("Connection open")
+        if current_app.debug is False:
+            self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+            self.sock.bind(("can0",))
+            self.logger.info("Can connection opened")
+        else:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.sock.bind(("127.0.0.1", 6000))
+            self.logger.info("UDP mock connection open")
 
 
 class PublisherThread(SocketConnectedThread):
