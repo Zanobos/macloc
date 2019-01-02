@@ -7,7 +7,7 @@
                     horizontal>
         <b-form-input id="canIdInput"
                       type="text"
-                      v-model="form.can_id"
+                      v-model="hold.can_id"
                       required
                       placeholder="Enter can ID">
         </b-form-input>
@@ -18,7 +18,7 @@
                     horizontal>
         <b-form-input id="distFromSxInput"
                       type="number"
-                      v-model="form.dist_from_sx"
+                      v-model="hold.dist_from_sx"
                       required
                       placeholder="Enter distance from left edge (in cm)">
         </b-form-input>
@@ -29,7 +29,7 @@
                     horizontal>
         <b-form-input id="distFromBotInput"
                       type="number"
-                      v-model="form.dist_from_bot"
+                      v-model="hold.dist_from_bot"
                       required
                       placeholder="Enter distance from bottom (in cm)">
         </b-form-input>
@@ -40,7 +40,7 @@
                     horizontal>
         <b-form-input id="holdTypeInput"
                       type="text"
-                      v-model="form.hold_type">
+                      v-model="hold.hold_type">
         </b-form-input>
       </b-form-group>
       <b-form-group id="wallIdInputGroup"
@@ -49,7 +49,7 @@
                     horizontal>
         <b-form-select id="wallIdInput"
                       :options="wallIds"
-                      v-model="form.wall_id">
+                      v-model="hold.wall_id">
           <template slot="first">
             <option :value="null">-- No wall --</option>
           </template>
@@ -62,50 +62,33 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
 export default {
+  props: {
+    hold: Object,
+    wallIds: Array
+  },
   data () {
     return {
-      form: {
-        can_id: '',
-        dist_from_sx: '',
-        dist_from_bot: '',
-        hold_type: null,
-        wall_id: null
-      },
       show: true
     }
-  },
-  computed: {
-    ...mapGetters({
-      wallIds: 'walls/wallIds'
-    })
   },
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      this.createHold(this.form)
+      this.$emit('submit-hold', this.hold)
     },
     onReset (evt) {
       evt.preventDefault()
       /* Reset our form values */
-      this.form.can_id = ''
-      this.form.dist_from_sx = ''
-      this.form.dist_from_bot = ''
-      this.form.hold_type = ''
-      this.wall_id = null
+      this.hold.can_id = ''
+      this.hold.dist_from_sx = ''
+      this.hold.dist_from_bot = ''
+      this.hold.hold_type = ''
+      this.hold.wall_id = null
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.$nextTick(() => { this.show = true })
-    },
-    ...mapActions({
-      createHold: 'holds/createHold',
-      fetchWalls: 'walls/fetchWalls'
-    })
-  },
-  created () {
-    this.fetchWalls()
+    }
   }
 }
 </script>

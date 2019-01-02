@@ -2,7 +2,7 @@
   <b-container>
     <b-row class="mt-2">
       <b-col>
-        <form-hold></form-hold>
+        <config-holds-insert-hold></config-holds-insert-hold>
       </b-col>
       <b-col>
         <list-holds></list-holds>
@@ -13,13 +13,13 @@
 
 <script>
 import ListHolds from '@/components/collections/ListHolds.vue'
-import FormHold from '@/components/forms/FormHold.vue'
+import ConfigHoldsInsertHold from '@/components/subpages/ConfigHoldsInsertHold.vue'
 
 export default {
   name: 'ConfigHolds',
   components: {
     ListHolds,
-    FormHold
+    ConfigHoldsInsertHold
   }
 }
 </script>

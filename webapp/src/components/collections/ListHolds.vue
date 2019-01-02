@@ -29,10 +29,15 @@
     <b-modal ref="modalDeleteRef"
         centered
         hide-footer
-        title="DELETE Hold">
+        title="Delete Hold">
         <div>You are about to delete the hold {{this.toDeleteHold.id}}.</div>
         <div>The procedure is irreversible. Do you want to proceed?</div>
         <b-btn class="mt-1" variant="danger" @click="deleteAndHideModal()">Delete</b-btn>
+    </b-modal>
+    <b-modal ref="modalEditRef"
+      centered
+      hide-footer
+      title="Edit Hold">
     </b-modal>
   </div>
 </template>
