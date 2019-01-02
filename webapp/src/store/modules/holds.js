@@ -16,7 +16,7 @@ const actions = {
         commit('storeHoldsMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload
+      payload != null ? payload : {} // It's a query
     )
   },
   initHoldsMeta ({ commit }, payload) {
@@ -33,7 +33,7 @@ const actions = {
   },
   createHold (context, payload) {
     apiholds.postHolds(
-      (response) => context.dispatch('fetchHolds', {}),
+      (response) => context.dispatch('fetchHolds'),
       (error) => defaultErrorHandler(error),
       payload
     )

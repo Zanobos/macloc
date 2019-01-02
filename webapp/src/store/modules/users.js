@@ -3,7 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   users: [],
-  usersMeta: {}
+  usersMeta: {} // not used anymore
 }
 
 const getters = {}

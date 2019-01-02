@@ -16,7 +16,7 @@ const actions = {
         commit('storeClimbsMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload // It's a query
+      payload != null ? payload : {} // It's a query
     )
   },
   initClimbsMeta ({ commit }, payload) {

@@ -23,7 +23,7 @@ export default {
     holds: state => state.holds.holds
   }),
   created () {
-    this.fetchHolds({})
+    this.fetchHolds()
   },
   methods: {
     ...mapActions({
