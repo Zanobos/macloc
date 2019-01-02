@@ -17,7 +17,7 @@
           </b-col>
           <b-col cols="3">
             <b-row class="mb-1">
-              <b-button type="submit" variant="primary">Edit</b-button>
+              <b-button type="submit" variant="primary" @click="showEditModal(hold)">Edit</b-button>
             </b-row>
             <b-row>
               <b-button variant="danger" @click="showDeleteModal(hold)">Delete</b-button>
@@ -38,30 +38,54 @@
       centered
       hide-footer
       title="Edit Hold">
+      <form-hold v-bind:initialHold="toEditHold" v-bind:wallIds="wallIds" v-on:submit-hold="onSubmitEditedHold"></form-hold>
     </b-modal>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import FormHold from '@/components/forms/FormHold.vue'
 
 export default {
+  components: {
+    FormHold
+  },
   data () {
     return {
-      toDeleteHold: {}
+      toDeleteHold: {},
+      toEditHold: {}
     }
   },
-  computed: mapState({
-    holds: state => state.holds.holds
-  }),
+  computed: {
+    ...mapState({
+      holds: state => state.holds.holds
+    }),
+    ...mapGetters({
+      wallIds: 'walls/wallIds'
+    })
+  },
   created () {
     this.fetchHolds()
   },
   methods: {
     ...mapActions({
       fetchHolds: 'holds/fetchHolds',
-      deleteHold: 'holds/deleteHold'
+      deleteHold: 'holds/deleteHold',
+      editHold: 'holds/editHold'
     }),
+    showEditModal (hold) {
+      this.toEditHold = hold
+      this.$refs.modalEditRef.show()
+    },
+    onSubmitEditedHold (hold) {
+      var payload = hold
+      var modalRef = this.$refs.modalEditRef
+      payload.onResponse = function (response) {
+        modalRef.hide()
+      }
+      this.editHold(payload)
+    },
     showDeleteModal (hold) {
       this.toDeleteHold = hold
       this.$refs.modalDeleteRef.show()

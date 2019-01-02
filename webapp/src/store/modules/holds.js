@@ -49,6 +49,18 @@ const actions = {
       (error) => defaultErrorHandler(error),
       payload.holdId
     )
+  },
+  editHold (context, payload) {
+    apiholds.putHold(
+      (response) => {
+        context.dispatch('fetchHolds')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 

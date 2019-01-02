@@ -51,7 +51,7 @@
                       :options="wallIds"
                       v-model="hold.wall_id">
           <template slot="first">
-            <option :value="null">-- No wall --</option>
+            <option :value="undefined">-- No wall --</option>
           </template>
         </b-form-select>
       </b-form-group>
@@ -62,14 +62,21 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   props: {
-    hold: Object,
+    initialHold: Object,
     wallIds: Array
   },
   data () {
     return {
       show: true
+    }
+  },
+  computed: {
+    hold () {
+      return Vue.util.extend({}, this.initialHold)
     }
   },
   methods: {
@@ -80,11 +87,11 @@ export default {
     onReset (evt) {
       evt.preventDefault()
       /* Reset our form values */
-      this.hold.can_id = ''
-      this.hold.dist_from_sx = ''
-      this.hold.dist_from_bot = ''
-      this.hold.hold_type = ''
-      this.hold.wall_id = null
+      this.hold.can_id = this.initialHold.can_id
+      this.hold.dist_from_sx = this.initialHold.dist_from_sx
+      this.hold.dist_from_bot = this.initialHold.dist_from_bot
+      this.hold.hold_type = this.initialHold.hold_type
+      this.hold.wall_id = this.initialHold.wall_id
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.$nextTick(() => { this.show = true })

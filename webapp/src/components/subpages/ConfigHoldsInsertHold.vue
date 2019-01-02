@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form-hold v-bind:hold="{}" v-bind:wallIds="wallIds" v-on:submit-hold="onSubmitHold"></form-hold>
+    <form-hold v-bind:initialHold="{}" v-bind:wallIds="wallIds" v-on:submit-hold="onSubmitHold"></form-hold>
   </div>
 </template>
 
