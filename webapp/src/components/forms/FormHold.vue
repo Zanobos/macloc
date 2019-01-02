@@ -3,7 +3,8 @@
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group id="canIdInputGroup"
                     label="Can ID:"
-                    label-for="canIdInput">
+                    label-for="canIdInput"
+                    horizontal>
         <b-form-input id="canIdInput"
                       type="text"
                       v-model="form.can_id"
@@ -12,8 +13,9 @@
         </b-form-input>
       </b-form-group>
       <b-form-group id="distFromSxInputGroup"
-                    label="Distance from left edge:"
-                    label-for="distFromSxInput">
+                    label="Dist from left:"
+                    label-for="distFromSxInput"
+                    horizontal>
         <b-form-input id="distFromSxInput"
                       type="number"
                       v-model="form.dist_from_sx"
@@ -22,8 +24,9 @@
         </b-form-input>
       </b-form-group>
       <b-form-group id="distFromBotInputGroup"
-                    label="Distance from bottom edge:"
-                    label-for="distFromBotInput">
+                    label="Dist from bottom:"
+                    label-for="distFromBotInput"
+                    horizontal>
         <b-form-input id="distFromBotInput"
                       type="number"
                       v-model="form.dist_from_bot"
@@ -33,7 +36,8 @@
       </b-form-group>
       <b-form-group id="holdTypeInputGroup"
                     label="Hold type:"
-                    label-for="holdTypeInput">
+                    label-for="holdTypeInput"
+                    horizontal>
         <b-form-input id="holdTypeInput"
                       type="text"
                       v-model="form.hold_type">
@@ -41,12 +45,12 @@
       </b-form-group>
       <b-form-group id="wallIdInputGroup"
                     label="Wall ID:"
-                    label-for="wallIdInput">
+                    label-for="wallIdInput"
+                    horizontal>
         <b-form-select id="wallIdInput"
                       :options="wallIds"
                       v-model="form.wall_id">
           <template slot="first">
-          <!-- this slot appears above the options from 'options' prop -->
             <option :value="null">-- No wall --</option>
           </template>
         </b-form-select>
@@ -96,8 +100,12 @@ export default {
       this.$nextTick(() => { this.show = true })
     },
     ...mapActions({
-      createHold: 'holds/createHold'
+      createHold: 'holds/createHold',
+      fetchWalls: 'walls/fetchWalls'
     })
+  },
+  created () {
+    this.fetchWalls()
   }
 }
 </script>

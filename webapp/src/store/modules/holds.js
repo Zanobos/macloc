@@ -37,6 +37,18 @@ const actions = {
       (error) => defaultErrorHandler(error),
       payload
     )
+  },
+  deleteHold (context, payload) {
+    apiholds.deleteHold(
+      (response) => {
+        context.dispatch('fetchHolds')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.holdId
+    )
   }
 }
 

@@ -15,7 +15,7 @@
       <b-carousel-slide v-for="wall in walls" :key="wall.id">
         <img  slot="img"
               class="d-block img-fluid w-100"
-              alt="image slot"
+              alt="image"
               :src="getImg(wall.id)"
         >
         <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
