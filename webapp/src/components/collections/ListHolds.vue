@@ -6,7 +6,7 @@
             <ul>
               <li>Hold id: {{ hold.id }} </li>
               <li>Can id: {{ hold.can_id }} </li>
-              <li>Distance from left side: {{ hold.dist_from_sx}} </li>
+              <li>Distance from left edge: {{ hold.dist_from_sx}} </li>
               <li>Distance from bottom: {{ hold.dist_from_bot}} </li>
             </ul>
           </p>
@@ -20,11 +20,10 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: mapState({
-    holds: state => state.holds.holds,
-    holdsMeta: state => state.holds.holdsMeta
+    holds: state => state.holds.holds
   }),
   created () {
-    this.fetchHolds(this.holdsMeta)
+    this.fetchHolds({})
   },
   methods: {
     ...mapActions({
@@ -33,11 +32,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-</style>

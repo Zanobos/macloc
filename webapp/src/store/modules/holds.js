@@ -16,9 +16,7 @@ const actions = {
         commit('storeHoldsMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page,
-      payload.wall_id
+      payload
     )
   },
   initHoldsMeta ({ commit }, payload) {
@@ -30,14 +28,12 @@ const actions = {
         context.commit('realtime/setOngoingHolds', { ongoingHolds: response.data.items }, { root: true })
       },
       (error) => defaultErrorHandler(error),
-      null,
-      null,
-      payload.wallId
+      payload
     )
   },
   createHold (context, payload) {
     apiholds.postHolds(
-      (response) => context.dispatch('fetchHolds', context.state.holdsMeta),
+      (response) => context.dispatch('fetchHolds', {}),
       (error) => defaultErrorHandler(error),
       payload
     )

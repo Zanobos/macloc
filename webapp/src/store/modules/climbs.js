@@ -75,7 +75,7 @@ const actions = {
         commit('realtime/setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
       },
       (error) => defaultErrorHandler(error),
-      { status: ' start' }
+      { status: 'start' }
     )
   }
 }
