@@ -28,7 +28,7 @@
                       type="number"
                       v-model="form.dist_from_bot"
                       required
-                      placeholder="Enter distance from left edge (in cm)">
+                      placeholder="Enter distance from bottom (in cm)">
         </b-form-input>
       </b-form-group>
       <b-form-group id="holdTypeInputGroup"

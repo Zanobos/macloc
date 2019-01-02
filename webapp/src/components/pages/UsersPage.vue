@@ -1,8 +1,14 @@
 <template>
-  <div>
-    <form-user></form-user>
-    <list-users></list-users>
-  </div>
+  <b-container>
+    <b-row class="mt-2">
+      <b-col>
+        <form-user></form-user>
+      </b-col>
+      <b-col>
+        <list-users></list-users>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
