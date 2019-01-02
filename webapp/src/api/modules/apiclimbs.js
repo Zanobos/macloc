@@ -1,12 +1,12 @@
 import { HTTP, encodeQueryData } from '@/api'
 
 export default {
-  getClimbs (cb, ecb, page, perPage, userId, status) {
+  getClimbs (cb, ecb, query) {
     let data = {}
-    data.page = page
-    data.per_page = perPage
-    data.status = status
-    data.user_id = userId
+    data.status = query.status
+    data.user_id = query.userId
+    data.page = query.page
+    data.per_page = query.perPage
     let queryString = encodeQueryData(data)
     HTTP.get('climbs' + queryString)
       .then(
@@ -21,10 +21,10 @@ export default {
         (error) => ecb(error)
       )
   },
-  postClimbs (cb, ecb, climb, userId, wallId) {
+  postClimbs (cb, ecb, climb, query) {
     let data = {}
-    data.wall_id = wallId
-    data.user_id = userId
+    data.wall_id = query.wallId
+    data.user_id = query.userId
     let queryString = encodeQueryData(data)
     HTTP.post('climbs' + queryString, climb)
       .then(

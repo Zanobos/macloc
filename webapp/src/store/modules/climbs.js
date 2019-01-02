@@ -3,7 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   climbs: [],
-  climbsMeta: {}
+  climbsMeta: {} // pagination not used any more
 }
 
 const getters = {}
@@ -16,10 +16,7 @@ const actions = {
         commit('storeClimbsMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page,
-      payload.userId,
-      payload.status
+      payload // It's a query
     )
   },
   initClimbsMeta ({ commit }, payload) {
@@ -35,8 +32,7 @@ const actions = {
       },
       (error) => defaultErrorHandler(error),
       payload.climb,
-      payload.userId,
-      payload.wallId
+      { userId: payload.userId, wallId: payload.wallId }
     )
   },
   startClimb ({ commit }, payload) {
@@ -79,10 +75,7 @@ const actions = {
         commit('realtime/setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
       },
       (error) => defaultErrorHandler(error),
-      null,
-      null,
-      null,
-      'start'
+      { status: ' start' }
     )
   }
 }

@@ -17,9 +17,6 @@
       </b-collapse>
     </b-card>
 
-    <b-pagination v-on:change="onPageChange" align="center" :total-rows="this.climbsMeta.total_items" v-model="climbsMeta.page" :per-page="climbsMeta.per_page">
-    </b-pagination>
-
   </div>
 </template>
 
@@ -29,23 +26,16 @@ import { mapActions, mapState } from 'vuex'
 export default {
   name: 'ListClimbs',
   computed: mapState({
-    climbs: state => state.climbs.climbs,
-    climbsMeta: state => state.climbs.climbsMeta
+    climbs: state => state.climbs.climbs
   }),
   methods: {
-    onPageChange: function (page) {
-      this.climbsMeta.page = page
-      this.climbsMeta.status = 'end'
-      this.fetchClimbs(this.climbsMeta)
-    },
     ...mapActions({
       fetchClimbs: 'climbs/fetchClimbs'
     })
 
   },
   created () {
-    this.climbsMeta.status = 'end'
-    this.fetchClimbs(this.climbsMeta)
+    this.fetchClimbs({ status: 'end' })
   }
 }
 </script>

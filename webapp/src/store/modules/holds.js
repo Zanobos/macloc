@@ -3,7 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   holds: [],
-  holdsMeta: {}
+  holdsMeta: {} // not used anymore
 }
 
 const getters = {}
