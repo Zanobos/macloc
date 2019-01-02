@@ -34,6 +34,13 @@ const actions = {
       null,
       payload.wallId
     )
+  },
+  createHold (context, payload) {
+    apiholds.postHolds(
+      (response) => context.dispatch('fetchHolds', context.state.holdsMeta),
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 

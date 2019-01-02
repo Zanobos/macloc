@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: mapState({
@@ -24,8 +24,11 @@ export default {
     holdsMeta: state => state.holds.holdsMeta
   }),
   created () {
-    this.$store.dispatch('holds/initHoldsMeta', {page: 1, per_page: 20}).then(() => {
-      this.$store.dispatch('holds/fetchHolds', this.holdsMeta)
+    this.fetchHolds(this.holdsMeta)
+  },
+  methods: {
+    ...mapActions({
+      fetchHolds: 'holds/fetchHolds'
     })
   }
 }

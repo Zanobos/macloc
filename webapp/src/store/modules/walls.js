@@ -6,7 +6,11 @@ const state = {
   wallsMeta: {}
 }
 
-const getters = {}
+const getters = {
+  wallIds (state) {
+    return state.walls.map(wall => wall.id)
+  }
+}
 
 const actions = {
   fetchWalls ({ commit }, payload) {
