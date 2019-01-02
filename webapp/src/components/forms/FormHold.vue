@@ -47,8 +47,8 @@
                       v-model="form.wall_id">
           <template slot="first">
           <!-- this slot appears above the options from 'options' prop -->
-          <option :value="null">-- No wall --</option>
-      </template>
+            <option :value="null">-- No wall --</option>
+          </template>
         </b-form-select>
       </b-form-group>
       <b-button type="submit" variant="primary">Submit</b-button>

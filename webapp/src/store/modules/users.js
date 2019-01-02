@@ -6,7 +6,13 @@ const state = {
   usersMeta: {} // not used anymore
 }
 
-const getters = {}
+const getters = {
+  getUsersLabelledByName (state) {
+    return state.users.map(user => {
+      return { text: user.name, value: user }
+    })
+  }
+}
 
 const actions = {
   fetchUsers ({ commit }, payload) {

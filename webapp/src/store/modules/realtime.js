@@ -10,9 +10,8 @@ const state = {
 }
 
 const getters = {
-  getForceByHoldId (state, getters) {
+  getForceByHoldId (state) {
     return (direction, holdId) => {
-      console.log(direction + ',' + holdId + ',' + state.rtholds)
       if (state.rtholds[holdId] == null) {
         return null
       }
