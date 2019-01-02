@@ -16,25 +16,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: mapState({
-    users: state => state.users.users,
-    usersMeta: state => state.users.usersMeta
+    users: state => state.users.users
   }),
-  created () {
-    this.$store.dispatch('users/initUsersMeta', {page: 1, per_page: 20}).then(() => {
-      this.$store.dispatch('users/fetchUsers', this.usersMeta)
+  methods: {
+    ...mapActions({
+      fetchUsers: 'users/fetchUsers'
     })
+  },
+  created () {
+    this.fetchUsers()
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-</style>

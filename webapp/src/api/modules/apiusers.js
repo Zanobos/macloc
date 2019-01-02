@@ -1,8 +1,12 @@
-import { HTTP } from '@/api'
+import { HTTP, encodeQueryData } from '@/api'
 
 export default {
-  getUsers (cb, ecb) {
-    HTTP.get('users')
+  getUsers (cb, ecb, query) {
+    let data = {}
+    data.page = query.page
+    data.per_page = query.perPage
+    let queryString = encodeQueryData(data)
+    HTTP.get('users' + queryString)
       .then(
         (response) => cb(response),
         (error) => ecb(error)

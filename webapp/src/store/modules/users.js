@@ -16,8 +16,7 @@ const actions = {
         commit('storeUsersMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page
+      payload != null ? payload : {}
     )
   },
   initUsersMeta ({ commit }, payload) {
@@ -25,7 +24,7 @@ const actions = {
   },
   createUser (context, payload) {
     apiusers.postUsers(
-      (response) => context.dispatch('fetchUsers', context.state.usersMeta),
+      (response) => context.dispatch('fetchUsers'),
       (error) => defaultErrorHandler(error),
       payload
     )
