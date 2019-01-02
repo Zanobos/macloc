@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { getWallImg } from '@/utils'
 
 export default {
@@ -42,8 +42,7 @@ export default {
     }
   },
   computed: mapState({
-    walls: state => state.walls.walls,
-    wallsMeta: state => state.walls.wallsMeta
+    walls: state => state.walls.walls
   }),
   methods: {
     onSlideStart (slide) {
@@ -52,13 +51,13 @@ export default {
     onSlideEnd (slide) {
       this.sliding = false
     },
-    getImg: getWallImg
+    getImg: getWallImg,
+    ...mapActions({
+      fetchWalls: 'walls/fetchWalls'
+    })
   },
   created () {
-    // I fetch all the possible walls, and I put all of them in a carousel
-    this.$store.dispatch('walls/initWallsMeta', {page: 1, per_page: 20}).then(() => {
-      this.$store.dispatch('walls/fetchWalls', this.wallsMeta)
-    })
+    this.fetchWalls()
   }
 }
 </script>

@@ -1,10 +1,10 @@
 import { HTTP, encodeQueryData } from '@/api'
 
 export default {
-  getWalls (cb, ecb, page, perPage) {
+  getWalls (cb, ecb, query) {
     let data = {}
-    data.page = page
-    data.per_page = perPage
+    data.page = query.page
+    data.per_page = query.perPage
     let queryString = encodeQueryData(data)
     HTTP.get('walls' + queryString)
       .then(

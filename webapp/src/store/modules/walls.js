@@ -3,7 +3,7 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   walls: [],
-  wallsMeta: {}
+  wallsMeta: {} // not used anymore
 }
 
 const getters = {
@@ -21,8 +21,7 @@ const actions = {
         commit('realtime/setActiveStatus', { activeStatus: response.data.active }, { root: true })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page
+      payload != null ? payload : {}
     )
   },
   initWallsMeta ({ commit }, payload) {
