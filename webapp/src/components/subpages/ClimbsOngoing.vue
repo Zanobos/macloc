@@ -23,11 +23,8 @@
         </b-card-body>
         </b-card>
       </b-col>
-      <b-col v-if="ongoingClimb">
-        <img  class="d-block img-fluid w-100"
-              alt="image slot"
-              :src="getOngoingWallImg()"
-        >
+      <b-col>
+        <real-time-holds-graph></real-time-holds-graph>
       </b-col>
     </b-row>
   </b-container>
@@ -36,9 +33,13 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { getWallImg } from '@/utils'
+import RealTimeHoldsGraph from '@/components/graphs/RealTimeHoldsGraph.vue'
 
 export default {
   name: 'ClimbsOngoing',
+  components: {
+    RealTimeHoldsGraph
+  },
   computed: {
     ...mapState({
       connected: state => state.realtime.isConnected,
