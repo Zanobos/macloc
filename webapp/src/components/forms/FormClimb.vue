@@ -49,8 +49,12 @@ export default {
       this.createClimb(form)
     },
     ...mapActions({
-      createClimb: 'climbs/createClimb'
+      createClimb: 'climbs/createClimb',
+      fetchUsers: 'users/fetchUsers'
     })
+  },
+  created () {
+    this.fetchUsers()
   }
 }
 </script>
