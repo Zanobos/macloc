@@ -16,7 +16,6 @@
         </b-card-body>
       </b-collapse>
     </b-card>
-
   </div>
 </template>
 
@@ -32,7 +31,6 @@ export default {
     ...mapActions({
       fetchClimbs: 'climbs/fetchClimbs'
     })
-
   },
   created () {
     this.fetchClimbs({ status: 'end' })

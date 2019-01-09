@@ -45,7 +45,7 @@ import Vue from 'vue'
 
 export default {
   props: {
-    intialWall: Object
+    initialWall: Object
   },
   data () {
     return {
@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     wall () {
-      return Vue.util.extend({}, this.intialWall)
+      return Vue.util.extend({}, this.initialWall)
     }
   },
   methods: {

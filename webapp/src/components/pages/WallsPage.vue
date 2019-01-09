@@ -5,20 +5,20 @@
         <insert-wall></insert-wall>
       </b-col>
       <b-col>
-        <carousel-walls></carousel-walls>
+        <list-walls></list-walls>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import CarouselWalls from '@/components/collections/CarouselWalls.vue'
+import ListWalls from '@/components/collections/ListWalls.vue'
 import InsertWall from '@/components/subpages/InsertWall.vue'
 
 export default {
   name: 'WallsPage',
   components: {
-    CarouselWalls,
+    ListWalls,
     InsertWall
   }
 }
