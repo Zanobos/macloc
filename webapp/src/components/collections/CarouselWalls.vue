@@ -1,5 +1,5 @@
 <template>
-  <div class="col">
+  <div>
     <b-carousel id="carousel1"
       style="text-shadow: 1px 1px 2px #333;"
       class="d-block"
@@ -57,11 +57,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  #wall {
-    width: 100%;
-    height: 100%;
-  }
-</style>
