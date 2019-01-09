@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import WallsPage from '@/components/pages/WallsPage'
+import HomePage from '@/components/pages/HomePage'
 import ClimbsPage from '@/components/pages/ClimbsPage'
 import UsersPage from '@/components/pages/UsersPage'
-import Configuration from '@/components/pages/Configuration'
-
-import ConfigWalls from '@/components/subpages/ConfigWalls'
-import ConfigHolds from '@/components/subpages/ConfigHolds'
+import HoldsPage from '@/components/pages/HoldsPage'
+import WallsPage from '@/components/pages/WallsPage'
 
 import ClimbsHistory from '@/components/subpages/ClimbsHistory'
 import ClimbsOngoing from '@/components/subpages/ClimbsOngoing'
@@ -16,10 +14,10 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/walls',
-      name: 'Walls',
-      label: 'Walls',
-      component: WallsPage
+      path: '/homepage',
+      name: 'HomePage',
+      label: 'HomePage',
+      component: HomePage
     },
     {
       path: '/climbs',
@@ -51,27 +49,16 @@ export default new Router({
       component: UsersPage
     },
     {
-      path: '/configuration',
-      label: 'Configuration',
-      component: Configuration,
-      children: [
-        {
-          path: 'walls',
-          name: 'ConfigWalls',
-          label: 'Walls',
-          component: ConfigWalls
-        },
-        {
-          path: 'holds',
-          name: 'ConfigHolds',
-          label: 'Holds',
-          component: ConfigHolds
-        },
-        {
-          path: '',
-          redirect: 'walls'
-        }
-      ]
+      path: '/walls',
+      name: 'Walls',
+      label: 'Walls',
+      component: WallsPage
+    },
+    {
+      path: '/holds',
+      name: 'Holds',
+      label: 'Holds',
+      component: HoldsPage
     },
     {
       path: '',
