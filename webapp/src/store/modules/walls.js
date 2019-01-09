@@ -34,6 +34,30 @@ const actions = {
       wall
     )
   },
+  deleteWall (context, payload) {
+    apiwalls.deleteWall(
+      (response) => {
+        context.dispatch('fetchWalls')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.wallId
+    )
+  },
+  editWall (context, payload) {
+    apiwalls.putWall(
+      (response) => {
+        context.dispatch('fetchWalls')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
+  },
   getOngoingWall (context, payload) {
     apiwalls.getWall(
       (response) => {
