@@ -49,16 +49,16 @@ export default new Router({
       component: UsersPage
     },
     {
-      path: '/walls',
-      name: 'Walls',
-      label: 'Walls',
-      component: WallsPage
-    },
-    {
       path: '/holds',
       name: 'Holds',
       label: 'Holds',
       component: HoldsPage
+    },
+    {
+      path: '/walls',
+      name: 'Walls',
+      label: 'Walls',
+      component: WallsPage
     },
     {
       path: '',

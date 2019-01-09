@@ -27,11 +27,9 @@ const actions = {
   initWallsMeta ({ commit }, payload) {
     commit('storeWallsMeta', { meta: payload })
   },
-  addWall ({ commit }, wall) {
+  createWall (context, wall) {
     apiwalls.postWalls(
-      (response) => {
-        this.fetchWalls({ commit: commit })
-      },
+      (response) => context.dispatch('fetchWalls'),
       (error) => defaultErrorHandler(error),
       wall
     )
