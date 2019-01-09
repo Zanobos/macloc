@@ -3,10 +3,11 @@
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group id="nameInputGroup"
                     label="Name:"
-                    label-for="nameInput">
+                    label-for="nameInput"
+                    horizontal>
         <b-form-input id="nameInput"
                       type="text"
-                      v-model="form.name"
+                      v-model="user.name"
                       required
                       placeholder="Enter name">
         </b-form-input>
@@ -14,27 +15,30 @@
       <b-form-group id="emailInputGroup"
                     label="Email address:"
                     label-for="emailInput"
-                    description="We'll never share your email with anyone else.">
+                    description="We'll never share your email with anyone else."
+                    horizontal>
         <b-form-input id="emailInput"
                       type="email"
-                      v-model="form.email"
+                      v-model="user.email"
                       placeholder="Enter email">
         </b-form-input>
       </b-form-group>
       <b-form-group id="heightInputGroup"
                     label="Height (in cm):"
-                    label-for="heightInput">
+                    label-for="heightInput"
+                    horizontal>
         <b-form-input id="heightInput"
                       required
-                      v-model="form.height">
+                      v-model="user.height">
         </b-form-input>
       </b-form-group>
       <b-form-group id="weightInputGroup"
                     label="Weight (in cm):"
-                    label-for="weightInput">
+                    label-for="weightInput"
+                    horizontal>
         <b-form-input id="weightInput"
                       required
-                      v-model="form.weight">
+                      v-model="user.weight">
         </b-form-input>
       </b-form-group>
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -44,39 +48,38 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import Vue from 'vue'
 
 export default {
+  props: {
+    initialUser: Object
+  },
   data () {
     return {
-      form: {
-        email: '',
-        name: '',
-        height: '',
-        weight: ''
-      },
       show: true
+    }
+  },
+  computed: {
+    user () {
+      return Vue.util.extend({}, this.initialUser)
     }
   },
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      this.createUser(this.form)
+      this.$emit('submit-user', this.user)
     },
     onReset (evt) {
       evt.preventDefault()
       /* Reset our form values */
-      this.form.name = ''
-      this.form.email = ''
-      this.form.height = ''
-      this.form.weight = ''
+      this.user.name = this.initialUser.name
+      this.user.email = this.initialUser.email
+      this.user.height = this.initialUser.height
+      this.user.weight = this.initialUser.weight
       /* Trick to reset/clear native browser form validation state */
       this.show = false
       this.$nextTick(() => { this.show = true })
-    },
-    ...mapActions({
-      createUser: 'users/createUser'
-    })
+    }
   }
 }
 </script>

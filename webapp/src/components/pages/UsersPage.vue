@@ -2,7 +2,7 @@
   <b-container>
     <b-row class="mt-2">
       <b-col>
-        <form-user></form-user>
+        <insert-user></insert-user>
       </b-col>
       <b-col>
         <list-users></list-users>
@@ -13,20 +13,13 @@
 
 <script>
 import ListUsers from '@/components/collections/ListUsers.vue'
-import FormUser from '@/components/forms/FormUser.vue'
+import InsertUser from '@/components/subpages/InsertUser.vue'
 
 export default {
   name: 'UsersPage',
   components: {
     ListUsers,
-    FormUser
+    InsertUser
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-</style>
