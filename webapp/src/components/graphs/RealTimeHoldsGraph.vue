@@ -2,7 +2,6 @@
 <template>
   <div id="wall"
       :style="{ 'background-image': 'url(\'' + getOngoingWallImg()+ '\')' }">
-
   </div>
 </template>
 
@@ -129,7 +128,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   #wall {
     width: 100%;
     height: 100%;

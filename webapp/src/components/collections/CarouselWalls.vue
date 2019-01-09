@@ -12,12 +12,8 @@
       @sliding-end="onSlideEnd"
     >
 
-      <b-carousel-slide v-for="wall in walls" :key="wall.id">
-        <img  slot="img"
-              class="d-block img-fluid w-100"
-              alt="image"
-              :src="getImg(wall.id)"
-        >
+      <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank
+        :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }">
         <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
         <b-collapse id="collapse1">
           <component :is="carouselFormProp" v-bind:wallId="wall.id"/>
@@ -64,8 +60,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
+  #wall {
+    width: 100%;
+    height: 100%;
+  }
 </style>
