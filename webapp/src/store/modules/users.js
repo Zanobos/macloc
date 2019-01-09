@@ -34,6 +34,30 @@ const actions = {
       (error) => defaultErrorHandler(error),
       payload
     )
+  },
+  deleteUser (context, payload) {
+    apiusers.deleteUser(
+      (response) => {
+        context.dispatch('fetchUsers')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.userId
+    )
+  },
+  editUser (context, payload) {
+    apiusers.putUser(
+      (response) => {
+        context.dispatch('fetchUsers')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 
