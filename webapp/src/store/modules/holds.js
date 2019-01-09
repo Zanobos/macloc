@@ -6,7 +6,14 @@ const state = {
   holdsMeta: {} // not used anymore
 }
 
-const getters = {}
+const getters = {
+  holdsMap (state) {
+    return state.holds.reduce(function (map, hold) {
+      map[hold.id] = hold
+      return map
+    }, {})
+  }
+}
 
 const actions = {
   fetchHolds ({ commit }, payload) {

@@ -27,7 +27,28 @@ export default {
     }),
     ...mapGetters({
       getForceByHoldId: 'realtime/getForceByHoldId'
-    })
+    }),
+    graphicHolds: function () {
+      var graphicHolds = this.ongoingHolds.map(hold => {
+        var graphicHold = {}
+        var percentFromBottom = hold.dist_from_bot / this.ongoingWall.height * 100.0
+        graphicHold.percentFromTop = 100.0 - percentFromBottom
+        graphicHold.percentFromLeft = hold.dist_from_sx / this.ongoingWall.width * 100.0
+        graphicHold.forceFromTop = graphicHold.percentFromTop + this.getForceByHoldId('y', hold.id) / 30.0
+        graphicHold.forceFromLeft = graphicHold.percentFromLeft + this.getForceByHoldId('x', hold.id) / 30.0
+        return graphicHold
+      })
+      return graphicHolds
+    }
+  },
+  watch: {
+    rtholds: {
+      handler: function (val, oldVal) {
+        // Has to explicitly update the canvas
+        this.drawForces()
+      },
+      deep: true
+    }
   },
   methods: {
     getOngoingWallImg () {
@@ -57,22 +78,53 @@ export default {
     drawHolds () {
       // Joining data
       var circle = this.svgContainer.selectAll('circle')
-        .data(this.ongoingHolds)
+        .data(this.graphicHolds)
       // Removing old data
       circle.exit().remove()
       // New data and update of existing
       circle.enter()
         .append('circle')
         .merge(circle)
-        .attr('cx', 100)
-        .attr('cy', 100)
-        .attr('r', 100)
+        .attr('cx', d => d.percentFromLeft + '%')
+        .attr('cy', d => d.percentFromTop + '%')
+        .attr('r', 40)
+        .style('fill', 'green')
+    },
+    drawForces () {
+      // Joining data
+      var line = this.svgContainer.selectAll('line')
+        .data(this.graphicHolds)
+      // Removing old data
+      line.exit().remove()
+      // New data and update of existing
+      line.enter()
+        .append('line')
+        .merge(line)
+        .attr('x1', d => d.percentFromLeft + '%')
+        .attr('y1', d => d.percentFromTop + '%')
+        .transition()
+        .attr('x2', d => d.forceFromLeft + '%')
+        .attr('y2', d => d.forceFromTop + '%')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 4)
+        .attr('class', 'arrow')
+        .attr('marker-end', 'url(#arrow)')
+      // Joining data
+      var circle = this.svgContainer.selectAll('circle')
+        .data(this.graphicHolds)
+      // Removing old data
+      circle.exit().remove()
+      // New data and update of existing
+      circle.enter()
+        .append('circle')
+        .merge(circle)
         .style('fill', 'green')
     }
   },
   mounted () {
     this.drawWall()
     this.drawHolds()
+    this.drawForces()
   }
 }
 </script>
