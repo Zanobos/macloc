@@ -19,8 +19,16 @@ def get_climbs():
     per_page = min(request.args.get('per_page', 1000, type=int), 1000)
     user_id = request.args.get('user_id', None, type=int)
     status = request.args.get('status', None, type=str)
+    not_status = request.args.get('not_status', None, type=str)
+    if status is not None and not_status is not None:
+        return bad_request('only one between status and not_status')
     query = Climb.query if user_id is None else Climb.query.filter(Climb.user_id == user_id)
-    query = query.filter(Climb.status == 'end') if status is None else query.filter(Climb.status == status)
+    if status is not None:
+        query = query.filter(Climb.status == status)
+    elif not_status is not None:
+        query = query.filter(Climb.status != not_status)
+    else:
+        query.filter(Climb.status == 'end')
     data = Climb.to_collection_dict(query, page, per_page, 'api.get_climbs')
     return jsonify(data)
 

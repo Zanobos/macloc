@@ -4,6 +4,7 @@ export default {
   getClimbs (cb, ecb, query) {
     let data = {}
     data.status = query.status
+    data.not_status = query.not_status
     data.user_id = query.userId
     data.page = query.page
     data.per_page = query.perPage
