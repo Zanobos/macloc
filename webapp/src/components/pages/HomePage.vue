@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <carousel-walls v-bind:carouselFormProp="formClimb"></carousel-walls>
-  </div>
+  <carousel-walls v-bind:carouselFormProp="formClimb"></carousel-walls>
 </template>
 
 <script>
