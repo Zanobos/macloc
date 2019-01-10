@@ -25,9 +25,6 @@ const actions = {
   createClimb ({ commit }, payload) {
     apiclimbs.postClimbs(
       (response) => {
-        // 1 Mutate state
-        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
-        // 2 Call callback
         payload.onResponse(response)
       },
       (error) => defaultErrorHandler(error),
@@ -68,11 +65,16 @@ const actions = {
       payload.climbId
     )
   },
-  getOngoingClimb ({ commit }) {
+  getOngoingClimb (context) {
     apiclimbs.getClimbs(
       // Consider only first climb, as there should be only one
       (response) => {
-        commit('realtime/setOngoingClimb', { ongoingClimb: response.data[0] }, { root: true })
+        var climb = response.data.items[0]
+        if (climb !== undefined) {
+          context.dispatch('walls/getOngoingWall', { wallId: climb.wall_id }, { root: true })
+          context.dispatch('holds/getOngoingHolds', { wallId: climb.wall_id }, { root: true })
+          context.commit('realtime/setOngoingClimb', { ongoingClimb: climb }, { root: true })
+        }
       },
       (error) => defaultErrorHandler(error),
       { not_status: 'end' }

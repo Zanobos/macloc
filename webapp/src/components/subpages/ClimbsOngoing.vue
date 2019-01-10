@@ -54,16 +54,7 @@ export default {
   },
   created () {
     // TODO change the flow using some more general if
-
-    // If the climb is in state "ready", it's local state, and the obj is not null
-    if (this.ongoingClimb == null) {
-      // If no local climb in status "ready", then check if it exist in server
-      this.getOngoingClimb()
-    }
-    if (this.ongoingClimb != null) {
-      this.getOngoingWall({ wallId: this.ongoingClimb.wall_id })
-      this.getOngoingHolds({ wallId: this.ongoingClimb.wall_id })
-    }
+    this.getOngoingClimb()
   },
   methods: {
     ...mapActions({

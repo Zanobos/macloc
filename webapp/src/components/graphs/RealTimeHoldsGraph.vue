@@ -1,6 +1,6 @@
 
 <template>
-  <div id="wall"
+  <div id="wall" v-if="ongoingClimb"
       :style="{ 'background-image': 'url(\'' + getOngoingWallImg()+ '\')' }">
   </div>
 </template>
