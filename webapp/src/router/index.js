@@ -62,7 +62,7 @@ export default new Router({
     },
     {
       path: '',
-      redirect: 'walls'
+      redirect: 'homepage'
     }
   ]
 })
