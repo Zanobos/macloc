@@ -60,4 +60,7 @@ export default {
 .carousel-inner {
   max-height: inherit;
 }
+.carousel-item {
+  max-height: inherit;
+}
 </style>
