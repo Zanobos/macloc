@@ -2,6 +2,7 @@ import threading
 import socket
 import struct
 import json
+import traceback
 from collections import defaultdict
 from math import sqrt
 from flask import current_app
@@ -20,6 +21,7 @@ class SocketConnectedThread(threading.Thread):
         self.stoprequest = threading.Event()
         # To be improved
         self.logger = current_app._get_current_object().logger
+        self.debug = current_app.debug
 
         if current_app.debug is False:
             self.sock = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
@@ -60,11 +62,20 @@ class PublisherThread(SocketConnectedThread):
                 self.logger.info("Commiting the session and clearing resources")
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
-            #Mask ID to hide possible flags
-            #can_id &= socket.CAN_EFF_MASK
+            # This code only with real device and in debugging
+            if self.debug is False:
+                self.logger.info('can_id: %d, length: %d, x: %d, y: %d, z: %d',
+                    can_id, length, x, y, z)
+                #Mask ID to hide possible flags
+                try:
+                    self.can_id_m &= socket.CAN_EFF_MASK
+                    self.logger.info('CAN id masked is %d', self.can_id_m)
+                except Exception as e:
+                    self.logger.error(traceback.format_exc())
             #Create Record
             hold_id = self.canid_holdid_dict[can_id]
             if hold_id is None:
+                self.logger.warn('No hold found for can_id %d', can_id)
                 continue
             record = Record(hold_id=hold_id, can_id=can_id, x=x, y=y, z=z,
                             timestamp=timestamp, climb_id=self.climb.id)
