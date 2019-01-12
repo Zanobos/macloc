@@ -17,7 +17,7 @@ Vue.use(BootstrapVue)
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: io(SOCKET_IO_URL, {path: SOCKET_IO_PATH}),
+  connection: io(SOCKET_IO_URL, {path: SOCKET_IO_PATH, transports: ['websocket']}),
   vuex: {
     store,
     actionPrefix: 'socket_'
