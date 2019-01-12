@@ -2,7 +2,6 @@ import threading
 import socket
 import struct
 import json
-import traceback
 from collections import defaultdict
 from math import sqrt
 from flask import current_app
@@ -65,13 +64,10 @@ class PublisherThread(SocketConnectedThread):
             # This code only with real device and in debugging
             if self.debug is False:
                 self.logger.info('can_id: %d, length: %d, x: %d, y: %d, z: %d',
-                    can_id, length, x, y, z)
+                                 can_id, length, x, y, z)
                 #Mask ID to hide possible flags
-                try:
-                    can_id_m = can_id & socket.CAN_EFF_MASK
-                    self.logger.info('CAN id masked is %d', can_id_m)
-                except Exception as e:
-                    self.logger.error(traceback.format_exc())
+                can_id = can_id & socket.CAN_EFF_MASK
+                self.logger.info('CAN id masked is %d', can_id)
             #Create Record
             hold_id = self.canid_holdid_dict[can_id]
             if hold_id is None:
@@ -116,8 +112,13 @@ class CalibrationThread(SocketConnectedThread):
                 self.logger.info("Went to timeout!")
                 continue
             can_id, length, x, y, z, timestamp = struct.unpack(self.FMT, can_pkt)
-            #Mask ID to hide possible flags
-            #can_id &= socket.CAN_EFF_MASK
+             # This code only with real device and in debugging
+            if self.debug is False:
+                self.logger.info('can_id: %d, length: %d, x: %d, y: %d, z: %d',
+                                 can_id, length, x, y, z)
+                #Mask ID to hide possible flags
+                can_id = can_id & socket.CAN_EFF_MASK
+                self.logger.info('CAN id masked is %d', can_id)
             magnitude = sqrt(x**2 + y**2 + z**2)
             self.logger.info(magnitude)
             self.canid_values_dict[can_id].append(magnitude)
