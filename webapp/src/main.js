@@ -3,10 +3,11 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueSocketIO from 'vue-socket.io'
+import io from 'socket.io-client'
 import App from './App'
 import router from './router'
 import store from './store'
-import { SOCKET_IO_URL } from '@/api'
+import { SOCKET_IO_URL, SOCKET_IO_PATH } from '@/api'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -16,7 +17,7 @@ Vue.use(BootstrapVue)
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SOCKET_IO_URL,
+  connection: io(SOCKET_IO_URL, {path: SOCKET_IO_PATH}),
   vuex: {
     store,
     actionPrefix: 'socket_'
