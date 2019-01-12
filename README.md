@@ -90,12 +90,28 @@ sudo vim /etc/network/interfaces.d/can0
     auto can0
     iface can0 can static 
         bitrate 500000
+
 sudo reboot
 ```
 12) Configure apache
 ```sh
 sudo chown -R macloc /var/www/html/
 sudo chgrp -R www-data /var/www/html/
+sudo touch /etc/apache2/sites-available/macloc.conf
+sudo vim /etc/apache2/sites-available/macloc.conf
+
+    <VirtualHost *:80>
+            DocumentRoot /var/www/html
+            ErrorLog ${APACHE_LOG_DIR}/error.log
+            CustomLog ${APACHE_LOG_DIR}/access.log combined
+            ProxyPass /api/ http://192.168.1.200:5000/api/
+            ProxyPassReverse /api/ http://192.168.1.200:5000/api/
+    </VirtualHost>
+
+sudo a2enmod proxy proxy_http proxy_wstunnel
+sudo a2dissite 000-default
+sudo a2ensite macloc
+sudo systemctl restart apache2
 ```
 13) Set up FE files
 ```sh
