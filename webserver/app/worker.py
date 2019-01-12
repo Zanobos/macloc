@@ -68,8 +68,8 @@ class PublisherThread(SocketConnectedThread):
                     can_id, length, x, y, z)
                 #Mask ID to hide possible flags
                 try:
-                    self.can_id_m &= socket.CAN_EFF_MASK
-                    self.logger.info('CAN id masked is %d', self.can_id_m)
+                    can_id_m = can_id & socket.CAN_EFF_MASK
+                    self.logger.info('CAN id masked is %d', can_id_m)
                 except Exception as e:
                     self.logger.error(traceback.format_exc())
             #Create Record
