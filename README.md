@@ -65,7 +65,7 @@ sudo touch /etc/supervisor/conf.d/maclocbe.conf
 sudo vim /etc/supervisor/conf.d/maclocbe.conf
 
     [program:maclocbe]
-    command=/home/macloc/workspace/macloc/webserver/venv/bin/gunicorn -b 192.168.1.200:5000 -w 2 webserver:app
+    command=/home/macloc/workspace/macloc/webserver/venv/bin/gunicorn -b 192.168.1.200:5000 -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 webserver:app
     directory=/home/macloc/workspace/macloc/webserver
     user=macloc
     autostart=true
@@ -104,6 +104,8 @@ sudo vim /etc/apache2/sites-available/macloc.conf
             DocumentRoot /var/www/html
             ErrorLog ${APACHE_LOG_DIR}/error.log
             CustomLog ${APACHE_LOG_DIR}/access.log combined
+            ProxyPass /api/socket.io/ ws://192.168.1.200:5000/api/socket.io/
+            ProxyPassReverse /api/socket.io/ ws://192.168.1.200:5000/api/socket.io/
             ProxyPass /api/ http://192.168.1.200:5000/api/
             ProxyPassReverse /api/ http://192.168.1.200:5000/api/
     </VirtualHost>
