@@ -13,7 +13,7 @@ Macloc server and webapp
 
 ## Setup raspberry
 
-1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment.
+1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment. Follow [these instructions](https://www.raspberrypi.org/documentation/installation/installing-images/) for a detailed guide.
 2) Create an empty file inside the boot partition of the ssd, for example with the command "touch ssh" in order to enable ssh daemon
 3) Connect with ssh using default username and password **pi/raspberrypi** via command line (unix environment) or putty (windows environment)
 4) Create a dedicated user and change default password for user pi for security reason to something secure
