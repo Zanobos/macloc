@@ -1,17 +1,15 @@
 # Macloc
 
-Macloc server and webapp
+> Macloc server and webapp
 
 ## Sources
 
 - **webapp** :
-    the dedicated web application. check the [relative instructions](webapp/README.md)
+    the dedicated web application. 
 - **webserver** :
     the complete webserver.
 
-## Connection
-
-## Setup raspberry
+## Raspberry setup
 
 1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment. Follow [these instructions](https://www.raspberrypi.org/documentation/installation/installing-images/) for a detailed guide
 2) Create an empty file inside the boot partition of the ssd, for example with the command "touch ssh" in order to enable ssh daemon, as specified by [this guide](https://www.raspberrypi.org/documentation/remote-access/ssh/), paragraph 3
