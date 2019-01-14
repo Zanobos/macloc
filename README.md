@@ -13,25 +13,27 @@ Macloc server and webapp
 
 ## Setup raspberry
 
-1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus
-2) Perform command "touch ssh" while being in boot partition (to enable ssh login on boot)
-3) Connect with ssh pi/raspberrypi
-4) Create a dedicated user
+1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment.
+2) Create an empty file inside the boot partition of the ssd, for example with the command "touch ssh" in order to enable ssh daemon
+3) Connect with ssh using default username and password **pi/raspberrypi** via command line (unix environment) or putty (windows environment)
+4) Create a dedicated user and change default password for user pi for security reason to something secure
 ```sh
 sudo adduser macloc
 sudo usermod -aG sudo macloc
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDo/lqJ5dK+pXu+hzMObW4zD/XiElCRF/5nFqA0WMpbaKA2g1arjwXI+8RJKJANzyWCTApxPkVobH4e0qdOzEK2r4qxp+RyWfDINmpYI/O44ulqbcD6ocowkDAXyLrM/UAWciljutQ1TMbcqNlGI2mSPxonIA158A9XvJ4J+4CgIJn/iHlgO4m0/hz6/NtHyunVcZeaDonCxpjQ5WoazBq/slesMTJiXUR5RgNjH14ylkl3IZzyR/R/gM+uVMFUiqT7uyFQ8a+TsDdxl+3Bga3K//aiDY14XjyAw0dqBh0YHNuzgHJ1+LIIHAuypcCEPV30+T4GHfiveolNXFHuYzrf macloc" > ~/.ssh/authorized_keys/macloc.pub
+passwd
 ```
-5) change default password for user pi for security reason (log in as pi, and launch command passwd)
-
-6) remove access with root account and allow only ssh login
+5) Logout from user pi and login using user macloc with the password set at point 4
+6) Remove ssh access with root account and allow only ssh login (optional)
 ```sh
+mkdir -p ~/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDo/lqJ5dK+pXu+hzMObW4zD/XiElCRF/5nFqA0WMpbaKA2g1arjwXI+8RJKJANzyWCTApxPkVobH4e0qdOzEK2r4qxp+RyWfDINmpYI/O44ulqbcD6ocowkDAXyLrM/UAWciljutQ1TMbcqNlGI2mSPxonIA158A9XvJ4J+4CgIJn/iHlgO4m0/hz6/NtHyunVcZeaDonCxpjQ5WoazBq/slesMTJiXUR5RgNjH14ylkl3IZzyR/R/gM+uVMFUiqT7uyFQ8a+TsDdxl+3Bga3K//aiDY14XjyAw0dqBh0YHNuzgHJ1+LIIHAuypcCEPV30+T4GHfiveolNXFHuYzrf macloc" > ~/.ssh/authorized_keys/macloc.pub
+
 sudo vim "/etc/ssh/sshd_config"
 
     PermitRootLogin no
     PasswordAuthentication no
 ```
-7) Configure the IP (need to know a free ip and gateway ip)
+7) Configure the static IP (and also the gateway ip if internet access is needed)
 ```sh
 sudo vim /etc/dhcpcd.conf
 
@@ -40,12 +42,12 @@ sudo vim /etc/dhcpcd.conf
     static routers=192.168.1.254
     static domain_name_servers=192.168.1.254
 ```
-8) Install needed packages
+8) Install needed unix packages
 ```sh
 sudo apt-get -y update
 sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor apache2 npm
 ```
-9) Prepare the workspace:
+9) Prepare the workspace for backend server:
 ```sh
 cd ~
 echo "export FLASK_APP=webserver.py" >> ~/.profile
@@ -59,7 +61,7 @@ pip install -r app/doc/requirements.txt
 pip install gunicorn
 flask db upgrade
 ```
-10) Prepare supervisor
+10) Prepare supervisor to always have a backend server running
 ```sh
 sudo touch /etc/supervisor/conf.d/maclocbe.conf
 sudo vim /etc/supervisor/conf.d/maclocbe.conf
@@ -93,7 +95,7 @@ sudo vim /etc/network/interfaces.d/can0
 
 sudo reboot
 ```
-12) Configure apache
+12) Configure apache to serve the front end files
 ```sh
 sudo chown -R macloc /var/www/html/
 sudo chgrp -R www-data /var/www/html/
