@@ -13,8 +13,8 @@ Macloc server and webapp
 
 ## Setup raspberry
 
-1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment. Follow [these instructions](https://www.raspberrypi.org/documentation/installation/installing-images/) for a detailed guide.
-2) Create an empty file inside the boot partition of the ssd, for example with the command "touch ssh" in order to enable ssh daemon
+1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment. Follow [these instructions](https://www.raspberrypi.org/documentation/installation/installing-images/) for a detailed guide
+2) Create an empty file inside the boot partition of the ssd, for example with the command "touch ssh" in order to enable ssh daemon, as specified by [this guide](https://www.raspberrypi.org/documentation/remote-access/ssh/), paragraph 3
 3) Connect with ssh using default username and password **pi/raspberrypi** via command line (unix environment) or putty (windows environment)
 4) Create a dedicated user and change default password for user pi for security reason to something secure
 ```sh
@@ -33,21 +33,12 @@ sudo vim "/etc/ssh/sshd_config"
     PermitRootLogin no
     PasswordAuthentication no
 ```
-7) Configure the static IP (and also the gateway ip if internet access is needed)
-```sh
-sudo vim /etc/dhcpcd.conf
-
-    interface eth0
-    static ip_address=192.168.1.200/24
-    static routers=192.168.1.254
-    static domain_name_servers=192.168.1.254
-```
-8) Install needed unix packages
+7) Install needed unix packages
 ```sh
 sudo apt-get -y update
 sudo apt-get -y install git vim python3 python3-venv python3-dev supervisor apache2 npm
 ```
-9) Prepare the workspace for backend server:
+8) Prepare the workspace for backend server:
 ```sh
 cd ~
 echo "export FLASK_APP=webserver.py" >> ~/.profile
@@ -61,7 +52,7 @@ pip install -r app/doc/requirements.txt
 pip install gunicorn
 flask db upgrade
 ```
-10) Prepare supervisor to always have a backend server running
+9) Prepare supervisor to always have a backend server running
 ```sh
 sudo touch /etc/supervisor/conf.d/maclocbe.conf
 sudo vim /etc/supervisor/conf.d/maclocbe.conf
@@ -75,7 +66,7 @@ sudo vim /etc/supervisor/conf.d/maclocbe.conf
     stopasgroup=true
     killasgroup=true
 ```
-11) Prepare the hardware for can acquisition. Connect the can controller to the RPI, then
+10) Prepare the hardware for can acquisition. Connect the can controller to the RPI, then
 ```sh
 sudo apt-get install can-utils
 sudo vim /boot/config.txt
@@ -95,7 +86,7 @@ sudo vim /etc/network/interfaces.d/can0
 
 sudo reboot
 ```
-12) Configure apache to serve the front end files
+11) Configure apache to serve the front end files
 ```sh
 sudo chown -R macloc /var/www/html/
 sudo chgrp -R www-data /var/www/html/
@@ -117,11 +108,20 @@ sudo a2dissite 000-default
 sudo a2ensite macloc
 sudo systemctl restart apache2
 ```
-13) Set up FE files
+12) Set up FE files
 ```sh
 cd ~/workspace/macloc/webapp
 sudo npm install npm@latest -g
 npm install
 npm run build
 cp dist/* /var/www/html
+```
+13) Configure the static IP (and also the gateway ip if internet access is needed)
+```sh
+sudo vim /etc/dhcpcd.conf
+
+    interface eth0
+    static ip_address=192.168.1.200/24
+    static routers=192.168.1.254
+    static domain_name_servers=192.168.1.254
 ```
