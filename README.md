@@ -112,7 +112,7 @@ cd ~/workspace/macloc/webapp
 sudo npm install npm@latest -g
 npm install
 npm run build
-cp dist/* /var/www/html
+cp -R dist/* /var/www/html
 ```
 13) Configure the static IP (and also the gateway ip if internet access is needed)
 ```sh
