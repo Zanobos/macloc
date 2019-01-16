@@ -11,7 +11,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const env = require('../config/prod.env')
+const args = require('minimist')(process.argv.slice(2))
+var target = (args['target'] === undefined) ? 'prod' : args['target']
+console.log('Target env selected: ' + target)
+
+const env = require('../config/' + target + '.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
