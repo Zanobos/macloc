@@ -1,6 +1,12 @@
 from app.api import bp
+from flask import current_app as app
+from flask import request
 
 @bp.after_request
-def apply_control_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
+def after(response):
+    app.logger.info(response)
     return response
+
+@bp.before_request
+def before():
+    app.logger.info(request)

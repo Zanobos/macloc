@@ -11,7 +11,7 @@ def get_wall(wallid):
 @bp.route('/walls', methods=['GET'])
 def get_walls():
     page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 5, type=int), 20)
+    per_page = min(request.args.get('per_page', 1000, type=int), 1000)
     data = Wall.to_collection_dict(Wall.query, page, per_page, 'api.get_walls')
     data['active'] = any(wall.active is True for wall in Wall.query.all())
     return jsonify(data)
@@ -24,7 +24,6 @@ def create_wall():
     wall = Wall()
     data['active'] = False
     wall.from_dict(data)
-    print(wall)
     db.session.add(wall)
     db.session.commit()
     response = jsonify(wall.to_dict())

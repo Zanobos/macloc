@@ -74,10 +74,15 @@ class Climb(PaginatedAPIMixin, db.Model):
         return '<Climb {}>'.format(self.id)
 
     def to_dict(self):
+        return self.to_dict_complete(False)
+
+    def to_dict_complete(self, historic):
+        wall_id = self.historic_wall_id if historic is True else self.wall_id
         data = {
             'id': self.id,
             'climber_name': self.climber.name,
             'wall_grade': self.on_wall.grade,
+            'wall_id': wall_id,
             'status': self.status,
             'start_time': self.start_time,
             'end_time': self.end_time,

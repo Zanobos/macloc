@@ -3,10 +3,16 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   users: [],
-  usersMeta: {}
+  usersMeta: {} // not used anymore
 }
 
-const getters = {}
+const getters = {
+  getUsersLabelledByName (state) {
+    return state.users.map(user => {
+      return { text: user.name, value: user }
+    })
+  }
+}
 
 const actions = {
   fetchUsers ({ commit }, payload) {
@@ -16,12 +22,42 @@ const actions = {
         commit('storeUsersMeta', { meta: response.data._meta })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page
+      payload != null ? payload : {}
     )
   },
   initUsersMeta ({ commit }, payload) {
     commit('storeUsersMeta', { meta: payload })
+  },
+  createUser (context, payload) {
+    apiusers.postUsers(
+      (response) => context.dispatch('fetchUsers'),
+      (error) => defaultErrorHandler(error),
+      payload
+    )
+  },
+  deleteUser (context, payload) {
+    apiusers.deleteUser(
+      (response) => {
+        context.dispatch('fetchUsers')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.userId
+    )
+  },
+  editUser (context, payload) {
+    apiusers.putUser(
+      (response) => {
+        context.dispatch('fetchUsers')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 

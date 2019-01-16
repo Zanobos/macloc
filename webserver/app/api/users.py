@@ -11,7 +11,7 @@ def get_user(userid):
 @bp.route('/users', methods=['GET'])
 def get_users():
     page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 5, type=int), 20)
+    per_page = min(request.args.get('per_page', 1000, type=int), 1000)
     data = User.to_collection_dict(User.query, page, per_page, 'api.get_users')
     return jsonify(data)
 

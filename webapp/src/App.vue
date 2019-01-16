@@ -26,4 +26,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.container {
+  max-height: 85vh;
+}
 </style>

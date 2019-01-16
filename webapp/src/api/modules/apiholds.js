@@ -1,11 +1,11 @@
 import { HTTP, encodeQueryData } from '@/api'
 
 export default {
-  getHolds (cb, ecb, page, perPage, wallId) {
+  getHolds (cb, ecb, query) {
     let data = {}
-    data.page = page
-    data.per_page = perPage
-    data.wall_id = wallId
+    data.wall_id = query.wallId
+    data.page = query.page
+    data.per_page = query.perPage
     let queryString = encodeQueryData(data)
     HTTP.get('holds' + queryString)
       .then(

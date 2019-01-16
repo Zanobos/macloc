@@ -3,35 +3,68 @@ import { defaultErrorHandler } from '@/api'
 
 const state = {
   walls: [],
-  wallsMeta: {},
-  activeStatus: false
+  wallsMeta: {} // not used anymore
 }
 
-const getters = {}
+const getters = {
+  wallIds (state) {
+    return state.walls.map(wall => wall.id)
+  }
+}
 
 const actions = {
   fetchWalls ({ commit }, payload) {
     apiwalls.getWalls(
       (response) => {
         commit('storeWalls', { walls: response.data.items })
-        commit('setActiveStatus', { activeStatus: response.data.active })
         commit('storeWallsMeta', { meta: response.data._meta })
+        commit('realtime/setActiveStatus', { activeStatus: response.data.active }, { root: true })
       },
       (error) => defaultErrorHandler(error),
-      payload.page,
-      payload.per_page
+      payload != null ? payload : {}
     )
   },
   initWallsMeta ({ commit }, payload) {
     commit('storeWallsMeta', { meta: payload })
   },
-  addWall ({ commit }, wall) {
+  createWall (context, wall) {
     apiwalls.postWalls(
-      (response) => {
-        this.fetchWalls({ commit: commit })
-      },
+      (response) => context.dispatch('fetchWalls'),
       (error) => defaultErrorHandler(error),
       wall
+    )
+  },
+  deleteWall (context, payload) {
+    apiwalls.deleteWall(
+      (response) => {
+        context.dispatch('fetchWalls')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.wallId
+    )
+  },
+  editWall (context, payload) {
+    apiwalls.putWall(
+      (response) => {
+        context.dispatch('fetchWalls')
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
+  },
+  getOngoingWall (context, payload) {
+    apiwalls.getWall(
+      (response) => {
+        context.commit('realtime/setOngoingWall', { ongoingWall: response.data }, { root: true })
+      },
+      (error) => defaultErrorHandler(error),
+      payload.wallId
     )
   }
 }
@@ -42,9 +75,6 @@ const mutations = {
   },
   storeWallsMeta (state, { meta }) {
     state.wallsMeta = meta
-  },
-  setActiveStatus (state, { activeStatus }) {
-    state.activeStatus = activeStatus
   }
 }
 

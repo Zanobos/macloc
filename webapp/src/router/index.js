@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/components/pages/HomePage'
-import ClimbsHistory from '@/components/pages/ClimbsHistory'
-import Users from '@/components/pages/Users'
-import Configuration from '@/components/pages/Configuration'
+import ClimbsPage from '@/components/pages/ClimbsPage'
+import UsersPage from '@/components/pages/UsersPage'
+import HoldsPage from '@/components/pages/HoldsPage'
+import WallsPage from '@/components/pages/WallsPage'
 
-import ConfigWalls from '@/components/subpages/ConfigWalls'
-import ConfigHolds from '@/components/subpages/ConfigHolds'
+import ClimbsHistory from '@/components/subpages/ClimbsHistory'
+import ClimbsOngoing from '@/components/subpages/ClimbsOngoing'
 
 Vue.use(Router)
 
@@ -14,45 +15,54 @@ export default new Router({
   routes: [
     {
       path: '/homepage',
-      name: 'Home Page',
-      label: 'Home Page',
+      name: 'HomePage',
+      label: 'HomePage',
       component: HomePage
     },
     {
-      path: '/climbsHistory',
-      name: 'Climbs History',
-      label: 'Climbs History',
-      component: ClimbsHistory
+      path: '/climbs',
+      label: 'Climbs',
+      component: ClimbsPage,
+      children: [
+        {
+          path: 'history',
+          name: 'ClimbsHistory',
+          label: 'History',
+          component: ClimbsHistory
+        },
+        {
+          path: 'ongoing',
+          name: 'ClimbsOngoing',
+          label: 'Ongoing',
+          component: ClimbsOngoing
+        },
+        {
+          path: '',
+          redirect: 'history'
+        }
+      ]
     },
     {
       path: '/users',
       name: 'Users',
       label: 'Users',
-      component: Users
+      component: UsersPage
     },
     {
-      path: '/configuration',
-      name: 'Configuration',
-      label: 'Configuration',
-      component: Configuration,
-      children: [
-        {
-          path: 'walls',
-          name: 'Walls',
-          label: 'Walls',
-          component: ConfigWalls
-        },
-        {
-          path: 'holds',
-          name: 'Holds',
-          label: 'Holds',
-          component: ConfigHolds
-        },
-        {
-          path: '',
-          redirect: 'walls'
-        }
-      ]
+      path: '/holds',
+      name: 'Holds',
+      label: 'Holds',
+      component: HoldsPage
+    },
+    {
+      path: '/walls',
+      name: 'Walls',
+      label: 'Walls',
+      component: WallsPage
+    },
+    {
+      path: '',
+      redirect: 'homepage'
     }
   ]
 })
