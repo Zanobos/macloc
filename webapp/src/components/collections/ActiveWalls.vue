@@ -13,12 +13,8 @@
     <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank
       :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }">
 
-      <climb-ongoing :wallId="wall.id" v-if="ongoingClimb(wall.id)"></climb-ongoing>
+      <climb-ongoing :wallId="wall.id"></climb-ongoing>
 
-      <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
-      <b-collapse id="collapse1">
-        <component :is="carouselFormProp" v-bind:wallId="wall.id"/>
-      </b-collapse>
     </b-carousel-slide>
   </b-carousel>
 </template>
@@ -29,9 +25,6 @@ import { getWallImg } from '@/utils'
 import ClimbOngoing from '@/components/subpages/ClimbOngoing'
 
 export default {
-  props: {
-    carouselFormProp: { type: Object, required: false }
-  },
   components: {
     ClimbOngoing
   },
@@ -60,12 +53,14 @@ export default {
     getImg: getWallImg,
     ...mapActions({
       fetchWalls: 'walls/fetchWalls',
-      getOngoingClimbs: 'realtime/getOngoingClimbs'
+      getOngoingClimbs: 'realtime/getOngoingClimbs',
+      fetchUsers: 'users/fetchUsers'
     })
   },
   created () {
     this.fetchWalls()
     this.getOngoingClimbs()
+    this.fetchUsers()
   }
 }
 </script>
