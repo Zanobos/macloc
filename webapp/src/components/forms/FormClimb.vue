@@ -39,11 +39,7 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      var router = this.$router
       var form = {}
-      form.onResponse = function (response) {
-        router.push('climbs/ongoing')
-      }
       form.wallId = this.wallId
       form.userId = this.selectedUser.id
       this.createClimb(form)

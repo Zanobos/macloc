@@ -1,12 +1,13 @@
 import Vue from 'vue'
+import { defaultErrorHandler } from '@/api'
+import apiclimbs from '@/api/modules/apiclimbs'
+import apiwalls from '@/api/modules/apiwalls'
+import apiholds from '@/api/modules/apiholds'
 
 const state = {
   isConnected: false,
   rtholds: {},
-  activeStatus: false,
-  ongoingClimb: null,
-  ongoingWall: null,
-  ongoingHolds: []
+  ongoingClimbs: []
 }
 
 const getters = {
@@ -16,6 +17,11 @@ const getters = {
         return null
       }
       return state.rtholds[holdId][direction]
+    }
+  },
+  ongoingClimb (state) {
+    return (wallId) => {
+      return state.ongoingClimbs[wallId]
     }
   }
 }
@@ -29,6 +35,37 @@ const actions = {
   },
   socket_json (context, payload) {
     context.commit('storeRecord', { record: JSON.parse(payload) })
+  },
+  getOngoingClimbs (context) {
+    apiclimbs.getClimbs(
+      (response) => {
+        response.data.items.forEach(climb => {
+          context.commit('addOngoingClimb', { ongoingClimb: climb })
+          context.dispatch('addOngoingWall', { wallId: climb.wall_id })
+          context.dispatch('addOngoingHolds', { wallId: climb.wall_id })
+        })
+      },
+      (error) => defaultErrorHandler(error),
+      { not_status: 'end' }
+    )
+  },
+  addOngoingWall (context, payload) {
+    apiwalls.getWall(
+      (response) => {
+        context.commit('addOngoingWall', { ongoingWall: response.data })
+      },
+      (error) => defaultErrorHandler(error),
+      payload.wallId
+    )
+  },
+  addOngoingHolds (context, payload) {
+    apiholds.getHolds(
+      (response) => {
+        context.commit('addOngoingHolds', { wallId: payload.wallId, ongoingHolds: response.data.items })
+      },
+      (error) => defaultErrorHandler(error),
+      payload
+    )
   }
 }
 
@@ -36,20 +73,18 @@ const mutations = {
   changeConnectionState (state, { isConnected }) {
     state.isConnected = isConnected
   },
-  setActiveStatus (state, { activeStatus }) {
-    state.activeStatus = activeStatus
-  },
-  setOngoingClimb (state, { ongoingClimb }) {
-    state.ongoingClimb = ongoingClimb
-  },
-  setOngoingWall (state, { ongoingWall }) {
-    state.ongoingWall = ongoingWall
-  },
-  setOngoingHolds (state, { ongoingHolds }) {
-    state.ongoingHolds = ongoingHolds
-  },
   storeRecord (state, { record }) {
     Vue.set(state.rtholds, record['hold_id'], { x: record['x'], y: record['y'], z: record['z'] })
+  },
+  addOngoingClimb (state, { ongoingClimb }) {
+    state.ongoingClimbs[ongoingClimb.wall_id] = ongoingClimb
+  },
+  addOngoingWall (state, { ongoingWall }) {
+    state.ongoingClimbs[ongoingWall.id].height = ongoingWall.height
+    state.ongoingClimbs[ongoingWall.id].width = ongoingWall.width
+  },
+  addOngoingHolds (state, { wallId, ongoingHolds }) {
+    state.ongoingClimbs[wallId].holds = ongoingHolds
   }
 }
 
