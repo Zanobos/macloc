@@ -75,10 +75,11 @@ const mutations = {
     state.isConnected = isConnected
   },
   storeRecord (state, { record }) {
-    Vue.set(state.rtholds, record['hold_id'], { x: record['x'], y: record['y'], z: record['z'] })
+    Vue.set(state.rtholds, record.hold_id, { x: record.x, y: record.y, z: record.z })
   },
   clearOngoingClimbs (state) {
     state.ongoingClimbs = {}
+    state.rtholds = {}
   },
   addOngoingClimb (state, { ongoingClimb }) {
     Vue.set(state.ongoingClimbs, ongoingClimb.wall_id, ongoingClimb)
