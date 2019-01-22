@@ -34,7 +34,6 @@ export default {
         : this.ongoingClimb(this.wallId).holds
     },
     graphicHolds: function () {
-      console.log(this.ongoingClimb(this.wallId))
       var graphicHolds = this.holds.map(hold => {
         var graphicHold = {}
         var percentFromBottom = hold.dist_from_bot / this.ongoingClimb(this.wallId).height * 100.0
@@ -51,6 +50,14 @@ export default {
     rtholds: {
       handler: function (val, oldVal) {
         // Has to explicitly update the canvas
+        this.drawForces()
+      },
+      deep: true
+    },
+    graphicHolds: {
+      handler: function (val, oldVal) {
+        // Has to explicitly update the canvas
+        this.drawHolds()
         this.drawForces()
       },
       deep: true

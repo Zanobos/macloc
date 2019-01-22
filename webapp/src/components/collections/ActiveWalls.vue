@@ -10,8 +10,7 @@
     @sliding-start="onSlideStart"
     @sliding-end="onSlideEnd"
   >
-    <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank
-      :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }">
+    <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank>
 
       <climb-ongoing :wallId="wall.id"></climb-ongoing>
 
