@@ -7,7 +7,7 @@ import apiholds from '@/api/modules/apiholds'
 const state = {
   isConnected: false,
   rtholds: {},
-  ongoingClimbs: []
+  ongoingClimbs: {}
 }
 
 const getters = {
