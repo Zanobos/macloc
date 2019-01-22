@@ -61,8 +61,7 @@ export default {
   },
   computed: {
     ...mapState({
-      connected: state => state.realtime.isConnected,
-      rtholds: state => state.realtime.rtholds
+      connected: state => state.realtime.isConnected
     }),
     ...mapGetters({
       getForceByHoldId: 'realtime/getForceByHoldId',
@@ -73,7 +72,7 @@ export default {
       return this.ongoingClimb(this.wallId) !== undefined ? this.ongoingClimb(this.wallId) : undefined
     },
     holds () {
-      return this.ongoingClimb(this.wallId) !== undefined ? this.ongoingClimb(this.wallId).holds : []
+      return this.climb !== undefined ? this.climb.holds : []
     },
     climbId () {
       return this.climb !== undefined ? this.climb.id : ''
