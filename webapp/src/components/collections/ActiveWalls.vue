@@ -13,7 +13,7 @@
     <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank
       :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }">
 
-      <climbs-ongoing :wallId="wall.id" v-if="ongoingClimb(wall.id)"></climbs-ongoing>
+      <climb-ongoing :wallId="wall.id" v-if="ongoingClimb(wall.id)"></climb-ongoing>
 
       <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
       <b-collapse id="collapse1">
@@ -26,14 +26,14 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { getWallImg } from '@/utils'
-import ClimbsOngoing from '@/components/subpages/ClimbsOngoing'
+import ClimbOngoing from '@/components/subpages/ClimbOngoing'
 
 export default {
   props: {
     carouselFormProp: { type: Object, required: false }
   },
   components: {
-    ClimbsOngoing
+    ClimbOngoing
   },
   data () {
     return {

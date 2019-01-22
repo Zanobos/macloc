@@ -2,8 +2,8 @@
   <b-container>
     <b-row>
       <b-col cols="3">
-        <p>Climber name: {{ongoingClimb(this.wallId)}}</p>
-        <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onStart">Start</b-button>
+        <b-button :disabled="readyButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onStart">Prepare</b-button>
+        <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="success" @click="onStart">Start</b-button>
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
         <p>Connected?{{connected}}</p>
         <b-card v-for="hold in ongoingClimb(this.wallId).holds" :key="hold.id" class="mb-1">
@@ -67,6 +67,9 @@ export default {
         dis = this.ongoingClimb(this.wallId).status !== 'start'
       }
       return dis
+    },
+    readyButtonDisabled () {
+      return this.ongoingClimb(this.wallId) != null
     },
     onStart (evt) {
       evt.preventDefault()
