@@ -39,6 +39,7 @@ const actions = {
   getOngoingClimbs (context) {
     apiclimbs.getClimbs(
       (response) => {
+        context.commit('clearOngoingClimbs')
         response.data.items.forEach(climb => {
           context.commit('addOngoingClimb', { ongoingClimb: climb })
           context.dispatch('addOngoingWall', { wallId: climb.wall_id })
@@ -75,6 +76,9 @@ const mutations = {
   },
   storeRecord (state, { record }) {
     Vue.set(state.rtholds, record['hold_id'], { x: record['x'], y: record['y'], z: record['z'] })
+  },
+  clearOngoingClimbs (state) {
+    state.ongoingClimbs = {}
   },
   addOngoingClimb (state, { ongoingClimb }) {
     Vue.set(state.ongoingClimbs, ongoingClimb.wall_id, ongoingClimb)

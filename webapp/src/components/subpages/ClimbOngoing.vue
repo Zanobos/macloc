@@ -2,7 +2,8 @@
   <b-container>
     <b-row>
       <b-col cols="3">
-        <b-button :disabled="prepareButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onPrepare">Prepare</b-button>
+        <b-button :disabled="prepareButtonDisabled()" class="w-100 mb-1" variant="primary" @click="showPrepareModal">Prepare</b-button>
+        <b-button :disabled="deleteButtonDisabled()" class="w-100 mb-1" variant="danger" @click="showDeleteModal">Delete</b-button>
         <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="success" @click="onStart">Start</b-button>
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
         <p>Connected?{{connected}}</p>
@@ -24,7 +25,7 @@
         </b-card>
       </b-col>
       <b-col>
-        <real-time-holds-graph v-if="ongoingClimb(this.wallId)" :wallId="this.wallId"></real-time-holds-graph>
+        <real-time-holds-graph v-if="climb" :wallId="this.wallId"></real-time-holds-graph>
       </b-col>
     </b-row>
     <b-modal ref="modalSubmitRef"
@@ -32,6 +33,14 @@
       hide-footer
       title="Prepare Climb">
       <form-climb :users="users" :wallId="this.wallId" v-on:submit-climb="onSubmitNewClimb"></form-climb>
+    </b-modal>
+    <b-modal ref="modalDeleteRef"
+      centered
+      hide-footer
+      title="Delete Climb">
+      <div>You are about to delete the climb {{climbId}}.</div>
+      <div>The procedure is irreversible. Do you want to proceed?</div>
+      <b-btn class="mt-1" variant="danger" @click="deleteAndHideModal()">Delete</b-btn>
     </b-modal>
   </b-container>
 </template>
@@ -61,34 +70,36 @@ export default {
       users: 'users/getUsersLabelledByName'
     }),
     climb () {
-      return this.ongoingClimb(this.wallId)
+      return this.ongoingClimb(this.wallId) !== undefined ? this.ongoingClimb(this.wallId) : undefined
     },
     holds () {
       return this.ongoingClimb(this.wallId) !== undefined ? this.ongoingClimb(this.wallId).holds : []
+    },
+    climbId () {
+      return this.climb !== undefined ? this.climb.id : ''
+    },
+    climbStatus () {
+      return this.climb !== undefined ? this.climb.status : 'no_climb'
     }
   },
   methods: {
     ...mapActions({
       createClimb: 'climbs/createClimb',
       startClimb: 'climbs/startClimb',
-      endClimb: 'climbs/endClimb'
+      endClimb: 'climbs/endClimb',
+      deleteClimb: 'climbs/deleteClimb'
     }),
+    prepareButtonDisabled () {
+      return this.climbStatus !== 'no_climb'
+    },
+    deleteButtonDisabled () {
+      return this.climbStatus !== 'ready'
+    },
     startButtonDisabled () {
-      var dis = this.climb == null
-      if (!dis) {
-        dis = this.climb.status !== 'ready'
-      }
-      return dis
+      return this.climbStatus !== 'ready'
     },
     endButtonDisabled () {
-      var dis = this.climb == null
-      if (!dis) {
-        dis = this.climb.status !== 'start'
-      }
-      return dis
-    },
-    prepareButtonDisabled () {
-      return this.climb != null
+      return this.climbStatus !== 'start'
     },
     onSubmitNewClimb (climb) {
       var payload = climb
@@ -101,17 +112,29 @@ export default {
     onStart (evt) {
       evt.preventDefault()
       var payload = {}
-      payload.climbId = this.climb.id
+      payload.climbId = this.climbId
       this.startClimb(payload)
     },
     onEnd (evt) {
       evt.preventDefault()
       var payload = {}
-      payload.climbId = this.climb.id
+      payload.climbId = this.climbId
       this.endClimb(payload)
     },
-    onPrepare (evt) {
+    deleteAndHideModal (wall) {
+      var payload = {}
+      var modalRef = this.$refs.modalDeleteRef
+      payload.climbId = this.climbId
+      payload.onResponse = function (response) {
+        modalRef.hide()
+      }
+      this.deleteClimb(payload)
+    },
+    showPrepareModal (evt) {
       this.$refs.modalSubmitRef.show()
+    },
+    showDeleteModal (evt) {
+      this.$refs.modalDeleteRef.show()
     },
     getOngoingWallImg () {
       return getWallImg(this.wallId)

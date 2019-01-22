@@ -61,7 +61,23 @@ const actions = {
   },
   getClimb (context, payload) {
     apiclimbs.getClimb(
-      (response) => payload.onResponse(response),
+      (response) => {
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
+      (error) => defaultErrorHandler(error),
+      payload.climbId
+    )
+  },
+  deleteClimb (context, payload) {
+    apiclimbs.deleteClimb(
+      (response) => {
+        context.dispatch('realtime/getOngoingClimbs', null, { root: true })
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
       (error) => defaultErrorHandler(error),
       payload.climbId
     )
