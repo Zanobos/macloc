@@ -80,9 +80,11 @@ def patch_climb(climbid):
 @bp.route('/climbs/<int:climbid>', methods=['DELETE'])
 def delete_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
+    # jsonify before deleting or foreign keys do not work
+    deleted_hold = jsonify(climb.to_dict())
     db.session.delete(climb)
     db.session.commit()
-    return jsonify(climb.to_dict())
+    return deleted_hold
 
 @bp.route('/climbs', methods=['DELETE'])
 def delete_climbs():
