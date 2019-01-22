@@ -28,8 +28,14 @@ export default {
       getForceByHoldId: 'realtime/getForceByHoldId',
       ongoingClimb: 'realtime/ongoingClimb'
     }),
+    holds () {
+      return this.ongoingClimb(this.wallId) === undefined ||
+              this.ongoingClimb(this.wallId).holds === undefined ? []
+        : this.ongoingClimb(this.wallId).holds
+    },
     graphicHolds: function () {
-      var graphicHolds = this.ongoingClimb(this.wallId).holds.map(hold => {
+      console.log(this.ongoingClimb(this.wallId))
+      var graphicHolds = this.holds.map(hold => {
         var graphicHold = {}
         var percentFromBottom = hold.dist_from_bot / this.ongoingClimb(this.wallId).height * 100.0
         graphicHold.percentFromTop = 100.0 - percentFromBottom

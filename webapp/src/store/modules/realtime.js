@@ -77,14 +77,14 @@ const mutations = {
     Vue.set(state.rtholds, record['hold_id'], { x: record['x'], y: record['y'], z: record['z'] })
   },
   addOngoingClimb (state, { ongoingClimb }) {
-    state.ongoingClimbs[ongoingClimb.wall_id] = ongoingClimb
+    Vue.set(state.ongoingClimbs, ongoingClimb.wall_id, ongoingClimb)
   },
   addOngoingWall (state, { ongoingWall }) {
-    state.ongoingClimbs[ongoingWall.id].height = ongoingWall.height
-    state.ongoingClimbs[ongoingWall.id].width = ongoingWall.width
+    Vue.set(state.ongoingClimbs[ongoingWall.id], 'height', ongoingWall.height)
+    Vue.set(state.ongoingClimbs[ongoingWall.id], 'width', ongoingWall.width)
   },
   addOngoingHolds (state, { wallId, ongoingHolds }) {
-    state.ongoingClimbs[wallId].holds = ongoingHolds
+    Vue.set(state.ongoingClimbs[wallId], 'holds', ongoingHolds)
   }
 }
 

@@ -2,12 +2,12 @@
   <b-container>
     <b-row>
       <b-col cols="3">
-        <b-button :disabled="readyButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onPrepare">Prepare</b-button>
+        <b-button :disabled="prepareButtonDisabled()" class="w-100 mb-1" variant="primary" @click="onPrepare">Prepare</b-button>
         <b-button :disabled="startButtonDisabled()" class="w-100 mb-1" variant="success" @click="onStart">Start</b-button>
         <b-button :disabled="endButtonDisabled()" class="w-100" variant="danger" @click="onEnd">End</b-button>
         <p>Connected?{{connected}}</p>
-        <b-card v-if="ongoingClimb(this.wallId)"
-                v-for="hold in ongoingClimb(this.wallId).holds"
+        <b-card
+                v-for="hold in holds"
                 :key="hold.id"
                 class="mb-1">
           <b-card-body>
@@ -59,7 +59,13 @@ export default {
       getForceByHoldId: 'realtime/getForceByHoldId',
       ongoingClimb: 'realtime/ongoingClimb',
       users: 'users/getUsersLabelledByName'
-    })
+    }),
+    climb () {
+      return this.ongoingClimb(this.wallId)
+    },
+    holds () {
+      return this.ongoingClimb(this.wallId) !== undefined ? this.ongoingClimb(this.wallId).holds : []
+    }
   },
   methods: {
     ...mapActions({
@@ -68,21 +74,21 @@ export default {
       endClimb: 'climbs/endClimb'
     }),
     startButtonDisabled () {
-      var dis = this.ongoingClimb(this.wallId) == null
+      var dis = this.climb == null
       if (!dis) {
-        dis = this.ongoingClimb(this.wallId).status !== 'ready'
+        dis = this.climb.status !== 'ready'
       }
       return dis
     },
     endButtonDisabled () {
-      var dis = this.ongoingClimb(this.wallId) == null
+      var dis = this.climb == null
       if (!dis) {
-        dis = this.ongoingClimb(this.wallId).status !== 'start'
+        dis = this.climb.status !== 'start'
       }
       return dis
     },
-    readyButtonDisabled () {
-      return this.ongoingClimb(this.wallId) != null
+    prepareButtonDisabled () {
+      return this.climb != null
     },
     onSubmitNewClimb (climb) {
       var payload = climb
@@ -95,13 +101,13 @@ export default {
     onStart (evt) {
       evt.preventDefault()
       var payload = {}
-      payload.climbId = this.ongoingClimb(this.wallId).id
+      payload.climbId = this.climb.id
       this.startClimb(payload)
     },
     onEnd (evt) {
       evt.preventDefault()
       var payload = {}
-      payload.climbId = this.ongoingClimb(this.wallId).id
+      payload.climbId = this.climb.id
       this.endClimb(payload)
     },
     onPrepare (evt) {
