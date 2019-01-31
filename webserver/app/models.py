@@ -48,7 +48,7 @@ class User(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['name', 'height', 'weight']:
+        for field in ['name', 'height', 'weight','nickname','email']:
             setattr(self, field, data[field])
         return self
 
