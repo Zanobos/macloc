@@ -1,8 +1,11 @@
+from os import listdir
+from os.path import isfile, join
 from app import db
 from app.api import bp
 from app.models import Wall
 from app.api.errors import bad_request, unauthorized
 from flask import request, jsonify, url_for
+from flask import current_app as app
 
 @bp.route('/walls/<int:wallid>', methods=['GET'])
 def get_wall(wallid):
@@ -62,3 +65,9 @@ def delete_walls():
     number_items = db.session.query(Wall).delete()
     db.session.commit()
     return jsonify(number_items)
+
+@bp.route('/walls/imgs', methods=['GET'])
+def list_walls_img():
+    mypath = join(app.config['STATIC_FOLDER'], 'walls')
+    walls = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    return jsonify(walls)
