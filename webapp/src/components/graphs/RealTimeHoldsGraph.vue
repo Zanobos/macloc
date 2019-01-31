@@ -1,6 +1,6 @@
 
 <template>
-  <div id="wall" v-if="ongoingClimb"
+  <div id="wall"
       :style="{ 'background-image': 'url(\'' + getOngoingWallImg()+ '\')' }">
   </div>
 </template>
@@ -12,6 +12,9 @@ import { mapState, mapGetters } from 'vuex'
 import { getWallImg } from '@/utils'
 
 export default {
+  props: {
+    wallId: Number
+  },
   data () {
     return {
       svgContainer: {}
@@ -19,20 +22,23 @@ export default {
   },
   computed: {
     ...mapState({
-      ongoingClimb: state => state.realtime.ongoingClimb,
-      ongoingWall: state => state.realtime.ongoingWall,
-      ongoingHolds: state => state.realtime.ongoingHolds,
       rtholds: state => state.realtime.rtholds
     }),
     ...mapGetters({
-      getForceByHoldId: 'realtime/getForceByHoldId'
+      getForceByHoldId: 'realtime/getForceByHoldId',
+      ongoingClimb: 'realtime/ongoingClimb'
     }),
+    holds () {
+      return this.ongoingClimb(this.wallId) === undefined ||
+              this.ongoingClimb(this.wallId).holds === undefined ? []
+        : this.ongoingClimb(this.wallId).holds
+    },
     graphicHolds: function () {
-      var graphicHolds = this.ongoingHolds.map(hold => {
+      var graphicHolds = this.holds.map(hold => {
         var graphicHold = {}
-        var percentFromBottom = hold.dist_from_bot / this.ongoingWall.height * 100.0
+        var percentFromBottom = hold.dist_from_bot / this.ongoingClimb(this.wallId).height * 100.0
         graphicHold.percentFromTop = 100.0 - percentFromBottom
-        graphicHold.percentFromLeft = hold.dist_from_sx / this.ongoingWall.width * 100.0
+        graphicHold.percentFromLeft = hold.dist_from_sx / this.ongoingClimb(this.wallId).width * 100.0
         graphicHold.forceFromTop = graphicHold.percentFromTop + this.getForceByHoldId('y', hold.id) / 30.0
         graphicHold.forceFromLeft = graphicHold.percentFromLeft + this.getForceByHoldId('x', hold.id) / 30.0
         return graphicHold
@@ -47,12 +53,19 @@ export default {
         this.drawForces()
       },
       deep: true
+    },
+    graphicHolds: {
+      handler: function (val, oldVal) {
+        // Has to explicitly update the canvas
+        this.drawHolds()
+        this.drawForces()
+      },
+      deep: true
     }
   },
   methods: {
     getOngoingWallImg () {
-      var id = this.ongoingClimb.wall_id
-      return getWallImg(id)
+      return getWallImg(this.wallId)
     },
     drawWall () {
       // same height and width of the wall

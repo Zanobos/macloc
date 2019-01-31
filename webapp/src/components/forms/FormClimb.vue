@@ -1,7 +1,6 @@
 <template>
   <div>
     <b-form @submit="onSubmit" v-if="show">
-      <!-- At the moment not used, only id to be faster -->
       <b-form-group id="userInputGroup"
                     label="User:"
                     label-for="userInput">
@@ -19,42 +18,26 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  props: {
+    wallId: Number,
+    users: Array
+  },
   data () {
     return {
       show: true,
       selectedUser: null
     }
   },
-  computed: {
-    ...mapGetters({
-      users: 'users/getUsersLabelledByName'
-    })
-  },
-  props: {
-    wallId: Number
-  },
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      var router = this.$router
       var form = {}
-      form.onResponse = function (response) {
-        router.push('climbs/ongoing')
-      }
       form.wallId = this.wallId
       form.userId = this.selectedUser.id
-      this.createClimb(form)
-    },
-    ...mapActions({
-      createClimb: 'climbs/createClimb',
-      fetchUsers: 'users/fetchUsers'
-    })
-  },
-  created () {
-    this.fetchUsers()
+      this.$emit('submit-climb', form)
+    }
   }
 }
 </script>

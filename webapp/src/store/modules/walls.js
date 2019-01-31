@@ -18,7 +18,6 @@ const actions = {
       (response) => {
         commit('storeWalls', { walls: response.data.items })
         commit('storeWallsMeta', { meta: response.data._meta })
-        commit('realtime/setActiveStatus', { activeStatus: response.data.active }, { root: true })
       },
       (error) => defaultErrorHandler(error),
       payload != null ? payload : {}

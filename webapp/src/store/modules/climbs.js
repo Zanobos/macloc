@@ -22,37 +22,38 @@ const actions = {
   initClimbsMeta ({ commit }, payload) {
     commit('storeClimbsMeta', { meta: payload })
   },
-  createClimb ({ commit }, payload) {
+  createClimb (context, payload) {
     apiclimbs.postClimbs(
       (response) => {
-        payload.onResponse(response)
+        context.dispatch('realtime/getOngoingClimbs', null, { root: true })
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
       },
       (error) => defaultErrorHandler(error),
       payload.climb,
       { userId: payload.userId, wallId: payload.wallId }
     )
   },
-  startClimb ({ commit }, payload) {
+  startClimb (context, payload) {
     var climb = {}
     climb.id = payload.climbId
     climb.status = 'start'
     apiclimbs.patchClimb(
       (response) => {
-        // Mutate state
-        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+        context.dispatch('realtime/getOngoingClimbs', null, { root: true })
       },
       (error) => defaultErrorHandler(error),
       climb
     )
   },
-  endClimb ({ commit }, payload) {
+  endClimb (context, payload) {
     var climb = {}
     climb.id = payload.climbId
     climb.status = 'end'
     apiclimbs.patchClimb(
       (response) => {
-        // Mutate state
-        commit('realtime/setOngoingClimb', { ongoingClimb: response.data }, { root: true })
+        context.dispatch('realtime/getOngoingClimbs', null, { root: true })
       },
       (error) => defaultErrorHandler(error),
       climb
@@ -60,24 +61,25 @@ const actions = {
   },
   getClimb (context, payload) {
     apiclimbs.getClimb(
-      (response) => payload.onResponse(response),
+      (response) => {
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
+        }
+      },
       (error) => defaultErrorHandler(error),
       payload.climbId
     )
   },
-  getOngoingClimb (context) {
-    apiclimbs.getClimbs(
-      // Consider only first climb, as there should be only one
+  deleteClimb (context, payload) {
+    apiclimbs.deleteClimb(
       (response) => {
-        var climb = response.data.items[0]
-        if (climb !== undefined) {
-          context.dispatch('walls/getOngoingWall', { wallId: climb.wall_id }, { root: true })
-          context.dispatch('holds/getOngoingHolds', { wallId: climb.wall_id }, { root: true })
-          context.commit('realtime/setOngoingClimb', { ongoingClimb: climb }, { root: true })
+        context.dispatch('realtime/getOngoingClimbs', null, { root: true })
+        if (typeof payload.onResponse === 'function') {
+          payload.onResponse(response)
         }
       },
       (error) => defaultErrorHandler(error),
-      { not_status: 'end' }
+      payload.climbId
     )
   }
 }

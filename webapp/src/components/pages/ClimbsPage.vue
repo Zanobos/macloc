@@ -1,19 +1,15 @@
 <template>
   <div>
-    <sub-navbar parentRouteLabel="Climbs" />
-    <b-container>
-      <router-view/>
-    </b-container>
+    <climbs-history></climbs-history>
   </div>
 </template>
 
 <script>
-import SubNavbar from '@/components/SubNavbar.vue'
+import ClimbsHistory from '@/components/subpages/ClimbsHistory'
 
 export default {
-  name: 'Configuration',
   components: {
-    SubNavbar
+    ClimbsHistory
   }
 }
 </script>

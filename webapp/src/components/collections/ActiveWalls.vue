@@ -10,24 +10,22 @@
     @sliding-start="onSlideStart"
     @sliding-end="onSlideEnd"
   >
+    <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank>
 
-    <b-carousel-slide v-for="wall in walls" :key="wall.id" img-blank
-      :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }">
-      <b-button v-if="carouselFormProp" v-b-toggle.collapse1>Start climbing wall #{{wall.id}}</b-button>
-      <b-collapse id="collapse1">
-        <component :is="carouselFormProp" v-bind:wallId="wall.id"/>
-      </b-collapse>
+      <climb-ongoing :wallId="wall.id"></climb-ongoing>
+
     </b-carousel-slide>
   </b-carousel>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { getWallImg } from '@/utils'
+import ClimbOngoing from '@/components/subpages/ClimbOngoing'
 
 export default {
-  props: {
-    carouselFormProp: { type: Object, required: false }
+  components: {
+    ClimbOngoing
   },
   data () {
     return {
@@ -35,9 +33,15 @@ export default {
       sliding: null
     }
   },
-  computed: mapState({
-    walls: state => state.walls.walls
-  }),
+  computed: {
+    ...mapState({
+      walls: state => state.walls.walls,
+      climbs: state => state.realtime.ongoingClimbs
+    }),
+    ...mapGetters({
+      ongoingClimb: 'realtime/ongoingClimb'
+    })
+  },
   methods: {
     onSlideStart (slide) {
       this.sliding = true
@@ -47,11 +51,15 @@ export default {
     },
     getImg: getWallImg,
     ...mapActions({
-      fetchWalls: 'walls/fetchWalls'
+      fetchWalls: 'walls/fetchWalls',
+      getOngoingClimbs: 'realtime/getOngoingClimbs',
+      fetchUsers: 'users/fetchUsers'
     })
   },
   created () {
     this.fetchWalls()
+    this.getOngoingClimbs()
+    this.fetchUsers()
   }
 }
 </script>

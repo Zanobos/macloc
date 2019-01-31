@@ -1,21 +1,14 @@
 <template>
-  <carousel-walls v-bind:carouselFormProp="formClimb"></carousel-walls>
+  <active-walls></active-walls>
 </template>
 
 <script>
-import CarouselWalls from '@/components/collections/CarouselWalls.vue'
-import FormClimb from '@/components/forms/FormClimb.vue'
+import ActiveWalls from '@/components/collections/ActiveWalls.vue'
 
 export default {
   name: 'HomePage',
   components: {
-    CarouselWalls,
-    FormClimb
-  },
-  data () {
-    return {
-      formClimb: FormClimb
-    }
+    ActiveWalls
   }
 }
 </script>

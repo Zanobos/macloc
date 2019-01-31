@@ -6,9 +6,6 @@ import UsersPage from '@/components/pages/UsersPage'
 import HoldsPage from '@/components/pages/HoldsPage'
 import WallsPage from '@/components/pages/WallsPage'
 
-import ClimbsHistory from '@/components/subpages/ClimbsHistory'
-import ClimbsOngoing from '@/components/subpages/ClimbsOngoing'
-
 Vue.use(Router)
 
 export default new Router({
@@ -21,26 +18,9 @@ export default new Router({
     },
     {
       path: '/climbs',
+      name: 'Climbs',
       label: 'Climbs',
-      component: ClimbsPage,
-      children: [
-        {
-          path: 'history',
-          name: 'ClimbsHistory',
-          label: 'History',
-          component: ClimbsHistory
-        },
-        {
-          path: 'ongoing',
-          name: 'ClimbsOngoing',
-          label: 'Ongoing',
-          component: ClimbsOngoing
-        },
-        {
-          path: '',
-          redirect: 'history'
-        }
-      ]
+      component: ClimbsPage
     },
     {
       path: '/users',
