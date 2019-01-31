@@ -109,9 +109,6 @@ sudo systemctl restart apache2
 12) Set up FE files
 ```sh
 cd ~/workspace/macloc/webapp
-sudo npm install npm@latest -g
-npm install
-npm run build
 cp -R dist/* /var/www/html
 ```
 13) Configure the static IP (and also the gateway ip if internet access is needed)
