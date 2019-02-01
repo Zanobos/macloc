@@ -48,7 +48,7 @@ class User(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['name', 'height', 'weight']:
+        for field in ['name', 'height', 'weight','nickname','email']:
             setattr(self, field, data[field])
         return self
 
@@ -117,6 +117,7 @@ class Wall(PaginatedAPIMixin, db.Model):
     width = db.Column(db.Float)
     grade = db.Column(db.Float)
     active = db.Column(db.Boolean)
+    img = db.Column(db.String(120))
     holds = db.relationship('Hold', backref='mounted_on', lazy='dynamic')
     climb = db.relationship('Climb', uselist=False, backref='going_on')
 
@@ -130,6 +131,7 @@ class Wall(PaginatedAPIMixin, db.Model):
             'height': self.height,
             'width': self.width,
             'grade': self.grade,
+            'img': self.img,
             'active': self.active,
             'holds_number': len(self.holds.all())
         }
@@ -191,6 +193,7 @@ class HistoricWall(db.Model):
     height = db.Column(db.Float)
     width = db.Column(db.Float)
     grade = db.Column(db.Float)
+    img = db.Column(db.String(120))
     holds = db.relationship('HistoricHold', backref='mounted_on', lazy='dynamic')
     climb = db.relationship('Climb', uselist=False, backref='on_wall')
 
@@ -202,12 +205,13 @@ class HistoricWall(db.Model):
             'id': self.id,
             'height': self.height,
             'width': self.width,
-            'grade': self.grade
+            'grade': self.grade,
+            'img': self.img
         }
         return data
 
     def from_dict(self, data):
-        for field in ['height', 'width', 'grade']:
+        for field in ['height', 'width', 'grade','img']:
             setattr(self, field, data[field])
         return self
 

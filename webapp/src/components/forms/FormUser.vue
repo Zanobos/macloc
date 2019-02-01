@@ -12,6 +12,17 @@
                       placeholder="Enter name">
         </b-form-input>
       </b-form-group>
+      <b-form-group id="nicknameInputGroup"
+                    label="Nickname:"
+                    label-for="nicknameInput"
+                    horizontal>
+        <b-form-input id="nicknameInput"
+                      type="text"
+                      v-model="user.nickname"
+                      required
+                      placeholder="Enter nickname">
+        </b-form-input>
+      </b-form-group>
       <b-form-group id="emailInputGroup"
                     label="Email address:"
                     label-for="emailInput"
@@ -73,6 +84,7 @@ export default {
       evt.preventDefault()
       /* Reset our form values */
       this.user.name = this.initialUser.name
+      this.user.nickname = this.initialUser.nickname
       this.user.email = this.initialUser.email
       this.user.height = this.initialUser.height
       this.user.weight = this.initialUser.weight

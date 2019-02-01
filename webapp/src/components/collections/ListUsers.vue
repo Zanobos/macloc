@@ -7,7 +7,8 @@
             <p class="card-text" style="text-align: left">
                 <ul>
                   <li>Name: {{ user.name }} </li>
-                  <li>Nick: {{ user.nickname }} </li>
+                  <li>Nickname: {{ user.nickname }} </li>
+                  <li>Email: {{ user.email }} </li>
                   <li>Height: {{ user.height}} </li>
                   <li>Weight: {{ user.weight}} </li>
                 </ul>
