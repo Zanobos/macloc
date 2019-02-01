@@ -64,16 +64,18 @@ def patch_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
     climb.patch_from_dict(data)
+    wall_id = climb.going_on.id
+    db.session.commit() # To close the open session (lazy load)
     global publisher_thread_map
     if data['status'] == 'start':
         climb.start_climb()
         publisher_thread = PublisherThread(climb=climb, db_session=db.session)
         publisher_thread.start()
-        publisher_thread_map[climb.going_on.id] = publisher_thread
+        publisher_thread_map[wall_id] = publisher_thread
     if data['status'] == 'end':
-        publisher_thread = publisher_thread_map[climb.going_on.id]
+        publisher_thread = publisher_thread_map[wall_id]
         publisher_thread.join()
-        del publisher_thread_map[climb.going_on.id]
+        del publisher_thread_map[wall_id]
         # this end climb must be the last instruction because it touches the session
         climb.end_climb()
     db.session.commit()
