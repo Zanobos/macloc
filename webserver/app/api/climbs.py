@@ -110,12 +110,17 @@ def climbs_ws_disconnect():
 # In case of exceptional failure resume publisher threads at startup
 @bp.before_app_first_request
 def resume_publisher_threads():
-    climb = Climb.query.filter(Climb.status == 'start').first()
-    if climb is None:
+    climbs = Climb.query.filter(Climb.status == 'start').all()
+    if not climbs:
         app.logger.info('no climbs in start status')
         return
-    app.logger.info('at least one climb in start status')
+    # First get all the possible wallids
+    for climb in climbs:
+        climb.tmp_wall_id = climb.going_on.id
+        app.logger.info('climb {} on wall {} in start status'.format(climb.id, climb.tmp_wall_id))
+        db.session.commit() # To close the open session (lazy load)
     global publisher_thread_map
-    publisher_thread = PublisherThread(climb=climb, db_session=db.session)
-    publisher_thread.start()
-    publisher_thread_map[climb.going_on.id] = publisher_thread
+    for climb in climbs:
+        publisher_thread = PublisherThread(climb=climb, db_session=db.session)
+        publisher_thread.start()
+        publisher_thread_map[climb.tmp_wall_id] = publisher_thread
