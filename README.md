@@ -9,6 +9,10 @@
 - **webserver** :
     the complete webserver.
 
+## Development
+
+Check the [instructions](DEVELOP.md)
+
 ## Raspberry setup
 
 1) Install 2018-11-13-raspbian-stretch-lite in an ssd with rufus. This image does not have a desktop environment. Follow [these instructions](https://www.raspberrypi.org/documentation/installation/installing-images/) for a detailed guide
