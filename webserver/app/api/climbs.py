@@ -7,7 +7,7 @@ from flask import request, jsonify, url_for
 from flask import current_app as app
 
 #Ok for dev environment and in order to save on resources
-publisher_thread = None
+publisher_thread_map = {}
 
 @bp.route('/climbs/<int:climbid>', methods=['GET'])
 def get_climb(climbid):
@@ -64,14 +64,18 @@ def patch_climb(climbid):
     climb = Climb.query.get_or_404(climbid)
     data = request.get_json() or {}
     climb.patch_from_dict(data)
-    global publisher_thread
+    wall_id = climb.going_on.id
+    db.session.commit() # To close the open session (lazy load)
+    global publisher_thread_map
     if data['status'] == 'start':
         climb.start_climb()
         publisher_thread = PublisherThread(climb=climb, db_session=db.session)
         publisher_thread.start()
+        publisher_thread_map[wall_id] = publisher_thread
     if data['status'] == 'end':
+        publisher_thread = publisher_thread_map[wall_id]
         publisher_thread.join()
-        publisher_thread = None
+        del publisher_thread_map[wall_id]
         # this end climb must be the last instruction because it touches the session
         climb.end_climb()
     db.session.commit()
@@ -102,3 +106,21 @@ def climbs_ws_connect():
 @socketio.on('disconnect', namespace='/api/climbs')
 def climbs_ws_disconnect():
     app.logger.info('Client disconnected')
+
+# In case of exceptional failure resume publisher threads at startup
+@bp.before_app_first_request
+def resume_publisher_threads():
+    climbs = Climb.query.filter(Climb.status == 'start').all()
+    if not climbs:
+        app.logger.info('no climbs in start status')
+        return
+    # First get all the possible wallids
+    for climb in climbs:
+        climb.tmp_wall_id = climb.going_on.id
+        app.logger.info('climb {} on wall {} in start status'.format(climb.id, climb.tmp_wall_id))
+        db.session.commit() # To close the open session (lazy load)
+    global publisher_thread_map
+    for climb in climbs:
+        publisher_thread = PublisherThread(climb=climb, db_session=db.session)
+        publisher_thread.start()
+        publisher_thread_map[climb.tmp_wall_id] = publisher_thread
