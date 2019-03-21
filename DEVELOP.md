@@ -50,7 +50,7 @@ sudo apt-get -y install git npm
 ```sh
 git clone https://github.com/Zanobos/macloc
 cd macloc/webapp
-npm install -g npm@latest
+sudo npm install -g npm@latest
 npm install
 ```
 

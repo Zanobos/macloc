@@ -87,6 +87,7 @@ const mutations = {
   addOngoingWall (state, { ongoingWall }) {
     Vue.set(state.ongoingClimbs[ongoingWall.id], 'height', ongoingWall.height)
     Vue.set(state.ongoingClimbs[ongoingWall.id], 'width', ongoingWall.width)
+    Vue.set(state.ongoingClimbs[ongoingWall.id], 'img', ongoingWall.img)
   },
   addOngoingHolds (state, { wallId, ongoingHolds }) {
     Vue.set(state.ongoingClimbs[wallId], 'holds', ongoingHolds)

@@ -9,7 +9,7 @@
 /* globals window, requestAnimationFrame */
 import * as d3 from 'd3'
 import { mapState, mapGetters } from 'vuex'
-import { getWallImg } from '@/utils'
+import { getWallImg } from '@/api'
 
 export default {
   props: {
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     getOngoingWallImg () {
-      return getWallImg(this.wallId)
+      return getWallImg(this.ongoingClimb(this.wallId).img)
     },
     drawWall () {
       // same height and width of the wall

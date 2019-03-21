@@ -10,7 +10,7 @@
                 <li>Grade: {{ wall.grade }} </li>
                 <li>Height: {{ wall.height }} </li>
                 <li>Width: {{ wall.width }} </li>
-                <li>Background: <div class="example-bg" :style="{ 'background-image': 'url(\'' + getImg(wall.id)+ '\')' }"></div></li>
+                <li>Background: <div class="example-bg" :style="{ 'background-image': 'url(\'' + getImg(wall.img)+ '\')' }"></div></li>
               </ul>
             </p>
           </b-col>
@@ -44,7 +44,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { getWallImg } from '@/utils'
+import { getWallImg } from '@/api'
 import FormWall from '@/components/forms/FormWall.vue'
 
 export default {

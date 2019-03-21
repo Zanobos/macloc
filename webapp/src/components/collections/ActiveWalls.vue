@@ -20,7 +20,6 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { getWallImg } from '@/utils'
 import ClimbOngoing from '@/components/subpages/ClimbOngoing'
 
 export default {
@@ -49,7 +48,6 @@ export default {
     onSlideEnd (slide) {
       this.sliding = false
     },
-    getImg: getWallImg,
     ...mapActions({
       fetchWalls: 'walls/fetchWalls',
       getOngoingClimbs: 'realtime/getOngoingClimbs',

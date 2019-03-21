@@ -47,7 +47,6 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { getWallImg } from '@/utils'
 import RealTimeHoldsGraph from '@/components/graphs/RealTimeHoldsGraph.vue'
 import FormClimb from '@/components/forms/FormClimb.vue'
 
@@ -134,9 +133,6 @@ export default {
     },
     showDeleteModal (evt) {
       this.$refs.modalDeleteRef.show()
-    },
-    getOngoingWallImg () {
-      return getWallImg(this.wallId)
     }
   }
 }

@@ -11,7 +11,8 @@ migrate = Migrate()
 socketio = SocketIO(path="api/socket.io")
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+
+    app = Flask(__name__, static_url_path=config_class.STATIC_URL_PATH)
 
     config_log(app)
 
