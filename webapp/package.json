@@ -2,7 +2,7 @@
   "name": "macloc-web",
   "version": "1.0.0",
   "description": "Macloc web-app with vue.js",
-  "author": "Zanotti Andrea <a.zanotti@reply.it>",
+  "author": "Zanotti Andrea <andreazanottifo@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
