@@ -115,8 +115,6 @@ sudo vim /etc/apache2/sites-available/macloc.conf
         CustomLog ${APACHE_LOG_DIR}/access.log combined
         ProxyPass /api/socket.io/ ws://192.168.1.200:5000/api/socket.io/
         ProxyPassReverse /api/socket.io/ ws://192.168.1.200:5000/api/socket.io/
-        ProxyPass /api/static/ http://192.168.1.200:5000/static/
-        ProxyPassReverse /api/static/ http://192.168.1.200:5000/static/
         ProxyPass /api/ http://192.168.1.200:5000/api/
         ProxyPassReverse /api/ http://192.168.1.200:5000/api/
 </VirtualHost>
