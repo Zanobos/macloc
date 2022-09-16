@@ -11,7 +11,7 @@ gevent-websocket==0.10.1
 greenlet==0.4.15
 ItsDangerous==1.1.0
 Jinja2==2.10
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.0
 pycparser==2.19
 python-dateutil==2.7.3
